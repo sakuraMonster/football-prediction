@@ -1,0 +1,949 @@
+2026-04-28 16:00:34.652 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.938 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:35.943 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:45.588 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-26)
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 0 场竞彩比赛。
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:00:46.828 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:41.794 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:19 - 开始抓取竞彩赛事数据: https://trade.500.com/jczq/ (target_date=2026-04-28)
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.002 | INFO     | src.crawler.jingcai_crawler:_parse_html:119 - 成功解析出 5 场竞彩比赛。
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:43.003 | INFO     | src.crawler.jingcai_crawler:fetch_today_matches:33 - 开始抓取半全场赔率数据: https://trade.500.com/jczq/?playid=272
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.630 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:44.631 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:47.155 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.775 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:49.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.319 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:52.320 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.838 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:54.839 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:57.677 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:31:58.960 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.390 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:33:47.549 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.535 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:34:26.643 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.235 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:05.523 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.569 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:35:40.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 16:36:33.854 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:04:46.633 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:05:40.165 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:23.713 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.680 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:12:57.808 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.537 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:13:42.641 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:58.946 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:14:59.056 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:45.900 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:16:46.027 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 17:17:12.197 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: pre_12h]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:27:29.820 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.671 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:28:13.795 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.788 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:06.894 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.881 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:29:51.985 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.526 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:30:39.647 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 18:31:09.495 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:10.343 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.260 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:45:39.468 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.114 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:46:30.270 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.435 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:48:30.530 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:02.903 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:03.028 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 21:49:29.732 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:01.783 | INFO     | src.llm.predictor:predict:1030 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-28 22:58:55.303 | INFO     | src.llm.predictor:predict:1044 - 预测成功返回！ [时间段: final]
+2026-04-29 10:36:44.554 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:36:44.554 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:36:44.554 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:36:44.554 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:36:44.554 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:36:44.708 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:36:44.708 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:36:44.708 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:36:44.708 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:36:44.708 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:37:02.832 | INFO     | src.llm.predictor:generate_post_mortem:884 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 10:37:02.832 | INFO     | src.llm.predictor:generate_post_mortem:884 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 10:37:02.832 | INFO     | src.llm.predictor:generate_post_mortem:884 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 10:37:02.832 | INFO     | src.llm.predictor:generate_post_mortem:884 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 10:37:02.832 | INFO     | src.llm.predictor:generate_post_mortem:884 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 10:54:50.925 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 10:54:51.034 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 10:55:18.826 | INFO     | src.crawler.jingcai_crawler:fetch_history_matches:244 - 开始抓取历史比赛数据: https://trade.500.com/jczq/?playid=269&g=2&date=2026-04-28
+2026-04-29 10:55:19.165 | INFO     | src.crawler.jingcai_crawler:fetch_history_matches:319 - 历史数据拉取完成: 2026-04-28，共 5 场
+2026-04-29 10:55:19.166 | INFO     | src.processor.data_fusion:merge_data:11 - 开始融合数据...
+2026-04-29 10:55:19.167 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二001 (新未来SC VS 拉斯决心) 的详细盘赔数据...
+2026-04-29 10:55:19.167 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-29 10:55:19.448 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二002 (利雅得新月 VS 达马克) 的详细盘赔数据...
+2026-04-29 10:55:19.448 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-29 10:55:19.708 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二003 (南安普敦 VS 伊普斯) 的详细盘赔数据...
+2026-04-29 10:55:19.708 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-29 10:55:20.091 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二004 (巴黎圣曼 VS 拜仁) 的详细盘赔数据...
+2026-04-29 10:55:20.091 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-29 10:55:20.384 | INFO     | src.processor.data_fusion:merge_data:21 - 正在抓取 周二005 (拉努斯 VS 基多体大) 的详细盘赔数据...
+2026-04-29 10:55:20.385 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-04-29 10:55:20.782 | INFO     | src.processor.data_fusion:merge_data:36 - 数据融合完成！
+2026-04-29 10:56:41.371 | INFO     | src.llm.predictor:predict:1148 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：新未来SC VS 拉斯决心 [时间段: final]
+2026-04-29 10:57:07.274 | INFO     | src.llm.predictor:predict:1162 - 预测成功返回！ [时间段: final]
+2026-04-29 10:57:07.406 | INFO     | src.llm.predictor:predict:1148 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：利雅得新月 VS 达马克 [时间段: final]
+2026-04-29 10:57:56.428 | INFO     | src.llm.predictor:predict:1162 - 预测成功返回！ [时间段: final]
+2026-04-29 10:57:56.663 | INFO     | src.llm.predictor:predict:1148 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：南安普敦 VS 伊普斯 [时间段: final]
+2026-04-29 10:58:48.637 | INFO     | src.llm.predictor:predict:1162 - 预测成功返回！ [时间段: final]
+2026-04-29 10:58:48.733 | INFO     | src.llm.predictor:predict:1148 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴黎圣曼 VS 拜仁 [时间段: final]
+2026-04-29 10:59:42.458 | INFO     | src.llm.predictor:predict:1162 - 预测成功返回！ [时间段: final]
+2026-04-29 10:59:42.631 | INFO     | src.llm.predictor:predict:1148 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉努斯 VS 基多体大 [时间段: final]
+2026-04-29 11:00:27.762 | INFO     | src.llm.predictor:predict:1162 - 预测成功返回！ [时间段: final]
+2026-04-29 11:01:04.155 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 11:01:08.008 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 11:01:35.271 | INFO     | src.llm.predictor:generate_post_mortem:959 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 11:02:48.405 | INFO     | src.llm.predictor:generate_post_mortem:959 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 11:04:52.325 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 11:04:52.440 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 11:04:59.171 | INFO     | src.llm.predictor:generate_post_mortem:959 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 11:11:09.799 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-28 赛果: https://trade.500.com/jczq/?date=2026-04-28
+2026-04-29 11:11:09.897 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 5 场比赛的赛果。
+2026-04-29 11:11:25.891 | INFO     | src.llm.predictor:generate_post_mortem:959 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场
+2026-04-29 11:12:50.143 | INFO     | src.llm.predictor:generate_post_mortem:959 - 开始基于结构化数据生成 2026-04-28 的深度复盘报告，窗口: 2026-04-28 12:00 ~ 2026-04-29 12:00，共 5 场

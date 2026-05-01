@@ -1,0 +1,36 @@
+2026-04-30 21:08:58.920 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-04-30 21:09:24.293 | INFO     | src.llm.predictor:predict:1296 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：布拉加 VS 弗赖堡 [时间段: final]
+2026-04-30 21:10:26.274 | INFO     | src.llm.predictor:predict:1310 - 预测成功返回！ [时间段: final]
+2026-04-30 21:11:37.956 | INFO     | src.llm.predictor:predict:1296 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴列卡诺 VS 斯特拉斯 [时间段: final]
+2026-04-30 21:12:12.672 | INFO     | src.llm.predictor:predict:1310 - 预测成功返回！ [时间段: final]
+2026-04-30 21:13:39.444 | INFO     | src.llm.predictor:predict:1296 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：布拉加 VS 弗赖堡 [时间段: final]
+2026-04-30 21:14:13.955 | INFO     | src.llm.predictor:predict:1310 - 预测成功返回！ [时间段: final]
+2026-04-30 21:15:10.705 | INFO     | src.llm.predictor:predict:1296 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴列卡诺 VS 斯特拉斯 [时间段: final]
+2026-04-30 21:15:51.291 | INFO     | src.llm.predictor:predict:1310 - 预测成功返回！ [时间段: final]
+2026-04-30 21:23:25.865 | INFO     | src.llm.predictor:generate_article:1021 - 正在生成公众号推文：布拉加 VS 弗赖堡
+2026-04-30 21:29:55.480 | INFO     | src.llm.predictor:predict:1296 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉斯永恒 VS 迈季迈阿宽广 [时间段: final]
+2026-04-30 21:30:37.526 | INFO     | src.llm.predictor:predict:1310 - 预测成功返回！ [时间段: final]
+2026-05-01 11:08:05.305 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-30 赛果: https://trade.500.com/jczq/?date=2026-04-30
+2026-05-01 11:08:05.457 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 6 场比赛的赛果。
+2026-05-01 11:08:28.491 | INFO     | src.llm.predictor:generate_post_mortem:1107 - 开始基于结构化数据生成 2026-04-30 的深度复盘报告，窗口: 2026-04-30 12:00 ~ 2026-05-01 12:00，共 6 场
+2026-05-01 11:22:14.738 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-30 赛果: https://trade.500.com/jczq/?date=2026-04-30
+2026-05-01 11:22:14.981 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 6 场比赛的赛果。
+2026-05-01 11:22:26.421 | INFO     | src.llm.predictor:generate_post_mortem:1108 - 开始基于结构化数据生成 2026-04-30 的深度复盘报告，窗口: 2026-04-30 12:00 ~ 2026-05-01 12:00，共 6 场
+2026-05-01 11:29:58.000 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：博德闪耀 VS 斯达 [时间段: final]
+2026-05-01 11:30:25.668 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:30:25.881 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：拉斯永恒 VS 迈季迈阿宽广 [时间段: final]
+2026-05-01 11:31:00.827 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:31:00.989 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：布拉加 VS 弗赖堡 [时间段: final]
+2026-05-01 11:31:43.269 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:31:43.640 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：诺丁汉 VS 维拉 [时间段: final]
+2026-05-01 11:32:25.442 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:32:25.645 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：巴列卡诺 VS 斯特拉斯 [时间段: final]
+2026-05-01 11:33:12.782 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:33:12.917 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：玻利瓦尔 VS 弗鲁米嫩 [时间段: final]
+2026-05-01 11:34:02.627 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:34:02.745 | INFO     | src.llm.predictor:predict:1300 - 正在向大模型 (deepseek-v4-pro) 发送预测请求：科林蒂安 VS 佩纳罗尔 [时间段: final]
+2026-05-01 11:34:41.289 | INFO     | src.llm.predictor:predict:1314 - 预测成功返回！ [时间段: final]
+2026-05-01 11:35:16.867 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:158 - 开始抓取 2026-04-30 赛果: https://trade.500.com/jczq/?date=2026-04-30
+2026-05-01 11:35:17.002 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:206 - 成功获取到 6 场比赛的赛果。
+2026-05-01 11:35:23.036 | INFO     | src.llm.predictor:generate_post_mortem:1109 - 开始基于结构化数据生成 2026-04-30 的深度复盘报告，窗口: 2026-04-30 12:00 ~ 2026-05-01 12:00，共 6 场
+2026-05-01 11:35:44.775 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
