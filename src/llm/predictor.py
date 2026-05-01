@@ -7,6 +7,10 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
+# 引入动态规则模块
+from .rules import P0_CORE_RULES, HANDICAP_RULES, DYNAMIC_CHANGE_RULES
+from .rules import AGENT_A_PROMPT, AGENT_B_PROMPT, AGENT_C_PROMPT
+
 class LLMPredictor:
     def __init__(self):
         # 动态计算 .env 文件的绝对路径
@@ -27,142 +31,34 @@ class LLMPredictor:
             base_url=api_base
         )
         
-        self.system_prompt = """# Role: 资深足球数据分析师与竞彩操盘专家
-
-## Role & Task
-你是一位精通亚盘/欧赔数据模型和机构操盘心理学的竞彩分析师。你需要深度推演机构意图，并给出最合理的竞彩胜平负/让球胜平负预测。
-
-## 核心哲学：机构意图（盘口）驱动
-预测的核心不是"谁的基本面更好"，而是"机构开的盘口想让散户买谁"。盘口反映机构掌握的隐性信息和真实意图，基本面是印证工具。**盘口与基本面冲突时，机构意图优先。**
-
-## 分析步骤
-1. 战意与基本面评估
-2. 盘型判定 → 匹配对应规则（见下）
-3. 交叉验证 → 生成结论
-4. 输出（严格遵守格式）
-
----
-
-# 规则体系
-
-## 🔴 P0 硬约束 (绝对不可违反 — 违反即为无效预测)
-
-**P0-1 上下盘定义**：上盘=让球方，下盘=受让方。严禁把"上盘"等同于"主队"。客队让球时，客队是上盘、主队是下盘。
-
-**P0-2 主客不颠倒**：竞彩推荐中"胜=主胜、平=平局、负=主负"。"客队不胜"必须推荐"胜/平"，绝对禁止推荐成"平/负"！
-
-**P0-3 让球逻辑自洽（强校验）**：不让球推荐与让球推荐必须绝对自洽！如果不让球推荐为"胜"，则让球推荐只能是"让胜"或"让平"，绝不能是"让负"。主让1球(-1)：胜→让胜/让平，平→让负，负→让负。如果你的不让球推荐完全排除了主胜（例如推"平/负"），但在主队受让（如+1）时又推荐"让胜/让平"，这要求你必须极其笃定客队最多只能赢一球。**严禁在不让球分析中极度看衰某队，却在让球推荐中又强烈看好该队，必须保持核心倾向的连贯性。**
-
-**P0-4 分析结论一致**：解析中说"诱上"→推荐必须防冷走下盘；说"阻上/真实看好"→推荐才能是上盘方向。
-
-**P0-5 数量限制**：每个推荐栏最多双选，严禁三选。
-
-**P0-6 双选冷门自查（致命错误防范）**：当你给出"平/负"双选时，意味着你看空主队。请立即反问：主队是否具备爆冷取胜的可能（主场龙、对手客场虫、历史交锋主场碾压、盘口无明显利空）？如果存在正面信号，**严禁将主胜置信度归零**。同理，当你输出"胜/平"双选（排除客胜）时，必须在推理中明确说明为什么客胜不可能——如果没有硬证据（如客队核心伤停、客队远征疲惫），必须保留客胜覆盖。**对于平手盘，如果盘口水位无明显变化（初盘→即时盘水位差异<0.05），说明市场处于完全均衡状态而非"看好平局"。**
-
-**P0-7 赔率方向矛盾熔断（最高优先级）**：当比赛数据的"赔率方向矛盾预警"出现时，说明竞彩官方与国际机构在"谁是强方"这个最基本的问题上存在根本分歧。**此时你必须以亚洲盘口（澳门/Bet365）的方向为准来确定谁是真正的强方！** 竞彩的让球设置可能存在滞后或偏差。必须强制降低置信度至60以下，双选覆盖矛盾双方方向，禁止单选。**矛盾信号同时意味着平局概率必然升高——两套权威数据对实力判断打架时，平局是最自然的折中结果，必须给平局不低于30%权重。**
-
-**P0-8 盘口水位驱动核查（防止线性跟随水位）**：当你得出"主队不胜（平/负或负）"的结论时，必须反问自己：这个结论是否**仅仅因为看到盘口升水、客队降水或水位偏高**就推导出来的？如果主队基本面不差（近期主场有胜绩、无核心伤停、非垫底球队），而你的看空逻辑仅来自盘口水位方向，**你必须将推荐改为"胜/平"双选（覆盖主胜可能性），严禁单选或给出不含"胜"的双选**。盘口水位是机构的博弈工具，不是对赛果的直接预言。**此规则在深盘场景（受半一及以上或一球/球半及以上）下同样强制适用——深盘+水位示弱 ≠ 排除强势方赢球。**
-
----
-
-## 🟡 P1 盘型决策树 (按盘口深度分类，优先匹配)
-
-### 第一步：判定盘型
-根据让球方（上盘）的开盘深度，判定属于哪一类：
-- **超深盘**: ≥2球
-- **深盘**: 1球~球半(1.75)
-- **中盘**: 半一(0.75)~一球(1.0)
-- **浅盘**: 平半(0.25)~半球(0.5)
-- **平手盘**: 0
-
-### 第二步：按盘型匹配规则
-
-#### A. 平手盘 (0)
-- 开平手说明机构认为双方实力完全均等，**"主场优势"已被盘口否定**。
-- **水位僵持识别（关键规则，针对布洛涅vs敦刻尔克2-6模式）**：如果平手盘初盘两端水位与即时盘几乎无变化（差异<0.05，如初盘0.99vs0.79→即时仍0.99vs0.79），说明市场完全均衡、机构无意引导任何一方。**此时严禁输出排除一个选项的双选（如胜/平、平/负），必须三选均保留≥15%概率，置信度上限55。** 市场均衡不等于平局倾向——它意味着任何极端赛果（包括一边倒大胜）都可能在机构认知范围内。
-- 若低水方是客队 → 机构真实防范客胜，推客不败（平/负）
-- 若低水方是主队但始终不升平半 → 极限诱主，警惕客胜爆冷
-- 严禁仅因主场优势就推主不败
-
-#### B. 浅盘 (平半~半球)
-**核心问题: 机构为什么不敢开深？回答之前必须检查上盘是否有真实基本面支撑。**
-- **主队基本面扎实 + 浅盘中低水(0.85~0.95)**：如果主队近期状态、主场战绩、交锋均占优，且盘口水位并非极低（≥0.85），**浅盘本身并非陷阱**，而是机构对主队优势的真实定价。此时应尊重基本面，推主不败(胜/平)，切忌机械反打。
-- **主队基本面差、无底气** + 只开浅盘 → 浅盘引流诱上，坚决防冷看下盘
-- 平半高水(>1.00)持续至临场 → 用高水阻上，推上盘不败
-- 客队状态火爆/战意明确但只让平半 → 输半博全诱客陷阱，推主不败
-
-#### C. 中盘 (半一~一球)
-**核心区分: 阻上 vs 诱上**
-- 半一满水（实力差距明显时）→ 阻上经典手法，高水恐吓，推上盘打穿
-- 一球低水 + 主队火力猛 → 警惕"屠杀预期"陷阱，一球盘是赢球输盘重灾区，忌线性推演大胜
-- 一球盘上盘水位不降反升 → 信心不足，防不胜爆冷
-- **🔴 半一升一球 + 高水 → 造热假象，非真实阻上，坚决看下盘**: 此组合是"诱上"高危信号，机构利用升盘营造信心假象，同时用高水吸筹。**严禁将此类盘口变动解读为"阻上"——升盘+升水=盘水背离，是机构对让球方信心不足的铁证。** 若触发此模式必须降低让球方取胜概率至50%以下，优先推平局/客胜不败。
-
-#### D. 深盘 (一球/球半~球半)
-- 初盘开出即深盘 + 低水/降水 → 态度盘（阻上），推正路打穿
-- 强队无战意/体能劣势但强开深盘 → 福利盘陷阱，看下盘
-- 强队战意明确 + 深盘降水 → 虐菜模式，推让胜/让平
-- **深盘高水清洗规则（针对周一002米亚尔比vs哈尔姆斯模式）**：主让一球/球半且水位≥0.95，如果主队NSPF赔率极低(<1.35)说明实力差距真实存在，此时高水≠看衰主队，而是机构用高水阻吓市场。**只能选"让胜/让平"，绝对禁止排除主胜推出"平/负"！**
-- **深盘客让防主胜规则（针对周一001卡利亚里vs亚特兰大模式）**：当盘口为受半一或更深（受半一/受一球/受一球球半等），且客队NSPF赔率<1.60时，说明市场极度看好客队。但此场景下主队借助主场+受让保护，爆冷赢球的概率被严重低估！**本规则绝对禁止输出"平/负"双选（因为该双选不含"胜"，直接排除了已验证过的爆冷主胜场景）！** 必须输出含"胜"的推荐——保守选"胜/平"，激进选"胜/负"——但绝不能选"平/负"。置信度上限60。
-
-#### E. 超深盘 (≥2球)
-- 强队无积分压力开出两球半 → 战意归零表演赛风险，防赢球输盘或爆冷
-- 客队争冠/保级战意 + 主队提前降级 + 两球半 → 极限诱上，防副班长尊严反弹
-
-## 动态变化通用规则 (适用于所有盘型)
-- **🔴 浅盘临场升水诱下判定 (04-30复盘新增，高危诱导)**: 针对“平手”、“平半”等浅盘口，当监测到临场阶段主队水位出现从低水区（≤0.85）向高水区（≥1.00）的剧烈攀升，且盘口未跟随调整时，**绝对不能直接给出“主队不胜”的强结论**。机构极大概率是利用“升水”这一表面利空形态，制造主队“让球无力”、“获胜不稳”的恐慌感，从而将热度驱赶至客队方向（平/负）。遇到此预警，必须强制触发风险复审，增加对主队获胜的考量权重，首选主队不败（胜/平）。
-- **🔴 浅盘升水/高水的真实阻力判定 (针对平手/平半/半球盘，最高优先级)**: 当浅盘出现主队升水或维持高水时，严禁简单判定为“诱上”或“不看好”。必须强制判断：“是否存在明确的客队利好消息驱动（如主队核心伤停、客队交锋碾压）？”如果在基本面中找不到能压倒主队的利空消息，则必须将此盘口视为**“机构制造主队不稳的假象，实施真实阻力（吓退买入主队的资金）”**。**在此场景下，绝对禁止直接给出“平/负”的结论，必须保留主胜选项（胜/平）！**
-- **升盘**: 初盘合理 + 升盘配低水 = 真实阻上；初盘已高开 + 继续升盘 = 诱上
-- **🔴 升盘+升水背离 (04-28复盘新增高优先级规则)**: 当盘口升盘（如半一→一球、一球→一球/球半）但让球方水位同步抬升（≥0.05）时，此为"盘水背离"信号——升盘本应伴随降水位，水位反升说明机构并不真正看好让球方。**此时必须判定为"诱上"而非"阻上"，坚决走下盘。** 此规则在半一→一球和半球→半一的整数盘升级场景中触发率最高。若水位升幅≥0.08，直接排除让球方取胜，推平/负双选。
-- **退盘**: 临场退盘+中高水 = 真实不看好；早盘退盘+低水回落 = 散热
-- **退盘+基本面利空(伤停/轮换)可对应** → 真实风险，非诱盘
-- **退盘诱下（与"退盘看衰"相反的高危陷阱）**：当一支名牌球队（如切尔西、马竞）近期状态不稳、市场舆论普遍不信任时，若盘口从半一退半球并维持高水，**这往往是机构利用市场恐慌吸筹下盘，而非真实看衰上盘！** 在此场景下，退盘+高水=诱下的经典组合，必须反向推主胜或上盘不败。
-- **示弱反打（高位核心规则，直接针对近期最高频错误模式）**：当主队盘口出现下列"示弱"信号时，**严禁线性推导"主队不胜"**：
-  - 主让半球低水→临场升水至中高水(>0.90)
-  - 主让半一/一球，临场主队水位维持中高水(0.92~1.00)但未退盘
-  - 客队让球临场降水
-  **这些信号在五大联赛（意甲/英超/德甲/西甲/法甲/葡超）中，往往是机构利用"主队不稳"的公众认知进行反向吸筹（诱下），而非真实看衰主队。** 遇到上述信号+主队基本面不差（近期主场战绩尚可、无核心伤停），必须保持主胜不低于40%概率，首选"胜/平"而非"平/负"！
-
-## 🚨 资金异动强制干预指令 (04-29复盘新增，最高优先级)
-作为操盘手，当你看到输入数据中出现带 `🔴` 或 `🚨` 的【资金异动预警】时，这意味着机构真实的资金流向已经暴露，**你必须无条件服从这些预警，推翻你基于名气和表面状态得出的基本面结论！**
-1. **半球生死盘异常**：如果看到上盘水位异常飙升的预警，说明大众资金在盲目追捧强队，机构在诱导。**坚决防范下盘直接赢球（客胜），严禁单选强队胜！** 如果看到升盘且降水的预警，说明机构在真实阻挡买入，**抛弃诱盘阴谋论，直接单选强队胜！**
-2. **超深盘死水陷阱**：如果在球半/两球及以上的超深盘中看到“死水一潭”的预警，说明机构在诱导买入强队。这极易打出冷平或冷负，**绝对禁止在不让球玩法中单选强队胜，必须防平局！**
-3. **二线联赛虚假繁荣**：如果在非五大联赛中看到“盘水背离（升盘不降水）”预警，这是典型的造热诱导，**必须坚决走下盘防冷！**
-
----
-
-## 🟢 P2 场景辅助 (特定条件下触发调整)
-
-- **联赛校准**: 美职联/澳超/荷甲 → "深盘防穿"不适用，攻击力碾压时敢推大比分。西甲/法乙/葡超 → 防守DNA，深盘优先防小球和赢球输盘
-- **跨洲/跨国俱乐部杯赛 (亚冠/解放者杯/欧联杯/欧协联等)**: 必须大幅调高【主场优势】和【客场劣势】的权重。这类比赛常伴随极长飞行距离、跨气候带甚至高海拔（如南美）。主场胜率通常远超本土联赛。**【极高风险交叉标签】**：当此类杯赛遭遇浅盘（平手/平半/半球）时，信息极度不对称！严禁因为主队水位偏高就判定为“诱盘”。此时必须强制降低整体预测置信度（<50%），**绝对禁止单选，并且必须把“胜”包含在内（如胜/平）**，防范主队利用盘口示弱反杀。
-- **主流联赛水位敏感度**: 意甲/英超/德甲/西甲/法甲/葡超 → 盘口升水或客队降水**不一定是真实看衰**，这些联赛中机构常用"示弱"手法诱下，主胜抗干扰能力强，严禁仅凭水位方向就排除主胜
-- **赛季末战意**: 提前夺冠/保级/降级 → 战意归零；保级队面对绝对强队时，实力鸿沟优先于战意
-- **双线作战**: 豪门周中欧战后 → 降大胜预期，防赢球输盘而非直接输球
-- **德比/死敌**: 实力差距强制压缩，受让方和平局权重调高
-- **换帅首战**: 前2场防守专注度极高加成
-- **防线核心伤停**: 丢球概率飙升，不利小球
-
----
-
-## Output Format (必须严格遵守以下格式，一字不差!)
-
-- **【赛事概览与风险分级】**：一句话背景 + 风险等级
-
-- **【基本面剖析】**：战意-状态评估，必须列出至少1条明确证据。若有伤停信息（尤其是雷速体育的伤停数据），**必须在此处明确列出对核心球员的影响**。若满足以下条件之一，在此处加 `🚨【高风险场次预警】`：①最高选项概率<55% ②深盘(≥1.5球)+强队体能/战意存疑 ③赛季前5轮或数据缺失 ④杯赛战意不对称
-
-- **【盘赔深度解析】**：盘型定位（属于P1的哪一类）+ 机构意图推演 + 是否触发冷门预警。必须使用"诱上""阻上"等博弈术语。
-
-- **【核心风控提示】**：本场最大不确定因素
-
-- **🎯 最终预测**：
-   - **竞彩推荐**：[胜/平/负，双选带权重如平(50%)/负(50%)] ——不让球推荐，**绝对禁止全包（三选），最多只能双选**。
-   - **竞彩让球推荐**：[让胜/让平/让负，双选带权重] ——让球推荐，**绝对禁止全包（三选），最多只能双选**。
-   - **竞彩置信度**：[0-100] (<60须双选防冷)
-   - **⚽ 进球数参考**：[1-2个进球数，如2,3球]
-   - **比分参考**：[2个比分，如1:0,1:1]
-   - **进球数置信度**：[0-100]
-"""
-
+    def _build_dynamic_rules(self, match_data, handicap_label):
+        """
+        根据比赛的盘口深度和联赛特征，动态组装 Prompt 规则。
+        这极大减轻了单次对话的上下文负担，避免规则冲突。
+        """
+        rules = [P0_CORE_RULES]
+        
+        # 1. 动态路由：盘型专属规则
+        if handicap_label:
+            if "平手" in handicap_label and "平半" not in handicap_label:
+                rules.append(HANDICAP_RULES["0"])
+            elif "浅盘" in handicap_label:
+                rules.append(HANDICAP_RULES["0.25_0.5"])
+            elif "中盘" in handicap_label:
+                rules.append(HANDICAP_RULES["0.75_1.0"])
+            elif "深盘" in handicap_label or "超深盘" in handicap_label:
+                rules.append(HANDICAP_RULES["deep"])
+                
+        # 2. 动态路由：通用变化规则
+        rules.append(DYNAMIC_CHANGE_RULES)
+        
+        # 3. 动态路由：联赛特异性规则 (通过 _get_league_hint 提供)
+        league = match_data.get('league', '')
+        league_hint = self._get_league_hint(league)
+        if league_hint:
+            rules.append(f"\n### 🔵 联赛专属规则 ({league})\n- {league_hint}\n")
+            
+        return "\n".join(rules)
 
     def _format_match_data(self, match, is_sfc=False):
         """将比赛数据格式化为 Prompt 可读的文本"""
@@ -333,6 +229,11 @@ class LLMPredictor:
         shallow_water_warning = self._detect_shallow_water_trap(asian, odds)
         if shallow_water_warning:
             info += f"  - 🔴 **浅盘升水诱下预警**：{shallow_water_warning}\n"
+            
+        # 7. 🚨 欧亚背离量化预警 (V3架构新增)
+        euro_asian_warning = self._detect_euro_asian_divergence(odds, asian)
+        if euro_asian_warning:
+            info += f"  - 🚨 **欧亚背离量化预警**：{euro_asian_warning}\n"
             
         return info
 
@@ -701,6 +602,116 @@ class LLMPredictor:
                 )
         
         return ' | '.join(warnings) if warnings else ""
+
+    @staticmethod
+    def _detect_euro_asian_divergence(odds, asian):
+        """
+        计算欧赔隐含概率，并对比实际亚指，检测“欧亚背离”冷门预警。
+        逻辑：
+        1. 从竞彩不让球赔率 (NSPF) 提取主平负赔率。
+        2. 计算返还率 (Return Rate) = 1 / (1/win + 1/draw + 1/lose)。
+        3. 计算真实隐含概率 = (1/odds) * Return Rate。
+        4. 根据主队胜率区间映射“理论亚盘”。
+        5. 对比实际澳门初盘，若“理论开深盘，实际开浅盘”，则是典型诱导，极大可能出下盘。
+        """
+        if not odds or not asian:
+            return ""
+            
+        nspf = odds.get('nspf', [])
+        if len(nspf) != 3:
+            return ""
+            
+        try:
+            # 1. 获取竞彩赔率 (默认顺序: 胜, 平, 负)
+            home_odds = float(nspf[0])
+            draw_odds = float(nspf[1])
+            away_odds = float(nspf[2])
+            
+            # 2. 计算返还率
+            implied_prob_sum = (1 / home_odds) + (1 / draw_odds) + (1 / away_odds)
+            return_rate = 1 / implied_prob_sum
+            
+            # 3. 计算真实胜率 (剔除水钱)
+            home_prob = (1 / home_odds) * return_rate
+            away_prob = (1 / away_odds) * return_rate
+            
+            # 确定谁是强势方
+            strong_prob = max(home_prob, away_prob)
+            is_home_strong = home_prob >= away_prob
+            
+            # 4. 理论亚盘映射表 (胜率区间 -> 理论盘口深度)
+            # 这套映射基于业内标准的欧洲赔率转亚洲让球公式
+            theory_handicap_val = 0.0
+            theory_handicap_str = "平手"
+            
+            if strong_prob >= 0.75:
+                theory_handicap_val = 1.5
+                theory_handicap_str = "球半"
+            elif strong_prob >= 0.68:
+                theory_handicap_val = 1.25
+                theory_handicap_str = "一球/球半"
+            elif strong_prob >= 0.62:
+                theory_handicap_val = 1.0
+                theory_handicap_str = "一球"
+            elif strong_prob >= 0.55:
+                theory_handicap_val = 0.75
+                theory_handicap_str = "半球/一球"
+            elif strong_prob >= 0.48:
+                theory_handicap_val = 0.5
+                theory_handicap_str = "半球"
+            elif strong_prob >= 0.40:
+                theory_handicap_val = 0.25
+                theory_handicap_str = "平手/半球"
+            else:
+                theory_handicap_val = 0.0
+                theory_handicap_str = "平手"
+                
+            # 理论盘口如果是客队强，加上负号
+            if not is_home_strong:
+                theory_handicap_val = -theory_handicap_val
+                
+            # 5. 获取实际澳门初盘
+            macau_start = asian.get('macau', {}).get('start', '')
+            if not macau_start or '|' not in macau_start:
+                return ""
+                
+            actual_handicap_str = macau_start.split('|')[1].strip().replace(' ', '')
+            
+            # 实际盘口转数值
+            handicap_map = {
+                '平手': 0, '平手/半球': 0.25, '半球': 0.5, '半球/一球': 0.75,
+                '一球': 1.0, '一球/球半': 1.25, '球半': 1.5, '球半/两球': 1.75,
+                '两球': 2.0, '两球/两球半': 2.25, '两球半': 2.5, 
+                '受平手/半球': -0.25, '受半球': -0.5, '受半球/一球': -0.75, '受一球': -1.0,
+                '受一球/球半': -1.25, '受球半': -1.5, '受球半/两球': -1.75, '受两球': -2.0
+            }
+            
+            actual_handicap_val = handicap_map.get(actual_handicap_str, None)
+            if actual_handicap_val is None:
+                return ""
+                
+            # 6. 对比与预警
+            # 如果主队是强势方，理论盘口 > 实际盘口 (即理论应该让深盘，实际让浅了) -> 诱导主队，看衰主队
+            divergence = theory_handicap_val - actual_handicap_val
+            
+            warnings = []
+            team_strong = "主队" if is_home_strong else "客队"
+            
+            # 背离达到 0.5 (即相差两个盘口，比如理论一球，实际半球)
+            if abs(divergence) >= 0.5:
+                if is_home_strong and divergence > 0:
+                    warnings.append(f"欧赔隐含{team_strong}胜率为{strong_prob:.1%}，理论应开【{theory_handicap_str}】；但实际亚指初盘仅开【{actual_handicap_str}】。欧亚严重背离！实际盘口远浅于理论实力，机构在刻意降低买入{team_strong}的门槛（诱导）。极大概率爆冷，必须防范{team_strong}不胜！")
+                elif not is_home_strong and divergence < 0:
+                    warnings.append(f"欧赔隐含{team_strong}胜率为{strong_prob:.1%}，理论应开受让【{theory_handicap_str}】；但实际亚指初盘仅开【{actual_handicap_str}】。欧亚严重背离！机构刻意降低{team_strong}让步门槛诱导买入。极大概率爆冷，必须防范{team_strong}不胜！")
+                elif is_home_strong and divergence < 0:
+                     warnings.append(f"欧赔隐含{team_strong}胜率为{strong_prob:.1%}，理论仅能支撑【{theory_handicap_str}】；但实际亚指初盘强开【{actual_handicap_str}】深盘。机构在利用深盘和高门槛阻挡资金买入{team_strong}。这是典型的“阻上”手法，{team_strong}大概率能打出！")
+                elif not is_home_strong and divergence > 0:
+                     warnings.append(f"欧赔隐含{team_strong}胜率为{strong_prob:.1%}，理论仅能支撑受让【{theory_handicap_str}】；但实际亚指初盘强开【{actual_handicap_str}】深盘。这是典型的“阻上”手法，{team_strong}大概率能打出！")
+            
+            return " | ".join(warnings)
+            
+        except Exception as e:
+            return ""
 
     @staticmethod
     def _detect_shallow_water_trap(asian, odds):
@@ -1317,68 +1328,137 @@ class LLMPredictor:
     def predict(self, match_data, period=None, total_matches_count=None, is_sfc=False, other_matches_context=None):
         """
         调用 LLM 进行预测，支持时间段标识
-        :param match_data: 比赛数据
-        :param period: 时间段标识 ('pre_24h', 'pre_12h', None自动判断)
-        :param total_matches_count: 当日总比赛场数，用于辅助交叉盘风险判断
-        :param is_sfc: 是否为胜负彩比赛，控制竞彩赔率等信息的显示
-        :param other_matches_context: 其他相关比赛的数据，用于辅助交叉盘或多场同时间同联赛比赛的风控
+        基于 Multi-Agent 工作流的 V3 预测引擎。
+        包含三步：基本面分析 -> 盘口推演 -> 风控裁判最终裁决。
         """
         # 自动判断时间段
         if period is None:
             period = self._determine_prediction_period(match_data)
             
-        user_content = self._format_match_data(match_data, is_sfc=is_sfc)
-        
-        # 增加交叉盘/单日少赛事风险预警，并将其他比赛作为上下文透传
-        if total_matches_count is not None and total_matches_count <= 3:
-            user_content += f"\n\n🚨 **【高危预警：极端赛程交叉盘风险】** 🚨\n"
-            user_content += f"注意：今天竞彩官方一共只开售了 {total_matches_count} 场比赛！\n"
-            user_content += "根据国内主任操盘的经典规律，当单日比赛极少（特别是只有2场）时，全国资金会高度集中，极易触发“交叉盘”专杀2串1的剧本（即“送一场，杀一场”，一场正路顺利打出，另一场大热必死）。\n"
-            user_content += "请在本次预测中**强制引入此交叉盘风控**！我将为你提供今日同开售的其他比赛的简要信息。你需要对比当前比赛与其他比赛的赔率、让球深度和基本面热度。如果当前比赛是最大的“大热比赛”，请务必审视其异常盘口或水位，大幅提高冷门预测权重；不要两场比赛都轻易给出双热正路的推荐结论！\n"
-            
-            if other_matches_context:
-                user_content += "\n**【今日同开售的其他比赛上下文参考】**：\n"
-                for i, om in enumerate(other_matches_context):
-                    if om.get('match_num') != match_data.get('match_num'):
-                        user_content += f"赛事 {i+1}: [{om.get('match_num')}] {om.get('league')} | {om.get('home_team')} VS {om.get('away_team')}\n"
-                        om_odds = om.get('odds', {})
-                        if om_odds.get('nspf'):
-                            user_content += f"  - 不让球赔率: {om_odds.get('nspf')}\n"
-                        if om_odds.get('spf'):
-                            user_content += f"  - 让球({om_odds.get('rangqiu')})赔率: {om_odds.get('spf')}\n"
-                        om_asian = om.get('asian_odds', {})
-                        if 'macau' in om_asian:
-                            user_content += f"  - 澳门亚指: {om_asian['macau'].get('start')} -> {om_asian['macau'].get('live')}\n"
-                user_content += "请基于上述同日比赛的赔率结构，判断本场比赛在“交叉盘”剧本中，扮演的是“稳穿的正路”还是“杀猪的诱盘下路”！\n"
-
-        # 增加胜负彩专属提示词
-        if is_sfc:
-            user_content += f"\n\n🚨 **【胜负彩专属要求】** 🚨\n"
-            user_content += "这是一场足彩十四场（胜负彩）比赛，你需要预测的最终赛果是全场胜平负（不让球）。\n"
-            user_content += "但是！【极其重要】：如果本场比赛提供了竞彩的【让球赔率(spf)】或【亚洲让球盘口】，你**必须**像分析普通竞彩一样，深度剖析这个让球盘口背后的机构博弈意图（诱盘、阻盘、强力看好等）。\n"
-            user_content += "盘口深度和水位的异动是判断两队真实差距和爆冷可能性的核心维度，绝对不能因为这是胜负彩就忽略让球数据！\n"
-            user_content += "区别仅仅在于：**在最终输出推荐时，只提供【竞彩不让球推荐】即可，不需要在输出结果中包含让球胜平负的选项**。你的推理过程必须包含让球博弈的思考！\n"
-
-        logger.info(f"正在向大模型 ({self.model}) 发送预测请求：{match_data.get('home_team')} VS {match_data.get('away_team')} [时间段: {period}]")
-        
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
+            # 1. 格式化数据并提取盘口标签
+            formatted_data = self._format_match_data(match_data, is_sfc)
+            handicap_label = self._classify_handicap(match_data.get('odds', {}).get('rangqiu', '0'), match_data.get('asian_odds', {}))
+            
+            # 2. 动态组装规则
+            dynamic_rules = self._build_dynamic_rules(match_data, handicap_label)
+            
+            # ==========================================
+            # Agent A: 基本面专员 (仅看基本面数据)
+            # ==========================================
+            logger.info(f"[{match_data.get('home_team')} vs {match_data.get('away_team')}] Agent A 正在分析基本面...")
+            agent_a_data = self._extract_fundamentals(match_data)
+            agent_a_response = self.client.chat.completions.create(
+                model=os.getenv('LLM_MODEL', 'ep-20250212200331-52ndx'),
                 messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": f"请分析以下比赛数据并给出预测：\n\n{user_content}"}
+                    {"role": "system", "content": AGENT_A_PROMPT},
+                    {"role": "user", "content": f"请分析以下比赛的基本面：\n{agent_a_data}"}
                 ],
-                temperature=0.7,
-                max_tokens=4000
+                temperature=0.3
+            )
+            agent_a_conclusion = agent_a_response.choices[0].message.content
+            
+            # ==========================================
+            # Agent B: 盘口推演专员 (仅看盘口与预警数据)
+            # ==========================================
+            logger.info(f"[{match_data.get('home_team')} vs {match_data.get('away_team')}] Agent B 正在推演盘口意图...")
+            agent_b_data = self._extract_odds_data(match_data)
+            agent_b_response = self.client.chat.completions.create(
+                model=os.getenv('LLM_MODEL', 'ep-20250212200331-52ndx'),
+                messages=[
+                    {"role": "system", "content": AGENT_B_PROMPT},
+                    {"role": "user", "content": f"请推演以下比赛的机构盘口意图：\n{agent_b_data}"}
+                ],
+                temperature=0.4
+            )
+            agent_b_conclusion = agent_b_response.choices[0].message.content
+            
+            # ==========================================
+            # Agent C: 风控裁判长 (整合输出)
+            # ==========================================
+            logger.info(f"[{match_data.get('home_team')} vs {match_data.get('away_team')}] Agent C 正在进行最终风控裁决...")
+            final_prompt = f"""
+{AGENT_C_PROMPT}
+
+### 🔴 动态风控铁律 (本场比赛必须遵守)
+{dynamic_rules}
+
+---
+### 比赛原始数据参考
+{formatted_data}
+
+---
+### 专员报告
+**【基本面专员报告】**：
+{agent_a_conclusion}
+
+**【盘口专员报告】**：
+{agent_b_conclusion}
+
+请根据以上报告和风控铁律，输出最终预测。
+"""
+            agent_c_response = self.client.chat.completions.create(
+                model=os.getenv('LLM_MODEL', 'ep-20250212200331-52ndx'),
+                messages=[
+                    {"role": "user", "content": final_prompt}
+                ],
+                temperature=0.2 # 裁判长需要极其冷静客观
             )
             
-            result = response.choices[0].message.content
+            result = agent_c_response.choices[0].message.content
             logger.info(f"预测成功返回！ [时间段: {period}]")
             return result, period
             
         except Exception as e:
             logger.error(f"调用 LLM 失败: {e}")
             return f"预测失败: {e}", period
+
+    def _extract_fundamentals(self, match_data):
+        """为 Agent A 提取纯基本面数据"""
+        info = f"- 赛事信息：{match_data.get('league')} | {match_data.get('home_team')} VS {match_data.get('away_team')}\n"
+        recent = match_data.get('recent_form', {})
+        if recent.get('standings'):
+            info += f"- 联赛积分与排名：{recent.get('standings')}\n"
+        info += f"- 主队近期战绩：{recent.get('home', '暂无')}\n"
+        info += f"- 客队近期战绩：{recent.get('away', '暂无')}\n"
+        info += f"- 交锋记录：{match_data.get('h2h_summary', '暂无')}\n"
+        if recent.get('injuries') and recent.get('injuries') != "暂无详细伤停数据":
+            info += f"- 伤停与阵容：{recent.get('injuries')}\n"
+            
+        adv_stats = match_data.get('advanced_stats', {})
+        home_adv = adv_stats.get('home', {})
+        away_adv = adv_stats.get('away', {})
+        info += f"- 主队场均射门 {home_adv.get('avg_shots', '未知')}, 场均射正 {home_adv.get('avg_shots_on_target', '未知')}\n"
+        info += f"- 客队场均射门 {away_adv.get('avg_shots', '未知')}, 场均射正 {away_adv.get('avg_shots_on_target', '未知')}\n"
+        return info
+
+    def _extract_odds_data(self, match_data):
+        """为 Agent B 提取纯盘口和预警数据"""
+        info = ""
+        odds = match_data.get('odds', {})
+        if odds.get('nspf'):
+            info += f"- 竞彩不让球赔率：{odds.get('nspf', [])}\n"
+        if odds.get('spf'):
+            info += f"- 竞彩让球({odds.get('rangqiu')})赔率：{odds.get('spf', [])}\n"
+            
+        asian = match_data.get('asian_odds', {})
+        if 'macau' in asian:
+            info += f"- 澳门亚指：初盘 [{asian['macau'].get('start')}] -> 即时盘 [{asian['macau'].get('live')}]\n"
+            
+        # 加入量化预警
+        deep_water = self._detect_deep_water_trap(asian)
+        if deep_water: info += f"- 🚨 超深盘死水预警：{deep_water}\n"
+        
+        half_ball = self._detect_half_ball_trap(asian, odds)
+        if half_ball: info += f"- 🔴 半球生死盘预警：{half_ball}\n"
+        
+        divergence = self._detect_handicap_water_divergence(asian)
+        if divergence: info += f"- 🔴 盘水背离预警：{divergence}\n"
+        
+        euro_asian = self._detect_euro_asian_divergence(odds, asian)
+        if euro_asian: info += f"- 🚨 欧亚背离量化预警：{euro_asian}\n"
+        
+        return info
 
     def _determine_prediction_period(self, match_data):
         """
