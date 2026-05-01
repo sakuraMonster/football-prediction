@@ -1,0 +1,14 @@
+[
+  {
+    "match_num": "周四005",
+    "home_team": "布拉加",
+    "away_team": "弗赖堡",
+    "league": "欧罗巴",
+    "asian_start": "平手/半球",
+    "actual_result": "胜/让胜",
+    "ai_reason": "主队水位从0.77飙升至1.01，盘口未变，这是机构在真实看衰主队，主场让球无力，客队必定不败。",
+    "raw_data": {
+      "league": "欧罗巴"
+    }
+  }
+]

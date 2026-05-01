@@ -625,6 +625,19 @@ def do_post_mortem(target_date=None):
     with open(os.path.join(reports_dir, 'wrong_predictions.json'), 'w', encoding='utf-8') as f:
         json.dump(wrong_matches, f, ensure_ascii=False, indent=2)
 
+    # 将错误案例自动存入独立目录，形成动态错题本 (V3 架构 - 第一阶段)
+    error_db_dir = os.path.join(project_root, 'data', 'knowledge_base', 'errors')
+    os.makedirs(error_db_dir, exist_ok=True)
+    
+    if wrong_matches:
+        error_file = os.path.join(error_db_dir, f'errors_{yesterday}.json')
+        try:
+            with open(error_file, 'w', encoding='utf-8') as f:
+                json.dump(wrong_matches, f, ensure_ascii=False, indent=2)
+            print(f"[KB] 自动归档 {len(wrong_matches)} 个错题到知识库: {error_file}")
+        except Exception as e:
+            print(f"[KB] 保存错题本失败: {e}")
+
     # 4. 调用大模型对错误比赛进行原因分析（生成报告及CSV）
     from generate_detailed_report import generate_detailed_report
     generate_detailed_report(yesterday)

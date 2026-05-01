@@ -1343,6 +1343,11 @@ class LLMPredictor:
             # 2. 动态组装规则
             dynamic_rules = self._build_dynamic_rules(match_data, handicap_label)
             
+            # 3. RAG 召回：从历史错题本中寻找相似教训
+            similar_errors_warning = self._recall_similar_errors(match_data, handicap_label)
+            if similar_errors_warning:
+                dynamic_rules += f"\n\n{similar_errors_warning}"
+            
             # ==========================================
             # Agent A: 基本面专员 (仅看基本面数据)
             # ==========================================
@@ -1459,6 +1464,77 @@ class LLMPredictor:
         if euro_asian: info += f"- 🚨 欧亚背离量化预警：{euro_asian}\n"
         
         return info
+
+    def _recall_similar_errors(self, match_data, current_handicap_label):
+        """
+        从本地错题本 (errors.json) 中召回高度相似的历史教训。
+        匹配维度：同联赛 + 同盘口深度。
+        """
+        try:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            error_db_dir = os.path.join(base_dir, 'data', 'knowledge_base', 'errors')
+            
+            if not os.path.exists(error_db_dir):
+                return ""
+                
+            current_league = match_data.get('league', '')
+            if not current_league or not current_handicap_label:
+                return ""
+                
+            # 简化盘口标签用于模糊匹配 (如：平半, 半球, 一球)
+            simplified_ht = current_handicap_label.split('(')[0].replace('受', '')
+            
+            similar_cases = []
+            
+            # 遍历最近的错题文件
+            for filename in sorted(os.listdir(error_db_dir), reverse=True)[:10]: # 最多看最近10天的错题
+                if not filename.endswith('.json'):
+                    continue
+                    
+                with open(os.path.join(error_db_dir, filename), 'r', encoding='utf-8') as f:
+                    errors = json.load(f)
+                    
+                for err in errors:
+                    # 获取错题中的联赛和盘口
+                    err_league = err.get('league', '') if 'league' in err else err.get('raw_data', {}).get('league', '')
+                    err_asian = err.get('asian_start', '') if 'asian_start' in err else err.get('raw_data', {}).get('asian_odds', {}).get('macau', {}).get('start', '')
+                    
+                    if not err_league or not err_asian:
+                        continue
+                        
+                    if current_league in err_league or err_league in current_league:
+                        # 检查 simplified_ht (如"平半"或"平手半球") 是否在历史盘口文本中
+                        # 兼容各种亚盘的称呼写法
+                        if (simplified_ht in err_asian or err_asian in simplified_ht or 
+                            simplified_ht in err_asian.replace('/', '') or
+                            err_asian in simplified_ht.replace(' ', '')):
+                            # 找到相似错题！
+                            actual_res = err.get('actual_result', '') or f"{err.get('actual_nspf', '')}/{err.get('actual_spf', '')}"
+                            reason = err.get('ai_reason', '') or err.get('reason', '')
+                            
+                            similar_cases.append(
+                                f"- 赛事：【{err.get('home_team') or err.get('home')} vs {err.get('away_team') or err.get('away')}】\n"
+                                f"  - 当时盘口：{err_asian}\n"
+                                f"  - AI当时错误判断：{reason[:100]}...\n"
+                                f"  - 最终真实赛果：{actual_res}（冷门打出）\n"
+                            )
+                            
+                            if len(similar_cases) >= 2: # 最多给2个案例，防止Prompt过长
+                                break
+                
+                if len(similar_cases) >= 2:
+                    break
+                    
+            if similar_cases:
+                warning_text = "### 🚨 历史错题召回警告 (RAG)\n"
+                warning_text += f"系统在历史错题库中发现，在【{current_league}】联赛的【{simplified_ht}】盘口下，模型曾犯过以下错误。请你务必仔细比对当前比赛，**切勿重蹈覆辙，优先考虑防范冷门**：\n"
+                warning_text += "\n".join(similar_cases)
+                return warning_text
+                
+        except Exception as e:
+            logger.error(f"召回历史错题失败: {e}")
+            
+        return ""
 
     def _determine_prediction_period(self, match_data):
         """
