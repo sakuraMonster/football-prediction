@@ -102,6 +102,89 @@ def handicap_type(rangqiu_str, asian_odds=None):
     return ht[:6]
 
 
+def _normalize_direction_tokens(text):
+    """把四维仲裁中的自然语言方向归一成 NSPF tokens。"""
+    normalized = str(text or "").replace(" ", "").replace("、", "/")
+    if not normalized or normalized in {"暂无", "未提取", "信息不足", "无", "无明显倾向"}:
+        return []
+
+    keyword_map = [
+        ("主队不败", ["胜", "平"]),
+        ("客队不败", ["平", "负"]),
+        ("主队不胜", ["平", "负"]),
+        ("客队不胜", ["胜", "平"]),
+        ("胜平", ["胜", "平"]),
+        ("平负", ["平", "负"]),
+        ("胜负", ["胜", "负"]),
+        ("主胜", ["胜"]),
+        ("客胜", ["负"]),
+        ("平局", ["平"]),
+    ]
+    for keyword, tokens in keyword_map:
+        if keyword in normalized:
+            return tokens
+
+    tokens = []
+    for token in ["胜", "平", "负"]:
+        if token in normalized and token not in tokens:
+            tokens.append(token)
+    return tokens
+
+
+def _dimension_review(value, actual_nspf):
+    tokens = _normalize_direction_tokens(value)
+    if not value or str(value).strip() in {"", "暂无", "未提取", "信息不足"}:
+        return {
+            "value": value or "未提取",
+            "bias": "无明确偏向",
+            "status": "信息不足",
+            "is_correct": None,
+        }
+
+    if not tokens:
+        return {
+            "value": value,
+            "bias": "无明确偏向",
+            "status": "信息不足",
+            "is_correct": None,
+        }
+
+    bias = "/".join(tokens)
+    is_correct = actual_nspf in tokens
+    return {
+        "value": value,
+        "bias": bias,
+        "status": "命中" if is_correct else "错误",
+        "is_correct": is_correct,
+    }
+
+
+def _build_agentc_mistake_hint(dim_reviews, override_reason, actual_nspf):
+    final_review = dim_reviews.get("final", {})
+    if final_review.get("is_correct") is True:
+        return "Agent C 最终仲裁方向与实际赛果一致，本场不属于仲裁误判。"
+
+    correct_dims = [name for name, review in dim_reviews.items() if name != "final" and review.get("is_correct") is True]
+    wrong_dims = [name for name, review in dim_reviews.items() if name != "final" and review.get("is_correct") is False]
+    info_poor_dims = [name for name, review in dim_reviews.items() if name != "final" and review.get("is_correct") is None]
+
+    reasons = []
+    if correct_dims:
+        reasons.append("本来更接近赛果的维度是：" + "、".join(correct_dims))
+    if wrong_dims:
+        reasons.append("判断偏掉的维度是：" + "、".join(wrong_dims))
+    if override_reason and override_reason not in {"暂无", "无明显冲突，无需推翻"}:
+        reasons.append(f"当时的推翻原因写成：{override_reason}")
+    elif correct_dims:
+        reasons.append("Agent C 没有把更接近赛果的维度真正上升为最终仲裁。")
+    if info_poor_dims:
+        reasons.append("以下维度信息不足或未形成明确方向：" + "、".join(info_poor_dims))
+
+    if not reasons:
+        return f"Agent C 最终仲裁与实际赛果 {actual_nspf} 不一致，但四维文本未提供足够结构化信息。"
+    return "；".join(reasons)
+
+
 def compute_accuracy_report(target_date=None):
     """
     程序化计算指定日期的预测准确率报告。
@@ -211,6 +294,12 @@ def compute_accuracy_report(target_date=None):
         pred_nspf = details.get('recommendation_nspf', '')
         pred_rq = details.get('recommendation_rq', '')
         reason = details.get('reason', '')
+        arb_fundamental = details.get('arb_fundamental', '')
+        arb_market = details.get('arb_market', '')
+        arb_intel = details.get('arb_intel', '')
+        arb_micro = details.get('arb_micro', '')
+        arb_final = details.get('arb_final', '')
+        arb_override_reason = details.get('arb_override_reason', '')
         
         # Get asian odds
         full_asian = raw_data.get('asian_odds', {})
@@ -240,6 +329,14 @@ def compute_accuracy_report(target_date=None):
         
         htype = handicap_type(rangqiu, full_asian)
         league = pred.get('league', '')
+        dim_reviews = {
+            "基本面": _dimension_review(arb_fundamental, actual_nspf),
+            "盘赔": _dimension_review(arb_market, actual_nspf),
+            "情报": _dimension_review(arb_intel, actual_nspf),
+            "微观规则": _dimension_review(arb_micro, actual_nspf),
+            "final": _dimension_review(arb_final or pred_nspf, actual_nspf),
+        }
+        agentc_mistake_hint = _build_agentc_mistake_hint(dim_reviews, arb_override_reason, actual_nspf)
         
         report["overall"]["total"] += 1
         if is_correct_nspf:
@@ -275,7 +372,16 @@ def compute_accuracy_report(target_date=None):
             "asian_start": asian_start,
             "asian_live": asian_live,
             "reason": reason,
-            "pred_id": pred.get('id')
+            "pred_id": pred.get('id'),
+            "prediction_period": pred.get('prediction_period', ''),
+            "arb_fundamental": arb_fundamental or "未提取",
+            "arb_market": arb_market or "未提取",
+            "arb_intel": arb_intel or "未提取",
+            "arb_micro": arb_micro or "未提取",
+            "arb_final": arb_final or (pred_nspf if pred_nspf != '暂无' else '未提取'),
+            "arb_override_reason": arb_override_reason or "未提取",
+            "dim_reviews": dim_reviews,
+            "agentc_mistake_hint": agentc_mistake_hint,
         })
         
         # Write is_correct back to DB (overall)

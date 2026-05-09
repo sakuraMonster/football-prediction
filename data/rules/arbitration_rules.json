@@ -1,0 +1,62 @@
+[
+  {
+    "id": "weak_evidence_cannot_override_market",
+    "name": "弱证据不得推翻强盘口",
+    "category": "arbitration_guard",
+    "priority": 90,
+    "condition": "ctx['market_micro_aligned'] is True and ctx['reverse_only_from_fundamental_or_intel'] is True",
+    "action_type": "forbid_override",
+    "action_payload": {
+      "blocked_dimensions": [
+        "基本面",
+        "情报"
+      ]
+    },
+    "explanation_template": "当盘赔与微观规则同向时，基本面或情报不得单独推翻市场方向。",
+    "enabled": true,
+    "source": "post_mortem_seed"
+  },
+  {
+    "id": "pk025_drop_to_pk_low_water_support_home",
+    "name": "平半退平手低水应视为主队保护",
+    "category": "arbitration_guard",
+    "priority": 95,
+    "condition": "ctx['asian'].get('start_hv') == 0.25 and ctx['asian'].get('live_hv') == 0.0 and (ctx['asian'].get('giving_live_w') is not None and ctx['asian'].get('giving_live_w') <= 0.80)",
+    "action_type": "forbid_override",
+    "action_payload": {
+      "blocked_dimensions": [
+        "盘赔反向诱下",
+        "微观规则反向诱下"
+      ]
+    },
+    "explanation_template": "平半退平手且上盘终盘超低水，更接近退盘散热保护主队，而非单纯看衰主队；若无强烈反向情报，不应继续用诱下逻辑压制主队方向。",
+    "enabled": true,
+    "source": "post_mortem_2026_05_08"
+  },
+  {
+    "id": "information_vacuum_abort",
+    "name": "信息真空直接回避",
+    "category": "arbitration_guard",
+    "priority": 100,
+    "condition": "ctx['informative_dimension_count'] < 2",
+    "action_type": "abort_prediction",
+    "action_payload": {
+      "message": "四维信息几乎为空，继续给出方向属于猜测，建议直接回避。"
+    },
+    "explanation_template": "当四维仲裁缺少足够信息支撑时，系统应直接回避，而不是在信息真空中硬给结论。",
+    "enabled": false,
+    "source": "post_mortem_seed"
+  },
+  {
+    "id": "arbitration_rule_draft_002",
+    "name": "平半退平手低水正路辩护：应识别为保护而非看衰",
+    "category": "arbitration_guard",
+    "priority": 60,
+    "condition": "ctx['asian'].get('start_hv') == 0.25 and ctx['asian'].get('live_hv') == 0.0 and ctx['asian'].get('giving_live_w') <= 0.80",
+    "action_type": "forbid_override",
+    "action_payload": {},
+    "explanation_template": "盘口从‘主让平半’退至‘主让平手’，且上盘水位最终处于超低水",
+    "enabled": true,
+    "source": "rule_draft_prefill"
+  }
+]

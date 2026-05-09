@@ -3,18 +3,29 @@ import sys
 import os
 import hashlib
 import json
+import asyncio
 from datetime import datetime
+
+# 强制恢复 Windows 默认的 ProactorEventLoop，解决子进程 NotImplementedError
+if sys.platform == 'win32':
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    except Exception:
+        pass
+
+import nest_asyncio
+nest_asyncio.apply()
 
 from dotenv import load_dotenv
 _base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(_base, "config", ".env"))
 
+sys.path.insert(0, _base)
+
 from src.logging_config import setup_logging
 setup_logging()
 from loguru import logger
 
-# 添加项目根目录到 Python 路径
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.db.database import Database
 
 # 设置页面配置 (主入口文件必须包含)

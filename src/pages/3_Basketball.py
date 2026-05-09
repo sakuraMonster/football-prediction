@@ -4,12 +4,11 @@ import os
 import pandas as pd
 import sys
 import base64
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from src.constants import AUTH_TOKEN_TTL
 import time
 from datetime import datetime, timedelta
 
-# 添加项目根目录到 Python 路径
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from src.llm.bball_predictor import BBallPredictor
 from src.db.database import Database
 from src.crawler.jclq_crawler import JclqCrawler

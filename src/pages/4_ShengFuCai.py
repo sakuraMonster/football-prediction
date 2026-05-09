@@ -4,13 +4,12 @@ import os
 import sys
 import time
 import base64
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from src.constants import AUTH_TOKEN_TTL
 from datetime import datetime
 from loguru import logger
 import traceback
 
-# 确保能导入 src 下的模块
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.db.database import Database
 from src.crawler.sfc_crawler import SfcCrawler
 from src.crawler.odds_crawler import OddsCrawler

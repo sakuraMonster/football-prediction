@@ -2,9 +2,58 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
 import os
+import re
 from datetime import datetime
+from loguru import logger
 
 Base = declarative_base()
+
+
+def _parse_match_time_value(value):
+    """兼容无秒/有秒/ISO 字符串的比赛时间解析。"""
+    if not value:
+        return None
+    if isinstance(value, datetime):
+        return value
+
+    text = str(value).strip()
+    if not text:
+        return None
+
+    normalized = text.replace("T", " ")
+    for fmt in (
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%Y/%m/%d %H:%M:%S",
+        "%Y/%m/%d %H:%M",
+    ):
+        try:
+            return datetime.strptime(normalized, fmt)
+        except ValueError:
+            continue
+
+    try:
+        return datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+
+
+def _parse_actual_result_from_score(score):
+    """根据比分文本推导实际胜平负。"""
+    if not score:
+        return None
+
+    match = re.search(r'(\d+)\s*[:：-]\s*(\d+)', str(score))
+    if not match:
+        return None
+
+    home_score = int(match.group(1))
+    away_score = int(match.group(2))
+    if home_score > away_score:
+        return "胜"
+    if home_score < away_score:
+        return "负"
+    return "平"
 
 class User(Base):
     __tablename__ = 'users'
@@ -39,8 +88,8 @@ class MatchPrediction(Base):
     # 半全场(平胜/平负) 专项预测结果
     htft_prediction_text = Column(Text, nullable=True)
     
-    # 结构化预测结果 (后续可扩展，用于回测)
-    predicted_result = Column(String(50), nullable=True) # 胜/平/负
+    # 主模型从预测报告中解析出的竞彩推荐（不让球）
+    predicted_result = Column(String(100), nullable=True)
     confidence = Column(Integer, nullable=True) # 1-5星
     
     # 实际赛果
@@ -124,6 +173,30 @@ class DailyReview(Base):
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
+class EuroOddsHistory(Base):
+    """欧赔初赔vs临赔历史数据，用于赔率变化规律分析"""
+    __tablename__ = 'euro_odds_history'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    fixture_id = Column(String(50), index=True)
+    match_num = Column(String(50), nullable=True)
+    league = Column(String(100), nullable=True)
+    home_team = Column(String(100), nullable=True)
+    away_team = Column(String(100), nullable=True)
+    match_time = Column(DateTime, nullable=True)
+    company = Column(String(100), nullable=True)  # 博彩公司名称
+    init_home = Column(String(20), nullable=True)  # 初赔主胜
+    init_draw = Column(String(20), nullable=True)  # 初赔平局
+    init_away = Column(String(20), nullable=True)  # 初赔客胜
+    live_home = Column(String(20), nullable=True)  # 临赔主胜
+    live_draw = Column(String(20), nullable=True)  # 临赔平局
+    live_away = Column(String(20), nullable=True)  # 临赔客胜
+    actual_score = Column(String(50), nullable=True)  # 实际比分
+    actual_result = Column(String(20), nullable=True)  # 胜/平/负
+    data_source = Column(String(50), default='500.com')  # 数据来源
+    created_at = Column(DateTime, default=datetime.now)
+
+
 class Database:
     def __init__(self, db_url=None):
         if db_url is None:
@@ -139,8 +212,46 @@ class Database:
             
         self.engine = create_engine(db_url)
         Base.metadata.create_all(self.engine)
+        self._ensure_match_predictions_columns()
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
+
+    def _ensure_match_predictions_columns(self):
+        """为已有 SQLite 库补齐运行期需要的列。"""
+        try:
+            with self.engine.begin() as conn:
+                columns = {
+                    row[1]
+                    for row in conn.exec_driver_sql("PRAGMA table_info(match_predictions)").fetchall()
+                }
+                if "predicted_result" not in columns:
+                    conn.exec_driver_sql(
+                        "ALTER TABLE match_predictions ADD COLUMN predicted_result VARCHAR(100)"
+                    )
+        except Exception as e:
+            logger.warning(f"match_predictions 列检查失败: {e}")
+
+    @staticmethod
+    def extract_prediction_recommendation(prediction_text):
+        """从预测报告中提取不让球“竞彩推荐”原文。"""
+        if not prediction_text:
+            return None
+
+        patterns = [
+            r'[\-\*\s]*竞彩推荐(?:（不让球）|\(不让球\))?[\*\s]*[：:]\s*([^\n\r]+)',
+            r'[\-\*\s]*不让球推荐[\*\s]*[：:]\s*([^\n\r]+)',
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, prediction_text)
+            if match:
+                value = match.group(1).strip()
+                value = re.sub(r'^[\-\*\s]+', '', value)
+                value = re.sub(r'[\*]+', '', value)
+                value = re.split(r'\s*(?:（不让球[^）]*）|\(不让球[^)]*\)|——|--)\s*', value, maxsplit=1)[0].strip()
+                value = re.sub(r'\s*（不让球.*?\)|\s*\(不让球.*?\)', '', value)
+                return value[:100]
+
+        return None
 
     def save_prediction(self, match_data, period='pre_24h'):
         """保存或更新预测结果，支持时间段标识"""
@@ -155,12 +266,10 @@ class Database:
                 prediction_period=period
             ).first()
             
-            match_time_str = match_data.get("match_time")
-            try:
-                # 尝试解析时间
-                match_time = datetime.strptime(match_time_str, "%Y-%m-%d %H:%M")
-            except:
-                match_time = None
+            match_time = _parse_match_time_value(match_data.get("match_time"))
+
+            prediction_text = match_data.get("llm_prediction", "")
+            predicted_result = self.extract_prediction_recommendation(prediction_text)
 
             if not record:
                 # 新建记录
@@ -173,15 +282,17 @@ class Database:
                     match_time=match_time,
                     prediction_period=period,
                     raw_data=match_data,
-                    prediction_text=match_data.get("llm_prediction", ""),
+                    prediction_text=prediction_text,
+                    predicted_result=predicted_result,
                     htft_prediction_text=match_data.get("htft_prediction", "")
                 )
                 self.session.add(record)
             else:
                 # 更新记录
                 record.raw_data = match_data
-                if match_data.get("llm_prediction"):
-                    record.prediction_text = match_data.get("llm_prediction")
+                if prediction_text:
+                    record.prediction_text = prediction_text
+                    record.predicted_result = predicted_result
                 if match_data.get("htft_prediction"):
                     record.htft_prediction_text = match_data.get("htft_prediction")
                     
@@ -228,11 +339,7 @@ class Database:
                 fixture_id=fixture_id
             ).first()
             
-            match_time_str = match_data.get("match_time")
-            try:
-                match_time = datetime.strptime(match_time_str, "%Y-%m-%d %H:%M")
-            except:
-                match_time = None
+            match_time = _parse_match_time_value(match_data.get("match_time"))
 
             if not record:
                 record = BasketballPrediction(
@@ -278,11 +385,7 @@ class Database:
                 match_num=match_num
             ).first()
             
-            match_time_str = match_data.get("match_time")
-            try:
-                match_time = datetime.strptime(match_time_str, "%Y-%m-%d %H:%M")
-            except:
-                match_time = None
+            match_time = _parse_match_time_value(match_data.get("match_time"))
 
             if not record:
                 record = SfcPrediction(
@@ -378,11 +481,13 @@ class Database:
         """更新比赛实际赛果"""
         try:
             records = self.session.query(MatchPrediction).filter_by(fixture_id=fixture_id).all()
+            actual_result = _parse_actual_result_from_score(score)
             for record in records:
                 record.actual_score = score
+                if actual_result:
+                    record.actual_result = actual_result
                 if bqc_result:
                     record.actual_bqc = bqc_result
-                # 此处可以增加计算 actual_result 的逻辑
             self.session.commit()
             return True
         except Exception as e:
@@ -393,6 +498,45 @@ class Database:
     def get_daily_review(self, target_date):
         """获取某日的复盘记录"""
         return self.session.query(DailyReview).filter_by(target_date=target_date).first()
+
+    def save_euro_odds(self, match_info, company_odds):
+        """批量保存欧赔历史数据
+        match_info: dict with fixture_id, match_num, league, home_team, away_team, match_time, actual_score, actual_result
+        company_odds: list of dict, each with company, init_home, init_draw, init_away, live_home, live_draw, live_away
+        """
+        try:
+            fixture_id = match_info.get("fixture_id")
+            if not fixture_id:
+                return False
+            saved = 0
+            for co in company_odds:
+                if not co.get("init_home") or not co.get("live_home"):
+                    continue
+                record = EuroOddsHistory(
+                    fixture_id=fixture_id,
+                    match_num=match_info.get("match_num", ""),
+                    league=match_info.get("league", ""),
+                    home_team=match_info.get("home_team", ""),
+                    away_team=match_info.get("away_team", ""),
+                    match_time=match_info.get("match_time_parsed"),
+                    company=co.get("company", ""),
+                    init_home=co.get("init_home"),
+                    init_draw=co.get("init_draw"),
+                    init_away=co.get("init_away"),
+                    live_home=co.get("live_home"),
+                    live_draw=co.get("live_draw"),
+                    live_away=co.get("live_away"),
+                    actual_score=match_info.get("actual_score", ""),
+                    actual_result=match_info.get("actual_result", ""),
+                )
+                self.session.add(record)
+                saved += 1
+            self.session.commit()
+            return saved
+        except Exception as e:
+            self.session.rollback()
+            logger.error(f"保存欧赔历史失败: {e}")
+            return 0
 
     def save_daily_review(self, target_date, review_content, htft_review_content=None):
         """保存某日的复盘记录"""

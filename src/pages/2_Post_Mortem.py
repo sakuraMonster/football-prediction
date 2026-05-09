@@ -2,11 +2,19 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 import base64
+import os
+import sys
+import json
+from urllib.parse import urlencode
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from src.constants import AUTH_TOKEN_TTL
 import time
 from src.db.database import Database
 from src.crawler.jingcai_crawler import JingcaiCrawler
 from src.llm.predictor import LLMPredictor
+from src.utils.rule_drafts import append_rule_drafts, get_pending_rule_drafts
 
 def decode_auth_token(token):
     try:
@@ -15,6 +23,22 @@ def decode_auth_token(token):
         return username, int(timestamp)
     except:
         return None, 0
+
+
+def build_rule_manager_url(auth_token, focus_case="", focus_rule_id="", focus_scope="", focus_action=""):
+    params = {}
+    if auth_token:
+        params["auth"] = auth_token
+    if focus_case:
+        params["focus_case"] = focus_case
+    if focus_rule_id:
+        params["focus_rule_id"] = focus_rule_id
+    if focus_scope:
+        params["focus_scope"] = focus_scope
+    if focus_action:
+        params["focus_action"] = focus_action
+    query = urlencode(params)
+    return f"/Rule_Manager?{query}" if query else "/Rule_Manager"
 
 def main():
     st.set_page_config(page_title="赛果复盘与模型优化", page_icon="🔍", layout="wide")
@@ -77,6 +101,8 @@ def main():
     st.sidebar.info(user_info)
     st.sidebar.markdown("---")
 
+    current_auth_token = st.query_params.get("auth", "")
+
     st.sidebar.header("🧭 功能导航")
     if st.sidebar.button("🏠 返回今日赛事看板", use_container_width=True):
         if "auth" in st.query_params:
@@ -136,6 +162,7 @@ def main():
                     
                     # 为了只展示属于抓取赛果范围内的比赛，我们加一个过滤
                     matched_predictions = []
+                    matched_fixture_ids = []
                     for p in predictions:
                         if p.match_num and p.match_num in results_dict:
                             result_info = results_dict[p.match_num]
@@ -153,8 +180,10 @@ def main():
                             p.actual_score = actual_score # 立即更新内存对象，方便展示
                             p.actual_bqc = actual_bqc
                             matched_predictions.append(p)
+                            matched_fixture_ids.append(p.fixture_id)
                             
-                    st.session_state["post_mortem_predictions"] = matched_predictions
+                    st.session_state["post_mortem_date"] = target_date_str
+                    st.session_state["post_mortem_fixture_ids"] = matched_fixture_ids
                     st.success(f"成功获取并更新了 {len(matched_predictions)} 场比赛的赛果！")
                     
     with col3:
@@ -162,9 +191,8 @@ def main():
         st.write("")
         if st.button("📥 补拉历史比赛数据(仅入库)", help="从500彩票网历史页面拉取指定日期的比赛和比分（不走预测）"):
             with st.spinner(f"正在从500网拉取 {target_date_str} 历史数据..."):
-                from src.processor.data_fusion import DataFusion
+                from src.processor.data_fusion import DataFusion, build_leisu_crawler
                 from src.crawler.odds_crawler import OddsCrawler
-                import json
                 
                 jingcai_crawler = JingcaiCrawler()
                 history_matches = jingcai_crawler.fetch_history_matches(target_date)
@@ -173,12 +201,23 @@ def main():
                     st.warning(f"未能拉取到 {target_date_str} 的历史比赛数据。")
                 else:
                     st.toast(f"已拉取 {len(history_matches)} 场比赛，正在融合盘口数据...")
+                    leisu = build_leisu_crawler(headless=True)
                     try:
                         odds_crawler = OddsCrawler()
                         data_fusion = DataFusion()
-                        history_matches = data_fusion.merge_data(history_matches, odds_crawler)
+                        history_matches = data_fusion.merge_data(
+                            history_matches,
+                            odds_crawler,
+                            leisu_crawler=leisu,
+                        )
                     except Exception as e:
                         st.warning(f"盘口数据融合失败: {e}")
+                    finally:
+                        if leisu:
+                            try:
+                                leisu.close()
+                            except Exception:
+                                pass
                         
                     # 先清除该窗口内已有的 historical 记录，防止重复拉取导致数据翻倍
                     ws = datetime.strptime(target_date_str, '%Y-%m-%d').replace(hour=12, minute=0, second=0)
@@ -193,7 +232,7 @@ def main():
                     saved = 0
                     for m in history_matches:
                         try:
-                            raw_json = json.dumps({"odds": m.get("odds", {}), "asian_odds": m.get("asian_odds", {})}, ensure_ascii=False)
+                            raw_json = json.dumps(m, ensure_ascii=False)
                             match_time = m.get('match_time', '')
                             db.session.execute(text("""
                                 INSERT INTO match_predictions 
@@ -230,7 +269,9 @@ def main():
                 st.warning(f"当前日期窗口 ({target_date_str} 12:00~次日12:00) 没有历史补拉数据，请先点击「补拉历史比赛数据」按钮。")
             else:
                 st.toast(f"找到 {len(hist_records)} 条历史补拉记录，正在逐一调用大模型预测...")
+                from src.processor.data_fusion import build_leisu_crawler, inject_leisu_data
                 predictor = LLMPredictor()
+                leisu = build_leisu_crawler(headless=True)
                 success_count = 0
                 fail_count = 0
                 progress_bar = st.progress(0)
@@ -239,32 +280,60 @@ def main():
                     try:
                         raw_data = p.raw_data or {}
                         if isinstance(raw_data, str):
-                            import json
                             raw_data = json.loads(raw_data)
+                        if not isinstance(raw_data, dict):
+                            raw_data = {}
                         
-                        match_dict = {
+                        match_dict = dict(raw_data)
+                        match_dict.update({
                             "fixture_id": p.fixture_id,
                             "match_num": p.match_num,
                             "league": p.league,
                             "home_team": p.home_team,
                             "away_team": p.away_team,
                             "match_time": str(p.match_time) if p.match_time else "",
-                            "odds": raw_data.get("odds", {}),
-                            "asian_odds": raw_data.get("asian_odds", {}),
-                            "recent_form": {},
-                            "h2h_summary": "暂无",
-                            "advanced_stats": {}
-                        }
+                        })
+                        match_dict.setdefault("odds", raw_data.get("odds", {}))
+                        match_dict.setdefault("asian_odds", raw_data.get("asian_odds", {}))
+                        match_dict.setdefault("recent_form", raw_data.get("recent_form", {}))
+                        match_dict.setdefault("h2h_summary", raw_data.get("h2h_summary", "暂无"))
+                        match_dict.setdefault("advanced_stats", raw_data.get("advanced_stats", {}))
+                        if leisu:
+                            inject_leisu_data(match_dict, leisu)
                         
-                        pred_text, period = predictor.predict(match_dict, total_matches_count=len(hist_records))
+                        pred_text, _ = predictor.predict(
+                            match_dict,
+                            period="repredicted",
+                            total_matches_count=len(hist_records),
+                        )
                         if pred_text and "预测失败" not in pred_text:
-                            from sqlalchemy import text as sqlt
-                            db.session.execute(sqlt("""
-                                UPDATE match_predictions 
-                                SET prediction_text = :pt, prediction_period = 'repredicted',
-                                    updated_at = datetime('now')
-                                WHERE id = :rid
-                            """), {"pt": pred_text, "rid": p.id})
+                            predicted_result = Database.extract_prediction_recommendation(pred_text)
+                            repredicted_record = db.session.query(MatchPrediction).filter(
+                                MatchPrediction.fixture_id == p.fixture_id,
+                                MatchPrediction.prediction_period == 'repredicted'
+                            ).first()
+
+                            if not repredicted_record:
+                                repredicted_record = MatchPrediction(
+                                    fixture_id=p.fixture_id,
+                                    match_num=p.match_num,
+                                    league=p.league,
+                                    home_team=p.home_team,
+                                    away_team=p.away_team,
+                                    match_time=p.match_time,
+                                    prediction_period='repredicted',
+                                    raw_data=match_dict,
+                                )
+                                db.session.add(repredicted_record)
+
+                            repredicted_record.raw_data = match_dict
+                            repredicted_record.prediction_text = pred_text
+                            repredicted_record.predicted_result = predicted_result
+                            repredicted_record.actual_score = p.actual_score
+                            repredicted_record.actual_bqc = p.actual_bqc
+                            repredicted_record.actual_result = p.actual_result
+                            repredicted_record.htft_prediction_text = p.htft_prediction_text
+                            p.raw_data = match_dict
                             success_count += 1
                         else:
                             fail_count += 1
@@ -276,6 +345,11 @@ def main():
                     progress_bar.progress((i + 1) / len(hist_records))
                 
                 db.session.commit()
+                if leisu:
+                    try:
+                        leisu.close()
+                    except Exception:
+                        pass
                 progress_bar.empty()
                 if success_count > 0:
                     st.success(f"✅ 成功重新预测 {success_count}/{len(hist_records)} 场历史比赛！请刷新页面查看结果。")
@@ -287,8 +361,9 @@ def main():
     st.subheader(f"📋 {target_date_str} 预测与赛果汇总")
     
     # 优先展示刚才拉取匹配到的比赛，否则重新查询（可能包含没打完的）
-    if "post_mortem_predictions" in st.session_state:
-        predictions = st.session_state["post_mortem_predictions"]
+    if st.session_state.get("post_mortem_date") == target_date_str and st.session_state.get("post_mortem_fixture_ids"):
+        fixture_ids = set(st.session_state["post_mortem_fixture_ids"])
+        predictions = [p for p in db.get_predictions_by_date(target_date_str) if p.fixture_id in fixture_ids]
     else:
         predictions = db.get_predictions_by_date(target_date_str)
         
@@ -356,6 +431,103 @@ def main():
                     st.markdown(daily_review.review_content)
             else:
                 st.info("该日尚无复盘报告，请点击下方按钮生成。")
+
+            structured_entries = []
+            for draft in get_pending_rule_drafts():
+                if draft.get("source_date") != target_date_str:
+                    continue
+                case_id = draft.get("case_id") or "|".join(draft.get("source_matches") or [])
+                if not case_id:
+                    continue
+                structured_entries.append({
+                    "case_id": case_id,
+                    "match_label": "、".join(draft.get("source_matches") or []) or "未知来源",
+                    "title": draft.get("title", "未命名草稿"),
+                    "disposition": draft.get("disposition", "未分类"),
+                    "based_on_rule_id": draft.get("based_on_rule_id", ""),
+                    "target_scope": draft.get("target_scope", "unknown"),
+                    "market_review_complete": draft.get("market_review_complete", True),
+                    "trigger_condition_nl": draft.get("trigger_condition_nl", "未提供"),
+                })
+
+            if structured_entries:
+                st.markdown("### 🧭 逐场规则修正入口")
+                st.caption("先按比赛和处置类型进入，再决定是修旧规则还是新增规则。")
+                for idx, entry in enumerate(structured_entries):
+                    cols = st.columns([2.5, 1.2, 1.4, 1.2])
+                    cols[0].write(f"**{entry['match_label']}**")
+                    cols[1].write(f"`{entry['disposition']}`")
+                    cols[2].write(f"`{entry['target_scope']}`")
+                    entry_url = build_rule_manager_url(
+                        current_auth_token,
+                        focus_case=entry["case_id"],
+                        focus_rule_id=entry["based_on_rule_id"],
+                        focus_scope=entry["target_scope"],
+                        focus_action=entry["disposition"],
+                    )
+                    cols[3].markdown(
+                        f'<a href="{entry_url}" target="_blank" rel="noopener noreferrer">新页签处理</a>',
+                        unsafe_allow_html=True,
+                    )
+                    if entry["based_on_rule_id"]:
+                        st.write(f"关联旧规则：`{entry['based_on_rule_id']}`")
+                    st.write(f"触发条件摘要：{entry['trigger_condition_nl']}")
+                    if entry["market_review_complete"] is False:
+                        st.warning("该入口对应的盘口复盘仍不完整，建议先补盘口链路再下规则结论。")
+
+            pending_rule_drafts = [
+                draft for draft in get_pending_rule_drafts()
+                if draft.get("source_date") == target_date_str
+            ]
+            if pending_rule_drafts:
+                st.markdown("### 📝 候选规则草稿")
+                st.caption("以下草稿来自当前日期复盘结果，可前往规则管理页审核并采纳。")
+                for idx, draft in enumerate(pending_rule_drafts[:10]):
+                    source_matches = "、".join(draft.get("source_matches") or []) or "未知来源"
+                    with st.expander(f"{draft.get('title', '未命名草稿')} [{draft.get('target_scope', 'unknown')}]"):
+                        st.write(f"问题类型：{draft.get('problem_type', '未标注')}")
+                        st.write(f"来源比赛：{source_matches}")
+                        disposition = draft.get("disposition", "未分类")
+                        st.write(f"处置分类：{disposition}")
+                        if draft.get("based_on_rule_id"):
+                            st.write(f"基于旧规则：`{draft.get('based_on_rule_id')}`")
+                        market_review_complete = draft.get("market_review_complete")
+                        if market_review_complete is False:
+                            st.warning("该草稿对应场次的盘口复盘仍不完整，请先补齐盘口链路再决定是否采纳。")
+                        st.write(f"触发条件描述：{draft.get('trigger_condition_nl', '未提供')}")
+                        st.write(f"建议条件：`{draft.get('suggested_condition', 'False')}`")
+                        st.write(f"建议动作：`{draft.get('suggested_action', '')}`")
+                        draft_case_id = draft.get("case_id") or "|".join(draft.get("source_matches") or [])
+                        target_scope = draft.get("target_scope", "")
+                        shortcut_cols = st.columns(3)
+                        repair_url = build_rule_manager_url(
+                            current_auth_token,
+                            focus_case=draft_case_id,
+                            focus_rule_id=draft.get("based_on_rule_id", ""),
+                            focus_scope=target_scope,
+                            focus_action="optimize_existing",
+                        )
+                        shortcut_cols[0].markdown(
+                            f'<a href="{repair_url}" target="_blank" rel="noopener noreferrer">修旧规则</a>',
+                            unsafe_allow_html=True,
+                        )
+                        add_url = build_rule_manager_url(
+                            current_auth_token,
+                            focus_case=draft_case_id,
+                            focus_rule_id=draft.get("based_on_rule_id", ""),
+                            focus_scope=target_scope,
+                            focus_action="add_new_rule",
+                        )
+                        shortcut_cols[1].markdown(
+                            f'<a href="{add_url}" target="_blank" rel="noopener noreferrer">新增规则</a>',
+                            unsafe_allow_html=True,
+                        )
+                        shortcut_cols[2].markdown(f"`{target_scope or 'unknown'}`")
+                rule_manager_url = build_rule_manager_url(current_auth_token)
+                st.markdown(
+                    f'<a href="{rule_manager_url}" target="_blank" rel="noopener noreferrer">⚙️ 在新页签打开规则页审核这些草稿</a>',
+                    unsafe_allow_html=True,
+                )
             
             # LLM洞察按钮（先计算准确率，再让AI做洞察）
             if st.session_state.get("role") == "admin":
@@ -374,7 +546,14 @@ def main():
                         st.success(f"准确率计算完成：窗口 {batch_label}，共 {acc_report['overall']['total']} 场")
                         with st.spinner("AI正在基于准确率数据进行分析..."):
                             predictor = LLMPredictor()
-                            review_text = predictor.generate_post_mortem(target_date_str, acc_report)
+                            review_text, rule_drafts, _case_mappings = predictor.generate_post_mortem(
+                                target_date_str,
+                                acc_report,
+                                return_rule_drafts=True,
+                            )
+                            for draft in rule_drafts:
+                                draft.setdefault("source_date", target_date_str)
+                            append_rule_drafts(drafts=rule_drafts)
                             if db.save_daily_review(target_date_str, review_content=review_text):
                                 st.success("复盘报告已生成！")
                                 st.rerun()

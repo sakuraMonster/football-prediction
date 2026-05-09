@@ -1,0 +1,309 @@
+[
+  {
+    "id": "zombie_pan_025",
+    "name": "平半僵尸盘 (真实阻力)",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.25 and asian['live_hv'] == 0.25 and asian['giving_live_w'] >= 1.00",
+    "warning_template": "【微观信号：阻上型僵持 (僵尸盘)】平半盘口不变但上盘升至满水/高水({asian['giving_live_w']:.2f})，这绝不是简单的“高回报诱上”，而是通过高风险+不舒服的水位设置真实的阻力。机构在赶赶筹码去下盘，严禁单博下盘！",
+    "enabled": true
+  },
+  {
+    "id": "cooling_down_drop",
+    "name": "半球退平半降温",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.50 and asian['live_hv'] == 0.25 and asian['giving_start_w'] <= 0.80 and 0.85 <= asian['giving_live_w'] <= 0.95",
+    "warning_template": "【微观信号：降温型退盘】初盘半球超低水({asian['giving_start_w']:.2f})已强表达优势，退至平半中水({asian['giving_live_w']:.2f})是典型的控热、平衡筹码操作。请勿线性等同于“看衰让球方”。这往往是机构真实的保护行为，主队不败概率极高。",
+    "enabled": true
+  },
+  {
+    "id": "hard_support_deep",
+    "name": "深盘硬挺不退",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] >= 0.75 and asian['start_hv'] == asian['live_hv'] and asian['giving_start_w'] <= 0.85 and asian['giving_live_w'] >= 0.95",
+    "warning_template": "【微观信号：硬挺不退】深度盘(≥半一)全程不退盘，更多是维持门槛防上；水位从{asian['giving_start_w']:.2f}→{asian['giving_live_w']:.2f}偏平衡性调整，不应单凭升水直接推翻让球方优势。",
+    "enabled": true
+  },
+  {
+    "id": "half_to_qtr_water_drop",
+    "name": "半球退平半降水陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.5 and asian['live_hv'] == 0.25 and asian['giving_start_w'] >= 0.95 and asian['giving_live_w'] < 0.9 and asian['giving_live_w'] < asian['giving_start_w']",
+    "warning_template": "当前盘口从半球退至平半，且让球方水位从初盘 {asian['giving_start_w']:.2f} 降至即时 {asian['giving_live_w']:.2f}，呈现经典“降盘降水”形态。注意：该形态并不总是代表让球方无力，若伴随初盘高水，很可能为机构主动压缩赔付的防范动作。请重点核查主胜打出可能，勿简单判定为诱买下盘，避免错失上行方向。",
+    "enabled": true
+  },
+  {
+    "id": "upgrade_trap_01",
+    "name": "让球方升盘陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "(abs(asian['live_hv']) > abs(asian['start_hv'])) and (asian['live_hv'] * asian['start_hv'] >= 0)",
+    "warning_template": "检测到让球方盘口从 {asian['start_hv']} 升至 {asian['live_hv']}，让球方水位由 {asian['giving_start_w']:.2f} 变为 {asian['giving_live_w']:.2f}。此类升盘常被模型误判为诱盘，但复盘显示它可能是机构真实支持让球方的信号。请警惕：让球方可能确实强势，切莫轻易反向选择。",
+    "enabled": true
+  },
+  {
+    "id": "flat_to_quarter_drop",
+    "name": "平手升平半降水陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.0 and asian['live_hv'] == 0.25 and asian['giving_start_w'] > asian['giving_live_w']",
+    "warning_template": "初盘平手，临场升为客让平半，且让球方水位从 {asian['giving_start_w']:.2f} 降至 {asian['giving_live_w']:.2f}，此变化常被误读为诱客。但若受让方水位升至 {asian['receiving_live_w']:.2f}，需警惕客队获得真实支撑，切忌机械反诱。",
+    "enabled": true
+  },
+  {
+    "id": "upgrade_125_150_dropwater_trap",
+    "name": "一球/球半升球半降水陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 1.25 and asian['live_hv'] == 1.5 and asian['giving_live_w'] < asian['giving_start_w']",
+    "warning_template": "初盘一球/球半升盘至球半，且上盘水位从 {asian['giving_start_w']:.2f} 降至 {asian['giving_live_w']:.2f}，形成典型升盘降水格局。模型可能将其判定为诱上，但此形态常反映机构真实防范，让球方大胜风险极高，切勿盲目反向锁定下盘。",
+    "enabled": true
+  },
+  {
+    "id": "home_odds_drop_2pct_trap",
+    "name": "主胜赔率下降无胜",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "euro['macau_start'] is not None and euro['live_home'] is not None and ((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) >= 0.02",
+    "warning_template": "【欧赔骤降陷阱】主胜赔率出现异常下降，初赔 {euro['macau_start']['h']:.2f} 下降到即时 {euro['live_home']:.2f}（降幅达: {((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) * 100:.1f}%）。某一方赔率初赔到临盘下降 2% 以上时，基本无胜！极大可能是大热诱导陷阱，请重点防范主队不胜（平/负）。",
+    "enabled": false
+  },
+  {
+    "id": "home_odds_drop_2_4pct_trap",
+    "name": "主胜赔率极危诱导陷阱 (降幅2-4%)",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "euro['macau_start'] is not None and euro['live_home'] is not None and 0.02 <= ((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) < 0.04",
+    "warning_template": "【极危诱导：主胜骤降2-4%】主胜赔率从初赔 {euro['macau_start']['h']:.2f} 降至 {euro['live_home']:.2f}（降幅: {((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) * 100:.1f}%）。历史数据显示，当主胜赔率出现 2%~4% 的暧昧降幅时，机构诱导成功率高达 57.6%！这是最典型的大热必死区间，请坚决防范主队不胜（重点防平/负）。",
+    "enabled": true
+  },
+  {
+    "id": "home_odds_drop_over5pct_trap",
+    "name": "主胜赔率深水诱导 (降幅>5%)",
+    "category": "micro_signal",
+    "level": "🟡中危",
+    "condition": "euro['macau_start'] is not None and euro['live_home'] is not None and ((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) >= 0.05 and (asian['live_hv'] > asian['start_hv'] or asian['giving_live_w'] <= 0.85)",
+    "warning_template": "【深水诱导：主胜降幅超5%】主胜赔率从初赔 {euro['macau_start']['h']:.2f} 剧降至 {euro['live_home']:.2f}（降幅: {((euro['macau_start']['h'] - euro['live_home']) / euro['macau_start']['h']) * 100:.1f}%）。若同时伴随亚盘升盘或让球方降至低水({asian['giving_live_w']:.2f})，说明热度与盘口联动成立，此时主队不胜风险显著抬升，建议优先防范平/负。",
+    "prediction_bias": "平负",
+    "effect": "suppress_home_win",
+    "enabled": true,
+    "source": "post_mortem_tightened"
+  },
+  {
+    "id": "away_odds_drop_2pct_trap",
+    "name": "客胜赔率下降无胜",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "euro['macau_start'] is not None and euro['live_away'] is not None and ((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) >= 0.02",
+    "warning_template": "【欧赔骤降陷阱】客胜赔率出现异常下降，初赔 {euro['macau_start']['a']:.2f} 下降到即时 {euro['live_away']:.2f}（降幅达: {((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) * 100:.1f}%）。某一方赔率初赔到临盘下降 2% 以上时，基本无胜！极大可能是大热诱导陷阱，请重点防范客队不胜（胜/平）。",
+    "enabled": false
+  },
+  {
+    "id": "away_odds_drop_2_3pct_trap",
+    "name": "客胜赔率死亡诱导陷阱 (降幅2-3%)",
+    "category": "micro_signal",
+    "level": "💀致命",
+    "condition": "euro['macau_start'] is not None and euro['live_away'] is not None and 0.02 <= ((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) < 0.03",
+    "warning_template": "【死亡诱导：客胜骤降2-3%】客胜赔率从初赔 {euro['macau_start']['a']:.2f} 降至 {euro['live_away']:.2f}（降幅: {((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) * 100:.1f}%）。历史回测警告：当客胜赔率出现 2%~3% 的降幅时，属于机构的“死亡诱导区”，客队不胜率达到惊人的 77.8%！切勿去客队，直接博主队不败（胜/平）。",
+    "enabled": true
+  },
+  {
+    "id": "away_odds_drop_over5pct_trap",
+    "name": "客胜赔率深水诱导 (降幅>5%)",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "euro['macau_start'] is not None and euro['live_away'] is not None and ((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) >= 0.05",
+    "warning_template": "【深水诱导：客胜降幅超5%】客胜赔率从初赔 {euro['macau_start']['a']:.2f} 剧降至 {euro['live_away']:.2f}（降幅: {((euro['macau_start']['a'] - euro['live_away']) / euro['macau_start']['a']) * 100:.1f}%）。历史数据显示此区间客队热度极高，不胜（出冷）概率高达 68%~69%。强力建议避开客胜，防范主胜或平局。",
+    "enabled": true
+  },
+  {
+    "id": "half_one_high_water_trap",
+    "name": "半一盘升水陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.75 and asian['live_hv'] == 0.75 and asian['giving_start_w'] <= 0.90 and asian['giving_live_w'] >= 0.95",
+    "warning_template": "半一盘口坚挺不退，但让球方水位已从初盘{asian['giving_start_w']:.2f}升至即时{asian['giving_live_w']:.2f}高位。该形态常被误读为“高水阻上”，实为机构真实升水示弱，主队赢盘能力骤降，注意输盘风险。",
+    "enabled": true
+  },
+  {
+    "id": "balance_trap_01",
+    "name": "平衡盘拉力错估",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "(asian['start_hv'] == 0.25 or asian['start_hv'] == 0.5) and (asian['live_hv'] == asian['start_hv']) and (abs(asian['giving_start_w'] - asian['giving_live_w']) < 0.04) and (0.85 <= asian['giving_live_w'] <= 0.98)",
+    "warning_template": "盘面呈现极致平衡：初盘{asian['start_hv']}维持不变，让球方水位仅从{asian['giving_start_w']:.2f}微调至{asian['giving_live_w']:.2f}（中水区间）。此类平静盘口常为机构陷阱，极易造成拉力方向错估，当前模型概率分配逻辑可能完全颠倒，请坚决防范反向赛果。",
+    "enabled": true
+  },
+  {
+    "id": "deep_drop_water_trap",
+    "name": "深盘降水未升盘陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] >= 1.0 and asian['live_hv'] <= asian['start_hv'] and (asian['giving_start_w'] - asian['giving_live_w']) >= 0.03",
+    "warning_template": "当前深盘结构下（初盘 {asian['start_hv']}），盘口未升甚至退至 {asian['live_hv']}，但让球方水位自 {asian['giving_start_w']:.2f} 降至 {asian['giving_live_w']:.2f}。此类深盘降水不升盘多为控制赔付或被动受压，谨防让球方赢球输盘或冷平，不宜盲目信任深盘方穿盘。",
+    "enabled": true
+  },
+  {
+    "id": "flat_quarter_low_rec_w",
+    "name": "平半盘受让低水陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.25 and asian['live_hv'] == 0.25 and asian['receiving_live_w'] < 0.85",
+    "warning_template": "即时盘维持平半，但受让方水位极低({asian['receiving_live_w']:.2f})，常表示机构对受让方严加防范。主队让球力度薄弱，不可机械套用“平半主不败”框架，需重点提防主队不胜甚至输球。",
+    "enabled": true
+  },
+  {
+    "id": "deep_reverse_trap_01",
+    "name": "深盘逆向诱导误判陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.75 and asian['live_hv'] == 1.0 and asian['giving_start_w'] <= 0.85 and asian['giving_live_w'] >= 1.05 and league['is_euro_cup']",
+    "warning_template": "⚠️ 检测到深盘逆向诱导陷阱：初盘{asian['start_hv']}盘低水（{asian['giving_start_w']:.2f}），即时升盘至{asian['live_hv']}盘并顶至高水（{asian['giving_live_w']:.2f}）。此为欧战强队实力认可下的升盘升水阻挡形态，极可能为真实阻挡，而非诱上盘，切勿误判导致方向完全错误。",
+    "enabled": true
+  },
+  {
+    "id": "contrarian_flow_trap",
+    "name": "热钱反向背离陷阱（基于430场数据：弱队胜率仅26.5%）",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] >= 0.75 and asian['live_hv'] < asian['start_hv'] and asian['giving_live_w'] > asian['giving_start_w']",
+    "warning_template": "🔴【热钱反向背离陷阱】初盘让{asian['start_hv']}球深盘（实力认可），但即时盘退至{asian['live_hv']}球且让球方水位从{asian['giving_start_w']:.2f}升至{asian['giving_live_w']:.2f}。资金在反向流入弱队！基于430场历史数据，反向背离时弱队打出率仅26.5%。机构正在设陷阱诱导追弱队，必须坚决走强队方向！",
+    "enabled": true
+  },
+  {
+    "id": "high_water_resist_up",
+    "name": "半球半一高水不退盘封堵信号",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "(asian['start_hv'] == 0.5 or asian['start_hv'] == 0.75) and asian['live_hv'] == asian['start_hv'] and asian['giving_start_w'] >= 1.00 and asian['giving_live_w'] >= 1.00",
+    "warning_template": "当前盘口初盘为半球或半一且未退盘，让球方水位持续居高（初盘 {asian['giving_start_w']:.2f}，即时 {asian['giving_live_w']:.2f}），此为高水封堵信号。禁止触发“高水诱上”预警，应优先考虑主胜；若欧赔主胜集中，可锁定主胜方向。",
+    "enabled": true
+  },
+  {
+    "id": "flat_quarter_water_shift_trap",
+    "name": "平半单向水位异动陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.25 and asian['live_hv'] == 0.25 and abs(asian['giving_live_w'] - asian['giving_start_w']) >= 0.10",
+    "warning_template": "平半盘让球方水位从初盘 {asian['giving_start_w']:.2f} 单向变动至即时 {asian['giving_live_w']:.2f}，幅度≥0.10，且欧赔同向调整，触发真实意图陷阱。若升水：真实看衰主队，主推向客队不败甚至客胜倾斜；若降水：真实看好主队，主胜必须进入核心推荐。",
+    "enabled": true
+  },
+  {
+    "id": "upgrade_resist_trap",
+    "name": "升盘升水阻上陷阱",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.5 and asian['live_hv'] == 0.75 and asian['giving_start_w'] < 0.80 and asian['giving_live_w'] > 0.85",
+    "warning_template": "初盘半球低水升半一高水（{asian['giving_start_w']:.2f}→{asian['giving_live_w']:.2f}）。若客队存在明确拉力，此形态优先判定为利用客队拉力升门槛阻上，不宜视为诱上信号。",
+    "enabled": true
+  },
+  {
+    "id": "micro_001",
+    "name": "低水升盘高水阻上识别规则",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "asian['giving_start_w'] <= 0.80 and asian['live_hv'] > asian['start_hv'] and asian['giving_live_w'] >= 0.90",
+    "warning_template": "初盘让球方水位 <= 0.80，且赛前发生升盘，且升盘后让球方水位升至 >= 0.90高位",
+    "prediction_bias": "强烈倾向让球方",
+    "effect": "触发 'strong_home_positive' 信号，权重+0.6，注解为'被动升盘阻上'",
+    "enabled": true,
+    "source": "rule_draft"
+  },
+  {
+    "id": "micro_002",
+    "name": "深盘不退盘+高水震荡沉盘规则",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "asian['start_hv'] >= 1.0 and asian['live_hv'] == asian['start_hv'] and 0.90 <= asian['giving_live_w'] <= 0.98 and abs(asian['giving_live_w'] - asian['giving_start_w']) < 0.05",
+    "warning_template": "初盘>=一球，终盘与初盘一致无降盘，且让球方水位持续在0.90-0.98高位波动，无明显降水",
+    "prediction_bias": "支持让球方穿盘",
+    "effect": "触发 'deep_disk_control' 信号，权重+0.7，注解为'深盘沉盘恐吓，高水阻上'",
+    "enabled": true,
+    "source": "rule_draft"
+  },
+  {
+    "id": "irl_2026_001",
+    "name": "半球盘：初盘低水升盘至中高水的【阻上】误判修正",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "asian['start_hv'] == 0.5 and asian['giving_start_w'] < 0.82 and 0.95 <= asian['giving_live_w'] <= 1.05 and asian['live_hv'] > asian['start_hv']",
+    "warning_template": "当场次盘口为【半球盘】，且初盘低水(<0.82)升盘至中高水(0.95-1.05)时，当前系统高频误判为诱上。",
+    "prediction_bias": "主队方向",
+    "effect": "强制覆盖【诱上】信号为【真实阻上】。禁止Agent C直接使用诱上逻辑进行推理。",
+    "enabled": true,
+    "source": "rule_draft"
+  },
+  {
+    "id": "irl_2026_002",
+    "name": "深盘预警：初盘强盘面对反向拉力时，不作为诱上证据",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "False",
+    "warning_template": "系统识别到明确的【球队拉力差异】（如主队状态差）信号，但同时【初盘强度】信号显示为‘强盘’（如半球0.76-）。",
+    "prediction_bias": "抑制盘赔维度权重，回调基本面维度权重",
+    "effect": "暂停自动生成【诱上】结论。将比赛标记为‘盘赔基本面冲突’，交由人工或高阶仲裁Agent处理，并在决策日志中强制保留基本面信号原值，不得降权。",
+    "enabled": false,
+    "source": "rule_draft_needs_refine"
+  },
+  {
+    "id": "half_ball_water_drop_no_rise",
+    "name": "半球盘降水不升盘诱上防范",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['start_hv'] == 0.5 and asian['live_hv'] == 0.5 and 0.9 <= asian['giving_start_w'] <= 1.08 and 0.82 <= asian['giving_live_w'] <= 0.95 and (asian['giving_start_w'] - asian['giving_live_w']) >= 0.05 and (euro['live_home'] is None or euro['p_home'] is None or euro['live_home'] >= euro['p_home'] * 0.97)",
+    "warning_template": "半球初盘上盘水位处于中高水，临场虽降水但仍停留在可持续吸筹区间，且欧赔主胜未明显同步压低，存在借降水制造主胜稳胆错觉的诱上嫌疑，建议放弃主胜或重点防范下盘。",
+    "prediction_bias": "平负",
+    "effect": "favorite_trap_warning",
+    "enabled": true
+  },
+  {
+    "id": "deep_handicap_rise_with_water_rise",
+    "name": "深盘升盘升水预警",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "asian['live_hv'] > asian['start_hv'] and asian['start_hv'] >= 1.0 and asian['giving_live_w'] > asian['giving_start_w'] and (asian['giving_live_w'] - asian['giving_start_w']) >= 0.08",
+    "warning_template": "让球方处于深盘区间，临场出现升盘同时升水，说明机构一边加深门槛一边抬高赔付压力，这更像上盘热度虚高而非真实穿盘强化，需警惕让球方赢球输盘或被平局阻击。",
+    "prediction_bias": "平负",
+    "effect": "deep_handicap_hot_warning",
+    "enabled": true,
+    "source": "post_mortem_2026_05_08"
+  },
+  {
+    "id": "half_ball_ultra_low_water_support_favorite",
+    "name": "半球盘超低水控热正路保护",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "asian['start_hv'] == 0.5 and asian['live_hv'] == 0.5 and asian['giving_start_w'] >= 0.9 and asian['giving_live_w'] <= 0.80 and (asian['giving_start_w'] - asian['giving_live_w']) >= 0.10",
+    "warning_template": "半球盘上盘从中高水快速压到超低水，这更像机构用低赔付主动控热保护正路，而非继续用中高水诱上；此时主胜方向或让球方方向不能被轻易推翻。",
+    "prediction_bias": "胜",
+    "effect": "favorite_support_warning",
+    "enabled": true,
+    "source": "post_mortem_2026_05_08"
+  },
+  {
+    "id": "euro_cup_half_water_drop_no_odds_support",
+    "name": "欧战杯赛半球降水欧赔不支持",
+    "category": "micro_signal",
+    "level": "🔴高危",
+    "condition": "league['is_euro_cup'] == True and asian['start_hv'] == 0.5 and asian['giving_live_w'] < asian['giving_start_w'] and (euro['live_home'] is None or euro['live_home'] >= euro['p_home'] * 0.98)",
+    "warning_template": "欧战杯赛半球盘，主队水位下降但欧赔主胜未同步下调，疑似诱导，谨防平负。",
+    "prediction_bias": "平负",
+    "effect": "下盘防平负",
+    "enabled": true
+  },
+  {
+    "id": "micro_signal _001",
+    "name": "深盘升盘升水预警：警惕让球方穿盘能力",
+    "category": "micro_signal",
+    "level": "🟡关注",
+    "condition": "asian['start_hv'] < asian['live_hv'] and asian['giving_start_w'] < asian['giving_live_w']",
+    "warning_template": "让球方盘口升盘，且即时水位高于初盘水位",
+    "prediction_bias": "倾向于让球方赢球输盘或平局（让球方不败但不穿盘）。",
+    "effect": "标记为‘让球方热度虚高/赔付承压预警’，在最终方向仲裁时，显著降低‘让球方大胜/穿盘’的评级。",
+    "enabled": true,
+    "source": "rule_draft_prefill"
+  }
+]

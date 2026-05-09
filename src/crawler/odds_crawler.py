@@ -4,6 +4,7 @@ from loguru import logger
 import re
 
 from src.crawler.advanced_stats_crawler import AdvancedStatsCrawler
+from src.crawler.euro_odds_crawler import EuroOddsCrawler
 
 class OddsCrawler:
     def __init__(self):
@@ -11,6 +12,7 @@ class OddsCrawler:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
         self.advanced_stats_crawler = AdvancedStatsCrawler()
+        self.euro_crawler = EuroOddsCrawler()
 
     def fetch_match_details(self, fixture_id, home_team=None, away_team=None):
         """
@@ -29,6 +31,9 @@ class OddsCrawler:
             data["advanced_stats"] = self.advanced_stats_crawler.fetch_advanced_stats(home_team, away_team)
             
         try:
+            # 0. 获取欧洲赔率 (初赔和即时赔)
+            data["europe_odds"] = self.euro_crawler.fetch_euro_odds(fixture_id)
+
             # 1. 获取亚指
             yazhi_url = f"https://odds.500.com/fenxi/yazhi-{fixture_id}.shtml"
             res = requests.get(yazhi_url, headers=self.headers, timeout=10)

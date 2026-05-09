@@ -1,8 +1,19 @@
 import os
 import sys
 import json
+import asyncio
 from loguru import logger
 from dotenv import load_dotenv
+
+# 强制恢复 Windows 默认的 ProactorEventLoop，解决子进程 NotImplementedError
+if sys.platform == 'win32':
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    except Exception:
+        pass
+
+import nest_asyncio
+nest_asyncio.apply()
 
 # 添加src到系统路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -41,11 +52,14 @@ def main():
     data_fusion = DataFusion()
     leisu = None
     try:
-        if os.getenv('LEISU_USERNAME'):
+        enable_leisu = os.getenv("ENABLE_LEISU", "1").lower() not in ("0", "false", "no", "off")
+        if enable_leisu:
             from src.crawler.leisu_crawler import LeisuCrawler
             leisu = LeisuCrawler(headless=True)
-    except Exception:
-        pass
+    except Exception as e:
+        import traceback
+        logger.error(f"雷速数据注入失败: {e}")
+        print(traceback.format_exc())
     merged_matches = data_fusion.merge_data(matches, odds_crawler, leisu_crawler=leisu)
     if leisu:
         try:

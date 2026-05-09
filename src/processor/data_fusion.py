@@ -1,4 +1,19 @@
+import os
 from loguru import logger
+
+
+def build_leisu_crawler(headless=True):
+    """按环境开关创建雷速爬虫实例，关闭或初始化失败时返回 None。"""
+    enable_leisu = os.getenv("ENABLE_LEISU", "1").lower() not in ("0", "false", "no", "off")
+    if not enable_leisu:
+        return None
+
+    try:
+        from src.crawler.leisu_crawler import LeisuCrawler
+        return LeisuCrawler(headless=headless)
+    except Exception as e:
+        logger.warning(f"雷速爬虫初始化失败: {e}")
+        return None
 
 
 def inject_leisu_data(match, leisu_crawler):
@@ -15,7 +30,9 @@ def inject_leisu_data(match, leisu_crawler):
             _apply_leisu_data(match, leisu_data)
             return True
     except Exception as e:
+        import traceback
         logger.warning(f"雷速数据注入失败 {match.get('match_num')}: {e}")
+        logger.warning(traceback.format_exc())
     return False
 
 
@@ -33,6 +50,8 @@ def _apply_leisu_data(match, leisu_data):
         match['h2h_leisu'] = leisu_data['h2h_scores']
     if leisu_data.get('recent_scores'):
         match['recent_leisu'] = leisu_data['recent_scores']
+    if leisu_data.get('match_intelligence'):
+        match['leisu_intelligence'] = leisu_data['match_intelligence']
 
 
 class DataFusion:
@@ -63,6 +82,7 @@ class DataFusion:
             
             # 将详细数据合并到比赛信息中
             match["asian_odds"] = details.get("asian_odds", {})
+            match["europe_odds"] = details.get("europe_odds", [])
             match["recent_form"] = details.get("recent_form", {})
             match["h2h_summary"] = details.get("h2h_summary", "")
             match["advanced_stats"] = details.get("advanced_stats", {})

@@ -1,0 +1,265 @@
+{
+  "analysis_time": "2026-05-06 12:37:19",
+  "total_samples": 430,
+  "overall_money_side_win_rate": 39.1,
+  "overall_stronger_win_rate": 49.5,
+  "findings": [
+    {
+      "type": "诱盘陷阱",
+      "condition": "绝对碾压(>2.0) + 微降<5% + 反向背离",
+      "samples": 44,
+      "money_side_win_rate": 11.4,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "明显优势(1.25-1.40) + 微降<5% + 反向背离",
+      "samples": 20,
+      "money_side_win_rate": 15.0,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "绝对碾压(>2.0) + 骤降>20% + 反向背离",
+      "samples": 24,
+      "money_side_win_rate": 16.7,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "明显优势(1.25-1.40) + 小降5-10% + 反向背离",
+      "samples": 5,
+      "money_side_win_rate": 20.0,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "绝对碾压(>2.0) + 中降10-20% + 反向背离",
+      "samples": 23,
+      "money_side_win_rate": 21.7,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "一方稍优(1.15-1.25) + 微降<5% + 反向背离",
+      "samples": 8,
+      "money_side_win_rate": 25.0,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "实力碾压(1.40-2.0) + 小降5-10% + 反向背离",
+      "samples": 19,
+      "money_side_win_rate": 26.3,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "绝对碾压(>2.0) + 小降5-10% + 反向背离",
+      "samples": 6,
+      "money_side_win_rate": 33.3,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "一方稍优(1.15-1.25) + 中降10-20% + 反向背离",
+      "samples": 6,
+      "money_side_win_rate": 33.3,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    },
+    {
+      "type": "诱盘陷阱",
+      "condition": "实力碾压(1.40-2.0) + 中降10-20% + 反向背离",
+      "samples": 21,
+      "money_side_win_rate": 38.1,
+      "conclusion": "钱追弱队但弱队胜率极低 → 机构设陷阱收割追弱队的资金 → 强队正常打出"
+    }
+  ],
+  "cross_table": {
+    "('绝对碾压(>2.0)', '微降<5%', 'contrarian')": {
+      "total": 44,
+      "money_won": 5,
+      "stronger_won": 31
+    },
+    "('明显优势(1.25-1.40)', '微降<5%', 'contrarian')": {
+      "total": 20,
+      "money_won": 3,
+      "stronger_won": 10
+    },
+    "('实力碾压(1.40-2.0)', '微降<5%', 'consensus')": {
+      "total": 25,
+      "money_won": 13,
+      "stronger_won": 13
+    },
+    "('实力碾压(1.40-2.0)', '小降5-10%', 'contrarian')": {
+      "total": 19,
+      "money_won": 5,
+      "stronger_won": 7
+    },
+    "('绝对碾压(>2.0)', '微降<5%', 'consensus')": {
+      "total": 49,
+      "money_won": 34,
+      "stronger_won": 34
+    },
+    "('绝对碾压(>2.0)', '中降10-20%', 'contrarian')": {
+      "total": 23,
+      "money_won": 5,
+      "stronger_won": 13
+    },
+    "('实力碾压(1.40-2.0)', '中降10-20%', 'contrarian')": {
+      "total": 21,
+      "money_won": 8,
+      "stronger_won": 8
+    },
+    "('非常接近(<1.15)', '微降<5%', 'consensus')": {
+      "total": 17,
+      "money_won": 8,
+      "stronger_won": 8
+    },
+    "('绝对碾压(>2.0)', '小降5-10%', 'consensus')": {
+      "total": 26,
+      "money_won": 17,
+      "stronger_won": 17
+    },
+    "('非常接近(<1.15)', '微降<5%', 'contrarian')": {
+      "total": 12,
+      "money_won": 6,
+      "stronger_won": 2
+    },
+    "('一方稍优(1.15-1.25)', '小降5-10%', 'consensus')": {
+      "total": 5,
+      "money_won": 3,
+      "stronger_won": 3
+    },
+    "('绝对碾压(>2.0)', '骤降>20%', 'contrarian')": {
+      "total": 24,
+      "money_won": 4,
+      "stronger_won": 12
+    },
+    "('一方稍优(1.15-1.25)', '中降10-20%', 'consensus')": {
+      "total": 2,
+      "money_won": 1,
+      "stronger_won": 1
+    },
+    "('实力碾压(1.40-2.0)', '小降5-10%', 'consensus')": {
+      "total": 18,
+      "money_won": 7,
+      "stronger_won": 7
+    },
+    "('非常接近(<1.15)', '小降5-10%', 'consensus')": {
+      "total": 10,
+      "money_won": 2,
+      "stronger_won": 2
+    },
+    "('明显优势(1.25-1.40)', '小降5-10%', 'consensus')": {
+      "total": 1,
+      "money_won": 1,
+      "stronger_won": 1
+    },
+    "('绝对碾压(>2.0)', '小降5-10%', 'contrarian')": {
+      "total": 6,
+      "money_won": 2,
+      "stronger_won": 2
+    },
+    "('实力碾压(1.40-2.0)', '微降<5%', 'contrarian')": {
+      "total": 17,
+      "money_won": 7,
+      "stronger_won": 7
+    },
+    "('非常接近(<1.15)', '小降5-10%', 'contrarian')": {
+      "total": 5,
+      "money_won": 2,
+      "stronger_won": 0
+    },
+    "('实力碾压(1.40-2.0)', '中降10-20%', 'consensus')": {
+      "total": 12,
+      "money_won": 6,
+      "stronger_won": 6
+    },
+    "('一方稍优(1.15-1.25)', '微降<5%', 'contrarian')": {
+      "total": 8,
+      "money_won": 2,
+      "stronger_won": 2
+    },
+    "('明显优势(1.25-1.40)', '中降10-20%', 'consensus')": {
+      "total": 1,
+      "money_won": 0,
+      "stronger_won": 0
+    },
+    "('一方稍优(1.15-1.25)', '中降10-20%', 'contrarian')": {
+      "total": 6,
+      "money_won": 2,
+      "stronger_won": 3
+    },
+    "('一方稍优(1.15-1.25)', '微降<5%', 'consensus')": {
+      "total": 15,
+      "money_won": 6,
+      "stronger_won": 6
+    },
+    "('绝对碾压(>2.0)', '中降10-20%', 'consensus')": {
+      "total": 7,
+      "money_won": 4,
+      "stronger_won": 4
+    },
+    "('明显优势(1.25-1.40)', '微降<5%', 'consensus')": {
+      "total": 6,
+      "money_won": 3,
+      "stronger_won": 3
+    },
+    "('明显优势(1.25-1.40)', '骤降>20%', 'contrarian')": {
+      "total": 1,
+      "money_won": 0,
+      "stronger_won": 0
+    },
+    "('非常接近(<1.15)', '骤降>20%', 'contrarian')": {
+      "total": 1,
+      "money_won": 1,
+      "stronger_won": 0
+    },
+    "('明显优势(1.25-1.40)', '中降10-20%', 'contrarian')": {
+      "total": 5,
+      "money_won": 2,
+      "stronger_won": 2
+    },
+    "('非常接近(<1.15)', '中降10-20%', 'contrarian')": {
+      "total": 4,
+      "money_won": 1,
+      "stronger_won": 3
+    },
+    "('明显优势(1.25-1.40)', '小降5-10%', 'contrarian')": {
+      "total": 5,
+      "money_won": 1,
+      "stronger_won": 4
+    },
+    "('实力碾压(1.40-2.0)', '骤降>20%', 'contrarian')": {
+      "total": 5,
+      "money_won": 2,
+      "stronger_won": 0
+    },
+    "('非常接近(<1.15)', '微降<5%', 'equal_initial')": {
+      "total": 2,
+      "money_won": 0,
+      "stronger_won": 0
+    },
+    "('非常接近(<1.15)', '小降5-10%', 'equal_initial')": {
+      "total": 1,
+      "money_won": 1,
+      "stronger_won": 0
+    },
+    "('非常接近(<1.15)', '中降10-20%', 'consensus')": {
+      "total": 2,
+      "money_won": 1,
+      "stronger_won": 1
+    },
+    "('一方稍优(1.15-1.25)', '小降5-10%', 'contrarian')": {
+      "total": 4,
+      "money_won": 3,
+      "stronger_won": 1
+    },
+    "('实力碾压(1.40-2.0)', '骤降>20%', 'consensus')": {
+      "total": 1,
+      "money_won": 0,
+      "stronger_won": 0
+    }
+  }
+}

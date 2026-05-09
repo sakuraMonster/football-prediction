@@ -1,0 +1,141 @@
+[
+  {
+    "draft_id": "MICRO_001",
+    "title": "低水升盘高水阻上识别规则",
+    "target_scope": "micro_signal",
+    "problem_type": "错把“真实阻上”当“诱惑引导”（见周四003）",
+    "trigger_condition_nl": "初盘让球方水位 <= 0.80，且赛前发生升盘，且升盘后让球方水位升至 >= 0.90高位",
+    "suggested_condition": "initial_water <= 0.80 AND market_trend == 'upgrade' AND final_water >= 0.90",
+    "suggested_action": "触发 'strong_home_positive' 信号，权重+0.6，注解为'被动升盘阻上'",
+    "suggested_bias": "强烈倾向让球方",
+    "priority": 8,
+    "source_matches": [
+      "周四003"
+    ],
+    "status": "accepted",
+    "created_at": "2026-05-08T12:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "MICRO_002",
+    "title": "深盘不退盘+高水震荡沉盘规则",
+    "target_scope": "micro_signal",
+    "problem_type": "忽视“生死盘”形态下的退水恐吓/沉盘（见周四005）",
+    "trigger_condition_nl": "初盘>=一球，终盘与初盘一致无降盘，且让球方水位持续在0.90-0.98高位波动，无明显降水",
+    "suggested_condition": "initial_line >= 1.0 AND market_trend == 'stable' AND 0.90 <= final_water <= 0.98 AND water_diff < 0.05",
+    "suggested_action": "触发 'deep_disk_control' 信号，权重+0.7，注解为'深盘沉盘恐吓，高水阻上'",
+    "suggested_bias": "支持让球方穿盘",
+    "priority": 9,
+    "source_matches": [
+      "周四005"
+    ],
+    "status": "accepted",
+    "created_at": "2026-05-08T12:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "ARB_001",
+    "title": "Agent C 四维信息全不足熔断规则",
+    "target_scope": "arbitration_guard",
+    "problem_type": "信息真空环境下Agent C强制进行方向性决策（见周四001,003,005）",
+    "trigger_condition_nl": "Agent C仲裁时，基本面、盘赔、情报、微观规则四个维度的结论字段均为'信息不足'",
+    "suggested_condition": "all(dimension.status == 'insufficient_data' for dimension in [fundamental, handicap, intelligence, micro_rule])",
+    "suggested_action": "触发熔断机制，将最终预测强制设为'无法预测（信息严重不足）'，置信度=0，并附加'建议规避'提示",
+    "suggested_bias": "无方向，彻底规避",
+    "priority": 10,
+    "source_matches": [
+      "周四001",
+      "周四003",
+      "周四005"
+    ],
+    "status": "rejected",
+    "created_at": "2026-05-08T12:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "IRL-2026-001",
+    "title": "半球盘：初盘低水升盘至中高水的【阻上】误判修正",
+    "target_scope": "arbitration_guard",
+    "problem_type": "系统性误判：盘口防御调整识别为诱导",
+    "trigger_condition_nl": "当场次盘口为【半球盘】，且初盘低水(<0.82)升盘至中高水(0.95-1.05)时，当前系统高频误判为诱上。",
+    "suggested_condition": "origin_handicap == '0.5' AND initial_water < 0.82 AND current_water BETWEEN 0.95 AND 1.05 AND handicap_change == 'up'",
+    "suggested_action": "强制覆盖【诱上】信号为【真实阻上】。禁止Agent C直接使用诱上逻辑进行推理。",
+    "suggested_bias": "主队方向",
+    "priority": 9,
+    "source_matches": [
+      "周四002",
+      "周四003"
+    ],
+    "status": "accepted",
+    "created_at": "2026-05-09T00:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "IRL-2026-002",
+    "title": "深盘预警：初盘强盘面对反向拉力时，不作为诱上证据",
+    "target_scope": "micro_signal",
+    "problem_type": "基本面与盘赔背离时，证据权重倒置",
+    "trigger_condition_nl": "系统识别到明确的【球队拉力差异】（如主队状态差）信号，但同时【初盘强度】信号显示为‘强盘’（如半球0.76-）。",
+    "suggested_condition": "signal('deep_handicap_confidence') >= 0.8 AND signal('team_form_contradiction') IS TRUE",
+    "suggested_action": "暂停自动生成【诱上】结论。将比赛标记为‘盘赔基本面冲突’，交由人工或高阶仲裁Agent处理，并在决策日志中强制保留基本面信号原值，不得降权。",
+    "suggested_bias": "抑制盘赔维度权重，回调基本面维度权重",
+    "priority": 8,
+    "source_matches": [
+      "周四003"
+    ],
+    "status": "accepted",
+    "created_at": "2026-05-09T00:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "IRL-2026-003",
+    "title": "信息真空区禁止高倾向性预测",
+    "target_scope": "warning",
+    "problem_type": "无信息时使用默认模板进行高风险预测",
+    "trigger_condition_nl": "当任意场次的【四维方向】中，至少有3个维度结果为 ‘信息不足’ 或 ‘未提取’ 时。",
+    "suggested_condition": "count(extracted_directions.where(status == 'insufficient_data')) >= 3",
+    "suggested_action": "模型的最终输出必须放弃概率预测，仅输出“数据不足，无法预测”，并附加‘高风险规避’标签。当前模型在此场景下输出任何高置信度方向均属违规。",
+    "suggested_bias": "避免强预测",
+    "priority": 10,
+    "source_matches": [
+      "周四004"
+    ],
+    "status": "rejected",
+    "created_at": "2026-05-09T00:00:00Z",
+    "source_date": "2026-05-07"
+  },
+  {
+    "draft_id": "DRAFT-001",
+    "title": "深盘升盘升水预警：警惕让球方穿盘能力",
+    "target_scope": "micro_signal",
+    "problem_type": "将升盘造热/赔付增加误判为实力加深",
+    "trigger_condition_nl": "让球方盘口升盘，且即时水位高于初盘水位",
+    "suggested_condition": "asian['start_hv'] < asian['live_hv'] and asian['giving_start_w'] < asian['giving_live_w']",
+    "suggested_action": "标记为‘让球方热度虚高/赔付承压预警’，在最终方向仲裁时，显著降低‘让球方大胜/穿盘’的评级。",
+    "suggested_bias": "倾向于让球方赢球输盘或平局（让球方不败但不穿盘）。",
+    "priority": 85,
+    "source_matches": [
+      "周五003 帕德博恩 vs 卡斯鲁厄"
+    ],
+    "status": "rejected",
+    "created_at": "2026-05-09",
+    "source_date": "2026-05-08"
+  },
+  {
+    "draft_id": "DRAFT-003",
+    "title": "基本面与盘赔冲突时的优先级修正预警",
+    "target_scope": "arbitration_guard",
+    "problem_type": "错误地使用盘赔分析推翻基于实力/状态的基本面结论",
+    "trigger_condition_nl": "基本面维度的预测结论明确且置信度高，但盘赔方向（含微观规则结论）与之完全相反",
+    "suggested_condition": "ctx['fundamental']['direction'] is not None and ctx['odds']['direction'] is not None and ctx['fundamental']['direction'] != ctx['odds']['direction']",
+    "suggested_action": "立即触发‘基本面优先’警报。将最终方向强制调整为与基本面一致，除非存在被情报维度（如突发核心伤停）明确证实的负面消息。禁止仅凭盘赔结构解释推翻基本面。",
+    "suggested_bias": "优先跟随基本面方向。",
+    "priority": 95,
+    "source_matches": [
+      "周五005 埃夫斯堡 vs 布鲁马波"
+    ],
+    "status": "rejected",
+    "created_at": "2026-05-09",
+    "source_date": "2026-05-08"
+  }
+]

@@ -10,7 +10,7 @@ from src.llm.predictor import LLMPredictor
 from src.db.database import Database
 from src.crawler.jingcai_crawler import JingcaiCrawler
 from src.crawler.odds_crawler import OddsCrawler
-from src.processor.data_fusion import DataFusion
+from src.processor.data_fusion import DataFusion, build_leisu_crawler
 import hashlib
 from datetime import datetime, timedelta
 
@@ -90,6 +90,37 @@ def save_data(matches):
             json.dump(matches, f, ensure_ascii=False, indent=2)
     except Exception as e:
         st.error(f"保存数据失败: {e}")
+
+
+def _build_all_predictions_for_match(match, db_predictions=None):
+    """合并数据库、缓存与最新 llm_prediction，确保页面展示拿到最新预测结果。"""
+    all_predictions = dict(db_predictions or {})
+    match_level_predictions = match.get("all_predictions") or {}
+    all_predictions.update(match_level_predictions)
+
+    latest_prediction = match.get("llm_prediction", "")
+    if latest_prediction:
+        try:
+            period = LLMPredictor()._determine_prediction_period(match)
+        except Exception:
+            period = "final"
+        all_predictions[period] = latest_prediction
+
+    return all_predictions
+
+
+def _resolve_primary_prediction_text(match, db_predictions=None):
+    all_predictions = _build_all_predictions_for_match(match, db_predictions=db_predictions)
+    if all_predictions:
+        if "final" in all_predictions:
+            return all_predictions["final"], all_predictions
+        if "pre_12h" in all_predictions:
+            return all_predictions["pre_12h"], all_predictions
+        if "pre_24h" in all_predictions:
+            return all_predictions["pre_24h"], all_predictions
+        return list(all_predictions.values())[-1], all_predictions
+
+    return match.get("llm_prediction", ""), all_predictions
 
 def create_user_ui():
     st.sidebar.divider()
@@ -218,6 +249,19 @@ def main():
             except:
                 pass
             st.switch_page("pages/2_Post_Mortem.py")
+
+    if st.session_state.get("role") == "admin":
+        if st.sidebar.button("⚙️ 动态风控规则管理", use_container_width=True):
+            if "auth" in st.query_params:
+                st.switch_page("pages/5_Rule_Manager.py")
+            else:
+                try:
+                    raw_token = f"{st.session_state['username']}|{int(time.time())}"
+                    token = base64.b64encode(raw_token.encode('utf-8')).decode('utf-8')
+                    st.query_params["auth"] = token
+                except:
+                    pass
+                st.switch_page("pages/5_Rule_Manager.py")
     
     # 一键展开/收缩控制
     if 'expand_all' not in st.session_state:
@@ -388,14 +432,7 @@ def main():
                         st.toast("正在抓取盘口与基本面数据并融合...")
                         odds_crawler = OddsCrawler()
                         data_fusion = DataFusion()
-                        # 尝试初始化雷速爬虫（如果配置了账号）
-                        leisu = None
-                        try:
-                            if os.getenv('LEISU_USERNAME'):
-                                from src.crawler.leisu_crawler import LeisuCrawler
-                                leisu = LeisuCrawler(headless=True)
-                        except Exception:
-                            pass
+                        leisu = build_leisu_crawler(headless=True)
                         merged_matches = data_fusion.merge_data(new_matches, odds_crawler, leisu_crawler=leisu)
                         if leisu:
                             try:
@@ -442,6 +479,9 @@ def main():
                             other_matches_context = [om for om in merged_matches if om.get('match_num') != m.get('match_num')]
                             res, period = predictor.predict(m, total_matches_count=total_count, other_matches_context=other_matches_context)
                             m["llm_prediction"] = res
+                            if "all_predictions" not in m:
+                                m["all_predictions"] = {}
+                            m["all_predictions"][period] = res
                             
                             db.save_prediction(m, period)
                         db.close()
@@ -459,14 +499,7 @@ def main():
                     from src.llm.predictor import LLMPredictor
                     from src.processor.data_fusion import inject_leisu_data
                     predictor = LLMPredictor()
-
-                    leisu = None
-                    try:
-                        if os.getenv('LEISU_USERNAME'):
-                            from src.crawler.leisu_crawler import LeisuCrawler
-                            leisu = LeisuCrawler(headless=True)
-                    except Exception:
-                        pass
+                    leisu = build_leisu_crawler(headless=True)
 
                     db = Database()
                     total_count = len(matches)
@@ -476,6 +509,9 @@ def main():
                         other_matches_context = [om for om in matches if om.get('match_num') != m.get('match_num')]
                         res, period = predictor.predict(m, total_matches_count=total_count, other_matches_context=other_matches_context)
                         m["llm_prediction"] = res
+                        if "all_predictions" not in m:
+                            m["all_predictions"] = {}
+                        m["all_predictions"][period] = res
                         db.save_prediction(m, period)
 
                     if leisu:
@@ -537,7 +573,6 @@ def main():
                             goals_pred, _ = goals_predictor.predict(m)
                             
                             try:
-                                import json
                                 res_dict = json.loads(goals_pred)
                                 stat_goals = res_dict.get('statistical_goals')
                                 fund_report = res_dict.get('fundamental_report', '')
@@ -677,7 +712,7 @@ def main():
                     saved = 0
                     for m in history_matches:
                         try:
-                            raw_json = json.dumps({"odds": m.get("odds", {}), "asian_odds": m.get("asian_odds", {})}, ensure_ascii=False)
+                            raw_json = json.dumps(m, ensure_ascii=False)
                             match_time = m.get('match_time', '')
                             from sqlalchemy import text
                             db.session.execute(text("""
@@ -708,22 +743,25 @@ def main():
     summary_data = []
     htft_summary_data = []
     goals_summary_data = []
+    db = Database()
+    db_preds_cache = {}
     for match in filtered_matches:
         # 1. 收集全场赛果预测
-        prediction_text = ""
-        if match.get("all_predictions"):
-            all_preds = match.get("all_predictions")
-            if 'final' in all_preds:
-                prediction_text = all_preds['final']
-            elif 'pre_12h' in all_preds:
-                prediction_text = all_preds['pre_12h']
-            elif 'pre_24h' in all_preds:
-                prediction_text = all_preds['pre_24h']
-            else:
-                # 拿任意一个
-                prediction_text = list(all_preds.values())[-1]
-        elif match.get("llm_prediction"):
-            prediction_text = match.get("llm_prediction")
+        fixture_id = match.get("fixture_id")
+        if fixture_id:
+            if fixture_id not in db_preds_cache:
+                all_predictions = {}
+                preds = db.get_all_predictions_by_fixture(fixture_id)
+                for pred in preds:
+                    all_predictions[pred.prediction_period] = pred.prediction_text
+                db_preds_cache[fixture_id] = all_predictions
+            db_all_preds = db_preds_cache.get(fixture_id) or {}
+        else:
+            db_all_preds = {}
+
+        prediction_text, merged_all_preds = _resolve_primary_prediction_text(match, db_predictions=db_all_preds)
+        if merged_all_preds:
+            match["all_predictions"] = merged_all_preds
             
         # 尝试提取预测结果以显示在标题栏
         recommendation = "待分析"
@@ -851,6 +889,8 @@ def main():
                 "_sort_score": int(htft_conf) if htft_conf.isdigit() else 0
             })
             
+    db.close()
+
     if summary_data or htft_summary_data or goals_summary_data:
         with st.expander("📊 展开查看今日赛事预测汇总列表", expanded=True):
             # 使用 Tabs 分开展示 全场预测 和 半全场预测 的汇总列表
@@ -917,6 +957,79 @@ def main():
             st.session_state.previous_parlays = ""
         if "parlays_comparison" not in st.session_state:
             st.session_state.parlays_comparison = ""
+        if "generated_parlays_structured" not in st.session_state:
+            st.session_state.generated_parlays_structured = []
+        if "previous_parlays_structured" not in st.session_state:
+            st.session_state.previous_parlays_structured = []
+
+        def render_structured_parlays(plans):
+            if not plans:
+                return False
+
+            for plan in plans:
+                payout = plan.get("payout", {})
+                with st.container(border=True):
+                    title_col, target_col = st.columns([2, 1])
+                    with title_col:
+                        st.markdown(f"### 方案{plan.get('plan_code', '')}：{plan.get('plan_name', '')}")
+                    with target_col:
+                        st.info(plan.get("target_status", ""))
+
+                    metric_col1, metric_col2, metric_col3 = st.columns(3)
+                    metric_col1.metric("净回报区间", f"{payout.get('net_min', 0):.2f} ~ {payout.get('net_max', 0):.2f}")
+                    metric_col2.metric("总注数", str(payout.get("notes_count", 0)))
+                    metric_col3.metric("理论赔率", f"{payout.get('min_product', 0):.2f} ~ {payout.get('max_product', 0):.2f}")
+
+                    st.caption(plan.get("role_desc", ""))
+                    st.write(plan.get("logic_summary", ""))
+
+                    match_tabs = st.tabs(["入选场次", "赔率推演", "备选替换场"])
+
+                    with match_tabs[0]:
+                        for match in plan.get("matches", []):
+                            st.markdown(
+                                f"**[{match.get('match_id', '')}] {match.get('home_team', '')} VS {match.get('away_team', '')}**"
+                            )
+                            st.write(f"推荐：{match.get('selection_text', '')}")
+                            st.write(
+                                f"置信度：{match.get('confidence', 0)} | 标签：{' / '.join(match.get('tags', [])) or '无'} | 进球数参考：{match.get('goals_ref', '无')}"
+                            )
+                            st.write(f"入选理由：{'；'.join(match.get('selection_reasons', [])) or '无'}")
+                            st.write(f"风险提示：{'；'.join(match.get('risk_notes', [])) or '无'}")
+                            st.markdown("---")
+
+                    with match_tabs[1]:
+                        for odds_line in payout.get("odds_lines", []):
+                            st.write(
+                                f"{odds_line.get('match_id', '')} ({odds_line.get('selection', '')})：{odds_line.get('odds_text', '')}"
+                            )
+                        if payout.get("odds_lines"):
+                            st.write(
+                                f"注数计算：{' × '.join(payout.get('notes_factors', []))} = {payout.get('notes_count', 0)} 注"
+                            )
+                            st.write(
+                                f"理论最低赔率：{' × '.join(payout.get('min_factors', []))} = {payout.get('min_product', 0):.2f}"
+                            )
+                            st.write(
+                                f"理论最高赔率：{' × '.join(payout.get('max_factors', []))} = {payout.get('max_product', 0):.2f}"
+                            )
+                            st.write(
+                                f"真实净回报：最低 {payout.get('net_min', 0):.2f} 倍 ~ 最高 {payout.get('net_max', 0):.2f} 倍"
+                            )
+                        else:
+                            st.write("当前未凑齐满足约束的两场组合，请结合备选替换场人工调整。")
+
+                    with match_tabs[2]:
+                        alternative = plan.get("alternative")
+                        if alternative:
+                            st.write(
+                                f"[{alternative.get('match_id', '')}] {alternative.get('home_team', '')} VS {alternative.get('away_team', '')}"
+                            )
+                            st.write(f"推荐：{alternative.get('selection_text', '')}")
+                            st.write(f"替换理由：{'；'.join(alternative.get('selection_reasons', [])) or '无'}")
+                        else:
+                            st.write("暂无可用备选替换场。")
+            return True
             
         # 尝试从数据库加载今日串关历史（只在页面首次加载且 session state 为空时）
         today_date = datetime.now().strftime("%Y-%m-%d")
@@ -931,18 +1044,20 @@ def main():
             
         col_btn_parlay, _ = st.columns([1, 2])
         with col_btn_parlay:
-            btn_text = "🔄 重新生成并对比方案" if st.session_state.generated_parlays else "🎯 AI 智能生成三套实战串子单"
+            btn_text = "🔄 重新评估今日三套方案" if st.session_state.generated_parlays else "🎯 AI 智能生成三套实战串子单"
             if st.button(btn_text, type="primary", use_container_width=True):
                 with st.spinner("操盘手 AI 正在深度分析所有赛事并为您组合串子单，请稍候..."):
                     import sys
                     import os
                     from src.llm.predictor import LLMPredictor
                     predictor = LLMPredictor()
-                    new_parlays = predictor.generate_parlays(summary_data)
+                    payload = predictor.generate_parlays_payload(combined_summary_data)
+                    new_parlays = payload["markdown"]
                     
                     # 如果已经有老的方案，则保存为历史并进行对比
                     if st.session_state.generated_parlays:
                         st.session_state.previous_parlays = st.session_state.generated_parlays
+                        st.session_state.previous_parlays_structured = st.session_state.generated_parlays_structured
                         
                         # 只有当新旧方案不完全相同时才去对比
                         if new_parlays != st.session_state.previous_parlays:
@@ -956,6 +1071,7 @@ def main():
                             st.session_state.parlays_comparison = "两次生成的方案完全一致，无需对比。"
                             
                     st.session_state.generated_parlays = new_parlays
+                    st.session_state.generated_parlays_structured = payload["plans"]
                     
                     # 持久化保存到数据库
                     db = Database()
@@ -977,17 +1093,20 @@ def main():
                     tab_new, tab_comp, tab_old = st.tabs(["🌟 最新生成方案", "⚖️ AI 深度对比分析", "🕰️ 前次历史方案"])
                     
                     with tab_new:
-                        st.markdown(st.session_state.generated_parlays)
+                        if not render_structured_parlays(st.session_state.generated_parlays_structured):
+                            st.markdown(st.session_state.generated_parlays)
                         
                     with tab_comp:
                         st.info("💡 **风控提示**：AI 针对两次不同的选场给出了深度分析，建议结合阅读。")
                         st.markdown(st.session_state.parlays_comparison)
                         
                     with tab_old:
-                        st.markdown(st.session_state.previous_parlays)
+                        if not render_structured_parlays(st.session_state.previous_parlays_structured):
+                            st.markdown(st.session_state.previous_parlays)
                 else:
                     st.success("✅ 串子单生成完毕！请参考：")
-                    st.markdown(st.session_state.generated_parlays)
+                    if not render_structured_parlays(st.session_state.generated_parlays_structured):
+                        st.markdown(st.session_state.generated_parlays)
             
     else:
         st.info("暂无预测数据，请先运行预测。")
@@ -1012,13 +1131,14 @@ def main():
         # 注入雷速体育数据
         leisu = None
         try:
-            if os.getenv('LEISU_USERNAME'):
-                from src.crawler.leisu_crawler import LeisuCrawler
-                from src.processor.data_fusion import inject_leisu_data
-                leisu = LeisuCrawler(headless=True)
+            from src.processor.data_fusion import inject_leisu_data
+            leisu = build_leisu_crawler(headless=True)
+            if leisu:
                 inject_leisu_data(_target_match, leisu)
-        except Exception:
-            pass
+        except Exception as e:
+            import traceback
+            st.error(f"雷速数据注入失败: {e}")
+            print(traceback.format_exc())
 
         if _action_type == 'repredict':
             with st.spinner("正在调用大模型重新进行全场预测..."):
@@ -1035,7 +1155,7 @@ def main():
                 _target_match["all_predictions"][period] = new_pred
                 db.close()
                 load_data.clear()
-                save_data(filtered_matches)
+                save_data(matches)
             st.success("全场预测已更新！")
         elif _action_type == 'htft':
             with st.spinner("正在调用大模型进行专项半全场预测..."):
@@ -1044,7 +1164,7 @@ def main():
                 htft_pred, _ = htft_predictor.predict(_target_match, total_matches_count=1)
                 _target_match["htft_prediction"] = htft_pred
                 load_data.clear()
-                save_data(filtered_matches)
+                save_data(matches)
             st.success("半全场预测已生成！")
         elif _action_type == 'goals':
             with st.spinner("正在调用大模型进行专项进球数推演..."):
@@ -1081,7 +1201,7 @@ def main():
                     fund_report = goals_pred
                 _target_match["goals_prediction_special"] = fund_report
                 load_data.clear()
-                save_data(filtered_matches)
+                save_data(matches)
             st.success("进球数专项预测完成！")
         if leisu:
             try: leisu.close()
@@ -1092,20 +1212,10 @@ def main():
         # 在这里也需要获取一次 recommendation
         recommendation = "待分析"
         pred_color = "gray"
-        
-        prediction_text = ""
-        if match.get("all_predictions"):
-            all_preds = match.get("all_predictions")
-            if 'final' in all_preds:
-                prediction_text = all_preds['final']
-            elif 'pre_12h' in all_preds:
-                prediction_text = all_preds['pre_12h']
-            elif 'pre_24h' in all_preds:
-                prediction_text = all_preds['pre_24h']
-            elif all_preds:
-                prediction_text = list(all_preds.values())[-1]
-        elif match.get("llm_prediction"):
-            prediction_text = match.get("llm_prediction")
+
+        prediction_text, merged_all_preds = _resolve_primary_prediction_text(match)
+        if merged_all_preds:
+            match["all_predictions"] = merged_all_preds
             
         if prediction_text:
             from src.llm.predictor import LLMPredictor
@@ -1169,22 +1279,16 @@ def main():
                 fixture_id = match.get("fixture_id")
             
                 # 获取所有时间段的预测
-                all_predictions = {}
+                db_all_predictions = {}
                 
-                # 优先使用JSON文件中的all_predictions数据
-                if match.get("all_predictions"):
-                    all_predictions = match.get("all_predictions")
-                elif fixture_id:
-                    # 如果没有JSON数据，从数据库加载
+                if fixture_id:
                     predictions = db.get_all_predictions_by_fixture(fixture_id)
                     for pred in predictions:
-                        all_predictions[pred.prediction_period] = pred.prediction_text
-                
-                # 如果都没有，使用当前数据
-                if not all_predictions and match.get("llm_prediction"):
-                    from src.llm.predictor import LLMPredictor
-                    current_period = LLMPredictor()._determine_prediction_period(match)
-                    all_predictions[current_period] = match.get("llm_prediction")
+                        db_all_predictions[pred.prediction_period] = pred.prediction_text
+
+                _, all_predictions = _resolve_primary_prediction_text(match, db_predictions=db_all_predictions)
+                if all_predictions:
+                    match["all_predictions"] = all_predictions
                 
                 # 显示时间段选择器
                 prediction = ""
