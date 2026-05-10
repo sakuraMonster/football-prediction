@@ -911,6 +911,65 @@ class LLMPredictor:
                 break
         return merged
 
+    @staticmethod
+    def _allowed_rq_tokens_for_nspf_token(nspf_token, rangqiu_str):
+        try:
+            rq = int(float(rangqiu_str))
+        except (ValueError, TypeError):
+            return []
+
+        if nspf_token == "胜":
+            if rq >= 0:
+                return ["让胜"]
+            if rq == -1:
+                return ["让胜", "让平"]
+            return ["让胜", "让平", "让负"]
+
+        if nspf_token == "平":
+            if rq > 0:
+                return ["让胜"]
+            if rq == 0:
+                return ["让平"]
+            return ["让负"]
+
+        if nspf_token == "负":
+            if rq <= 0:
+                return ["让负"]
+            if rq == 1:
+                return ["让平", "让负"]
+            return ["让胜", "让平", "让负"]
+
+        return []
+
+    @classmethod
+    def _check_nspf_rq_consistency(cls, nspf_rec, rq_rec, rangqiu_str):
+        """检查不让球推荐与让球推荐在数学逻辑上是否自洽"""
+        possible_spfs = set()
+        for nspf in nspf_rec:
+            possible_spfs.update(cls._allowed_rq_tokens_for_nspf_token(nspf, rangqiu_str))
+
+        if not possible_spfs:
+            return []
+
+        invalid_rq = [r for r in rq_rec if r not in possible_spfs]
+        return invalid_rq
+
+    @classmethod
+    def _build_joint_recommendation_hint(cls, rangqiu_str):
+        try:
+            int(float(rangqiu_str))
+        except (ValueError, TypeError):
+            return ""
+
+        mappings = []
+        for nspf_token in ["胜", "平", "负"]:
+            rq_tokens = cls._allowed_rq_tokens_for_nspf_token(nspf_token, rangqiu_str)
+            if rq_tokens:
+                mappings.append(f"{nspf_token} -> {'/'.join(rq_tokens)}")
+        if not mappings:
+            return ""
+        return f"当前竞彩让球数={rangqiu_str}，推荐映射必须满足：{'；'.join(mappings)}。"
+
     @classmethod
     def _enforce_minimum_risk_coverage(cls, prediction_text, details, risk_policy, match_asian_odds):
         changed = False
@@ -945,6 +1004,8 @@ class LLMPredictor:
             "must_double_rq": False,
             "must_explain_market_anchor": False,
             "confidence_cap": None,
+            "prefer_market_when_micro_triggered": bool(triggered_rule_ids),
+            "joint_recommendation_generation": bool(triggered_rule_ids or odds_conflict_text or has_anchor_divergence),
         }
 
         if triggered_rule_ids:
@@ -2910,6 +2971,11 @@ class LLMPredictor:
         else:
             micro_relation = "无盘赔微观信号规则匹配或未形成明确偏向"
 
+        if triggered_rule_ids:
+            priority_rule = "已命中微观信号：四维仲裁优先级提升为 微观规则 > 盘口方向 > 情报佐证 > 基本面结论。若要逆市场，必须给出结构化强证据和明确推翻链路。"
+        else:
+            priority_rule = "未命中微观信号时，盘口方向与情报/基本面并行裁决；若出现明显盘口意图，仍需解释谁推翻了谁。"
+
         conflict_flags = 0
         conflict_points = []
         if tilt_relation == "明显冲突":
@@ -2929,6 +2995,9 @@ class LLMPredictor:
                 conflict_points.append(
                     f"盘口意图={market_intent}，但微观偏向={micro_bias}，二者在风险方向上存在反向信号"
                 )
+        if triggered_rule_ids and tilt_relation == "明显冲突":
+            conflict_flags += 1
+            conflict_points.append("已命中微观信号且基本面与盘口结构化方向相反，本场应优先核验盘口/微观链路，不能让基本面直接覆盖市场信号")
 
         if conflict_flags >= 2:
             severity = "high"
@@ -2947,6 +3016,7 @@ class LLMPredictor:
             "intel_relation": intel_relation,
             "micro_relation": micro_relation,
             "anchor_relation": "欧亚存在分工背离，需警惕盘口与强弱锚点错位" if has_anchor_divergence else "欧亚锚点未见明显背离",
+            "priority_rule": priority_rule,
             "conflict_flags": conflict_flags,
             "conflict_points": conflict_points,
             "severity": severity,
@@ -2976,6 +3046,7 @@ class LLMPredictor:
         lines.append(f"- 情报佐证 vs 盘口方向：{assessment['intel_relation']}")
         lines.append(f"- 微观规则 vs 盘口意图：{assessment['micro_relation']}")
         lines.append(f"- 欧亚锚点 vs 盘口方向：{assessment['anchor_relation']}")
+        lines.append(f"- 仲裁优先级：{assessment['priority_rule']}")
 
         lines.append(f"- 仲裁提示：{assessment['verdict']}")
 
@@ -3006,6 +3077,16 @@ class LLMPredictor:
             lines.append(f"- 微观规则命中：{', '.join(f'[{rid}]' for rid in triggered_rule_ids)}")
         else:
             lines.append("- 微观规则命中：无盘赔微观信号规则匹配")
+
+        if triggered_rule_ids or risk_policy.get("prefer_market_when_micro_triggered"):
+            lines.append("- 仲裁优先级规则：当前已命中微观信号/预警，微观信号的可信度高于 LLM 自行发挥的盘口解读；四维仲裁时应先服从微观规则方向，再判断盘口方向是否被强情报或强基本面推翻。")
+
+        if triggered_rule_ids or odds_conflict_text or has_anchor_divergence or risk_policy.get("joint_recommendation_generation"):
+            lines.append("- 推荐生成顺序：先完成【四维仲裁】并确定统一的不让球最终方向，再按竞彩让球数映射出【竞彩让球推荐】；严禁把不让球推荐和让球推荐当成两套独立结论分别生成。")
+            rangqiu_str = (match_data.get("odds") or {}).get("rangqiu") or match_data.get("让球数") or ""
+            joint_hint = self._build_joint_recommendation_hint(rangqiu_str)
+            if joint_hint:
+                lines.append(f"- 竞彩映射约束：{joint_hint}")
 
         confidence_cap = risk_policy.get("confidence_cap")
         if confidence_cap is not None:
@@ -3041,7 +3122,7 @@ class LLMPredictor:
             if first_micro:
                 lines.append(f"- 微观规则摘要：{first_micro}")
 
-        lines.append("- 使用方式：请先完成【四维仲裁】，再决定是否需要由基本面/情报推翻盘口方向；若要推翻，必须写清楚推翻链路。")
+        lines.append("- 使用方式：请先完成【四维仲裁】，再决定是否需要由基本面/情报推翻盘口方向；若已命中微观信号，则默认先站在盘口/微观链路一侧审视基本面，若要推翻必须写清楚推翻链路。")
         return "\n".join(lines)
 
     def _build_agent_c_prompt(
@@ -3779,6 +3860,12 @@ class LLMPredictor:
             match.get("竞彩推荐(不让球)") or match.get("竞彩推荐")
         )
         rq_options = self._extract_recommendation_options(match.get("竞彩让球推荐"))
+        
+        # 展示层兜底：过滤掉历史脏数据里与不让球推荐矛盾的让球选项。
+        invalid_rq = self._check_nspf_rq_consistency(nspf_options, rq_options, match.get("让球数", "0"))
+        if invalid_rq:
+            rq_options = [opt for opt in rq_options if opt not in invalid_rq]
+            
         goals_options = self._extract_goals_options(match.get("AI预测进球数") or match.get("进球数参考"))
         nspf_odds = match.get("不让球赔率(胜/平/负)", []) or []
         rq_odds = match.get("让球赔率(胜/平/负)", []) or []
@@ -3960,9 +4047,9 @@ class LLMPredictor:
                 scores=scores,
             )
             tier = "banned"
-            if primary_play and confidence >= 70 and scores["stable"] >= 28 and primary_play["options_count"] == 1 and primary_play["max_odds"] <= 2.30:
+            if primary_play and confidence >= 65 and scores["stable"] >= 28 and primary_play["options_count"] == 1 and primary_play["max_odds"] <= 2.30:
                 tier = "stable"
-            elif primary_play and confidence >= 64 and scores["value"] >= 20:
+            elif primary_play and confidence >= 60 and scores["value"] >= 20:
                 tier = "value"
             elif primary_play and confidence >= 60 and scores["aggressive"] >= 16:
                 tier = "aggressive"

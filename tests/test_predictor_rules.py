@@ -358,7 +358,7 @@ def test_build_programmatic_arbitration_hint_surfaces_program_evidence():
     match_data = {
         "home_team": "弗赖堡",
         "away_team": "布拉加",
-        "odds": {"nspf": ["1.62", "3.50", "4.42"]},
+        "odds": {"nspf": ["1.62", "3.50", "4.42"], "rangqiu": "-1"},
         "asian_odds": {"macau": {"start": "0.88 | 半球 | 0.98", "live": "0.96 | 半球/一球 | 0.86"}},
         "europe_odds": [{"company": "澳门", "init_home": "1.70", "init_away": "4.60"}],
         "leisu_intelligence": {
@@ -389,6 +389,9 @@ def test_build_programmatic_arbitration_hint_surfaces_program_evidence():
     assert "欧赔实力方" in hint
     assert "[R205]" in hint
     assert "情报数量分布" in hint
+    assert "仲裁优先级规则" in hint
+    assert "推荐生成顺序" in hint
+    assert "胜 -> 让胜/让平" in hint
 
 
 def test_extract_structured_block_reads_agent_summary_fields():
@@ -492,6 +495,7 @@ nspf_tilt: 平负
     assert assessment["severity"] == "high"
     assert assessment["tilt_relation"] == "明显冲突"
     assert assessment["conflict_flags"] >= 2
+    assert "微观规则 > 盘口方向 > 情报佐证 > 基本面结论" in assessment["priority_rule"]
     assert any("基本面倾向" in point for point in assessment["conflict_points"])
 
 
