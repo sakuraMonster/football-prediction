@@ -1,0 +1,144 @@
+[11908:16044:0510/175702.675:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v11.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v11.filemap.sogouime20477034827
+[11908:16044:0510/175702.675:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[11908:16044:0510/175702.675:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[11908:16044:0510/175702.789:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v11.filemap.sogouime
+[11908:16044:0510/175702.789:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:11
+[11908:16044:0510/175702.789:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[0510/175735.525:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x166402fcfe00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/175738.223:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x166400177400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/175741.419:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 1
+[0510/175741.439:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 3
+[0510/175741.730:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 5
+[0510/175741.730:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 7
+[0510/175741.898:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 9
+[0510/175741.898:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 11
+[0510/175742.085:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 13
+[0510/175742.085:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 15
+[0510/175742.085:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 17
+[0510/175742.102:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 19
+[0510/175742.102:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 25
+[0510/175742.103:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 27
+[0510/175742.103:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 29
+[0510/175742.103:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 31
+[0510/175742.324:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 33
+[0510/175742.324:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 35
+[0510/175742.324:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 37
+[0510/175742.324:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 41
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 43
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 47
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 49
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 51
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 53
+[0510/175742.325:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 55
+[0510/175742.423:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 59
+[0510/175742.423:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 63
+[0510/175742.423:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 65
+[0510/175742.423:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 67
+[0510/175742.423:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 73
+[0510/175742.424:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 85
+[0510/175742.424:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 21
+[0510/175742.424:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 23
+[0510/175742.424:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 39
+[0510/175742.492:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 45
+[0510/175742.498:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 57
+[0510/175742.687:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 61
+[0510/175742.687:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 69
+[0510/175742.690:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 71
+[0510/175742.695:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 87
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 79
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 77
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 91
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 89
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 95
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 83
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 93
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 81
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 75
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 97
+[0510/175742.699:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 103
+[0510/175742.914:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 105
+[0510/175742.914:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 101
+[0510/175742.914:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 111
+[0510/175742.914:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 107
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 109
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 99
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 113
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 117
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 121
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 125
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 127
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 129
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 131
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 133
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 135
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 123
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 141
+[0510/175742.917:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 115
+[0510/175747.224:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x166400172c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/175747.356:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x166400172c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[0510/175922.096:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 9
+[0510/175922.231:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 21
+[0510/175922.819:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 19
+[0510/175923.038:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 333
+[0510/175923.038:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 335
+[0510/175923.038:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 337
+[0510/175923.038:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 339
+[0510/180101.791:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 367
+[0510/180101.791:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 365
+[0510/180101.791:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 369
+[0510/180101.791:WARNING:net\spdy\spdy_session.cc:3074] Received HEADERS for invalid stream 371
+[0510/180143.427:ERROR:net\socket\ssl_client_socket_impl.cc:924] handshake failed; returned -1, SSL error code 1, net_error -100
+[17224:16732:0510/195708.248:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v11.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v11.filemap.sogouime20477034827
+[17224:16732:0510/195708.248:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[17224:16732:0510/195708.248:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[17224:16732:0510/195708.341:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v11.filemap.sogouime
+[17224:16732:0510/195708.341:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:11
+[17224:16732:0510/195708.341:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[0510/195711.274:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x286c03b57a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/195711.455:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x286c03b57a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/195721.480:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x286c05838200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/195721.519:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x286c05838200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[26856:32416:0510/200952.577:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v11.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v11.filemap.sogouime20477034827
+[26856:32416:0510/200952.578:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[26856:32416:0510/200952.578:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[26856:32416:0510/200952.689:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v11.filemap.sogouime
+[26856:32416:0510/200952.689:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:11
+[26856:32416:0510/200952.689:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[0510/200955.255:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x1b5c056e4000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/200955.440:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x1b5c056e4000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/201004.634:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x1b5c0384c000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/201004.642:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x1b5c0384c000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[23916:15984:0510/202047.125:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v11.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v11.filemap.sogouime20477034827
+[23916:15984:0510/202047.125:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[23916:15984:0510/202047.125:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[23916:15984:0510/202047.219:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v11.filemap.sogouime
+[23916:15984:0510/202047.219:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:11
+[23916:15984:0510/202047.219:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:11
+[0510/202049.582:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x33cc04ef8600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/202049.726:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x33cc04ef8600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/202059.669:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x33cc0389dc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/202059.709:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x33cc0389dc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[9528:26040:0510/222956.834:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v12.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v12.filemap.sogouime20477034827
+[9528:26040:0510/222956.834:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[9528:26040:0510/222956.834:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:12
+[9528:26040:0510/222956.928:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v12.filemap.sogouime
+[9528:26040:0510/222956.928:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:12
+[9528:26040:0510/222956.928:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:12
+[0510/222959.446:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x592403b6fa00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/222959.631:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x592403b6fa00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[15476:25044:0510/224221.288:WARNING:t_skinfilemap.cpp(56)] SGRenderLog:CheckUpdate newMem.OpenMem failed, szNewMem:Local\sgime_skin.v12.filemap.sogouime err:系统错误2: 系统找不到指定的文件。  
+打开Filemap失败: Local\sgime_skin.v12.filemap.sogouime20477034827
+[15476:25044:0510/224221.288:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:1
+[15476:25044:0510/224221.288:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:12
+[15476:25044:0510/224221.398:WARNING:t_skinfilemap.cpp(63)] SGRenderLog:CheckUpdate newMem.OpenMem Suc, szNewMem:Local\sgime_skin.Dpi192.v12.filemap.sogouime
+[15476:25044:0510/224221.398:WARNING:t_skinfilemap.cpp(65)] SGRenderLog:CheckUpdate finish: old version:12
+[15476:25044:0510/224221.398:WARNING:t_skinfilemap.cpp(67)] SGRenderLog:CheckUpdate finish: new version:12
+[0510/224224.060:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x5aa40397ba00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/224224.286:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x5aa40397ba00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/224705.225:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x5aa403970c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[0510/224705.241:ERROR:gpu\command_buffer\service\gl_utils.cc:431] [.WebGL-0x5aa403970c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)

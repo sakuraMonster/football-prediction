@@ -950,6 +950,62 @@ def main():
             else:
                 combined_summary_data.append(s)
 
+        def _parse_kickoff_time(value):
+            if not value:
+                return None
+            text = str(value).strip().replace("T", " ")
+            if "." in text:
+                text = text.split(".", 1)[0]
+            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+                try:
+                    return datetime.strptime(text, fmt)
+                except ValueError:
+                    continue
+            try:
+                return datetime.fromisoformat(text)
+            except ValueError:
+                return None
+
+        if "parlay_time_filter_enabled" not in st.session_state:
+            st.session_state.parlay_time_filter_enabled = False
+        if "parlay_time_start_date" not in st.session_state:
+            st.session_state.parlay_time_start_date = datetime.now().date()
+        if "parlay_time_end_date" not in st.session_state:
+            st.session_state.parlay_time_end_date = datetime.now().date()
+        if "parlay_time_start_time" not in st.session_state:
+            st.session_state.parlay_time_start_time = datetime.strptime("18:00", "%H:%M").time()
+        if "parlay_time_end_time" not in st.session_state:
+            st.session_state.parlay_time_end_time = datetime.strptime("22:00", "%H:%M").time()
+
+        enable_filter = st.checkbox("限定比赛时间范围", key="parlay_time_filter_enabled")
+        filter_error = None
+        if enable_filter:
+            col_t1, col_t2 = st.columns(2)
+            with col_t1:
+                st.date_input("开始日期", key="parlay_time_start_date")
+                st.time_input("开始时间", key="parlay_time_start_time")
+            with col_t2:
+                st.date_input("结束日期", key="parlay_time_end_date")
+                st.time_input("结束时间", key="parlay_time_end_time")
+
+            start_dt = datetime.combine(st.session_state.parlay_time_start_date, st.session_state.parlay_time_start_time)
+            end_dt = datetime.combine(st.session_state.parlay_time_end_date, st.session_state.parlay_time_end_time)
+            if end_dt <= start_dt:
+                filter_error = "时间范围无效：结束时间必须大于开始时间。"
+                st.error(filter_error)
+
+            parlay_summary_data = []
+            if not filter_error:
+                for row in combined_summary_data:
+                    kickoff = _parse_kickoff_time(row.get("开赛时间", ""))
+                    if kickoff is None:
+                        continue
+                    if start_dt <= kickoff <= end_dt:
+                        parlay_summary_data.append(row)
+            st.caption(f"串关候选场次：{len(parlay_summary_data)} / {len(combined_summary_data)}")
+        else:
+            parlay_summary_data = combined_summary_data
+
         # 用于保存生成的串子单结果
         if "generated_parlays" not in st.session_state:
             st.session_state.generated_parlays = ""
@@ -1051,7 +1107,13 @@ def main():
                     import os
                     from src.llm.predictor import LLMPredictor
                     predictor = LLMPredictor()
-                    payload = predictor.generate_parlays_payload(combined_summary_data)
+                    if enable_filter and filter_error:
+                        st.error("时间范围无效，无法生成串关方案。")
+                        st.stop()
+                    if len(parlay_summary_data) < 2:
+                        st.error("候选场次不足（至少需要 2 场）")
+                        st.stop()
+                    payload = predictor.generate_parlays_payload(parlay_summary_data)
                     new_parlays = payload["markdown"]
                     
                     # 如果已经有老的方案，则保存为历史并进行对比

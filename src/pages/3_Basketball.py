@@ -306,13 +306,76 @@ def main():
         st.markdown("### 🎫 AI 智能串关推荐 (篮球)")
         if 'bball_generated_parlays' not in st.session_state:
             st.session_state.bball_generated_parlays = None
+
+        def _parse_kickoff_time(value):
+            if not value:
+                return None
+            text = str(value).strip().replace("T", " ")
+            if "." in text:
+                text = text.split(".", 1)[0]
+            from datetime import datetime
+            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+                try:
+                    return datetime.strptime(text, fmt)
+                except ValueError:
+                    continue
+            try:
+                return datetime.fromisoformat(text)
+            except ValueError:
+                return None
+
+        if "bball_parlay_time_filter_enabled" not in st.session_state:
+            st.session_state.bball_parlay_time_filter_enabled = False
+        if "bball_parlay_time_start_date" not in st.session_state:
+            st.session_state.bball_parlay_time_start_date = datetime.now().date()
+        if "bball_parlay_time_end_date" not in st.session_state:
+            st.session_state.bball_parlay_time_end_date = datetime.now().date()
+        if "bball_parlay_time_start_time" not in st.session_state:
+            st.session_state.bball_parlay_time_start_time = datetime.strptime("18:00", "%H:%M").time()
+        if "bball_parlay_time_end_time" not in st.session_state:
+            st.session_state.bball_parlay_time_end_time = datetime.strptime("22:00", "%H:%M").time()
+
+        enable_filter = st.checkbox("限定比赛时间范围", key="bball_parlay_time_filter_enabled")
+        filter_error = None
+        if enable_filter:
+            col_t1, col_t2 = st.columns(2)
+            with col_t1:
+                st.date_input("开始日期", key="bball_parlay_time_start_date")
+                st.time_input("开始时间", key="bball_parlay_time_start_time")
+            with col_t2:
+                st.date_input("结束日期", key="bball_parlay_time_end_date")
+                st.time_input("结束时间", key="bball_parlay_time_end_time")
+
+            start_dt = datetime.combine(st.session_state.bball_parlay_time_start_date, st.session_state.bball_parlay_time_start_time)
+            end_dt = datetime.combine(st.session_state.bball_parlay_time_end_date, st.session_state.bball_parlay_time_end_time)
+            if end_dt <= start_dt:
+                filter_error = "时间范围无效：结束时间必须大于开始时间。"
+                st.error(filter_error)
+
+            parlay_display_data = []
+            if not filter_error:
+                for row in display_data:
+                    kickoff = _parse_kickoff_time(row.get("开赛时间", ""))
+                    if kickoff is None:
+                        continue
+                    if start_dt <= kickoff <= end_dt:
+                        parlay_display_data.append(row)
+            st.caption(f"串关候选场次：{len(parlay_display_data)} / {len(display_data)}")
+        else:
+            parlay_display_data = display_data
             
         col_gen, col_clear = st.columns([2, 8])
         with col_gen:
             if st.button("🏀 生成篮球智能串关方案", type="primary"):
                 with st.spinner("正在根据今日数据和风险模型计算最优串关方案..."):
+                    if enable_filter and filter_error:
+                        st.error("时间范围无效，无法生成串关方案。")
+                        st.stop()
+                    if len(parlay_display_data) < 2:
+                        st.error("候选场次不足（至少需要 2 场）")
+                        st.stop()
                     predictor = BBallPredictor()
-                    st.session_state.bball_generated_parlays = predictor.generate_parlays(display_data)
+                    st.session_state.bball_generated_parlays = predictor.generate_parlays(parlay_display_data)
         
         with col_clear:
             if st.session_state.bball_generated_parlays:

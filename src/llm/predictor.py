@@ -3075,6 +3075,26 @@ class LLMPredictor:
 
         if triggered_rule_ids:
             lines.append(f"- 微观规则命中：{', '.join(f'[{rid}]' for rid in triggered_rule_ids)}")
+            try:
+                import json
+                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                rules_path = os.path.join(base_dir, "data", "rules", "micro_signals.json")
+                with open(rules_path, "r", encoding="utf-8") as f:
+                    rules = json.load(f)
+                bias_map = {
+                    str(r.get("id")): str(r.get("prediction_bias") or "").strip()
+                    for r in (rules or [])
+                    if r.get("id")
+                }
+                bias_parts = [
+                    f"[{rid}]={bias_map.get(rid)}"
+                    for rid in triggered_rule_ids
+                    if bias_map.get(rid)
+                ]
+                if bias_parts:
+                    lines.append(f"- 微观规则偏向：{', '.join(bias_parts)}")
+            except Exception:
+                pass
         else:
             lines.append("- 微观规则命中：无盘赔微观信号规则匹配")
 
@@ -3574,13 +3594,13 @@ class LLMPredictor:
             except Exception:
                 return None
 
-        def implied_probs_from_nspf(nspf):
-            if not nspf or len(nspf) != 3:
+        def implied_probs_from_3way(odds_3way):
+            if not odds_3way or len(odds_3way) != 3:
                 return None
             try:
-                home_odds = float(nspf[0])
-                draw_odds = float(nspf[1])
-                away_odds = float(nspf[2])
+                home_odds = float(odds_3way[0])
+                draw_odds = float(odds_3way[1])
+                away_odds = float(odds_3way[2])
                 implied_prob_sum = (1 / home_odds) + (1 / draw_odds) + (1 / away_odds)
                 return_rate = 1 / implied_prob_sum
                 return ((1 / home_odds) * return_rate, (1 / draw_odds) * return_rate, (1 / away_odds) * return_rate)
@@ -3599,19 +3619,18 @@ class LLMPredictor:
         giving_live_w = l["w1"] if hl >= 0 else l["w2"]
         receiving_live_w = l["w2"] if hl >= 0 else l["w1"]
 
-        probs = implied_probs_from_nspf((odds or {}).get("nspf", []))
-        p_home, p_draw, p_away = probs if probs else (None, None, None)
-
         is_euro_cup = any(k in (league or "") for k in ["欧协联", "欧联", "欧冠"])
 
         nspf_odds = (odds or {}).get("nspf", [])
-        live_home = float(nspf_odds[0]) if len(nspf_odds) == 3 else None
-        live_draw = float(nspf_odds[1]) if len(nspf_odds) == 3 else None
-        live_away = float(nspf_odds[2]) if len(nspf_odds) == 3 else None
-        
-        # 提取欧洲赔率 (初盘)
+        cai_live_home = float(nspf_odds[0]) if len(nspf_odds) == 3 else None
+        cai_live_draw = float(nspf_odds[1]) if len(nspf_odds) == 3 else None
+        cai_live_away = float(nspf_odds[2]) if len(nspf_odds) == 3 else None
+
+        # 提取欧洲赔率 (初盘/临盘)
         macau_start = None
         bet365_start = None
+        macau_live = None
+        bet365_live = None
         if euro_odds:
             for item in euro_odds:
                 company = item.get('company', '')
@@ -3622,14 +3641,45 @@ class LLMPredictor:
                             'd': float(item.get('init_draw', 0)),
                             'a': float(item.get('init_away', 0))
                         }
+                        macau_live = {
+                            'h': float(item.get('live_home', 0)),
+                            'd': float(item.get('live_draw', 0)),
+                            'a': float(item.get('live_away', 0))
+                        }
                     elif 'bet365' in company.lower():
                         bet365_start = {
                             'h': float(item.get('init_home', 0)),
                             'd': float(item.get('init_draw', 0)),
                             'a': float(item.get('init_away', 0))
                         }
+                        bet365_live = {
+                            'h': float(item.get('live_home', 0)),
+                            'd': float(item.get('live_draw', 0)),
+                            'a': float(item.get('live_away', 0))
+                        }
                 except (ValueError, TypeError):
                     continue
+
+        def _valid_live_triplet(live_triplet):
+            if not live_triplet:
+                return False
+            try:
+                return all(float(live_triplet.get(k, 0)) > 0 for k in ("h", "d", "a"))
+            except Exception:
+                return False
+
+        chosen_live = None
+        if _valid_live_triplet(macau_live):
+            chosen_live = macau_live
+        elif _valid_live_triplet(bet365_live):
+            chosen_live = bet365_live
+
+        live_home = chosen_live["h"] if chosen_live else None
+        live_draw = chosen_live["d"] if chosen_live else None
+        live_away = chosen_live["a"] if chosen_live else None
+
+        probs = implied_probs_from_3way([live_home, live_draw, live_away]) if all(v is not None for v in (live_home, live_draw, live_away)) else None
+        p_home, p_draw, p_away = probs if probs else (None, None, None)
 
         # 1. 构造上下文 (Context)
         context = {
