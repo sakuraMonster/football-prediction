@@ -3,6 +3,7 @@ import re
 import json
 import urllib.parse
 import itertools
+from uuid import uuid4
 from loguru import logger
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -14,7 +15,9 @@ import simpleeval
 # 引入动态规则模块
 from .rules import P0_CORE_RULES, HANDICAP_RULES, DYNAMIC_CHANGE_RULES, HOT_MONEY_RULES
 from .rules import AGENT_A_PROMPT, AGENT_B_PROMPT, AGENT_C_PROMPT
-from src.utils.rule_registry import normalize_arbitration_rule_action
+from src.utils.rule_registry import normalize_arbitration_rule_action, normalize_micro_rule_condition, normalize_arbitration_rule_condition, generate_rule_id_from_draft
+from src.market_script_v2.engine import MarketScriptV2Engine
+from src.market_script_v2.models import format_v2_lines, v2_triggered_rule_ids
 
 class LLMPredictor:
     def __init__(self):
@@ -39,6 +42,13 @@ class LLMPredictor:
             api_key=api_key,
             base_url=api_base
         )
+        
+        # 控制是否允许 LLM 自行进行主观盘赔推演
+        self.enable_llm_subjective_market_analysis = os.getenv("ENABLE_LLM_SUBJECTIVE_MARKET_ANALYSIS", "false").lower() == "true"
+
+        self.market_engine_mode = os.getenv("PREDICTION_MARKET_ENGINE_MODE", "legacy").strip().lower() or "legacy"
+
+        self._v2_engine = MarketScriptV2Engine()
 
     @staticmethod
     def _get_project_base_dir():
@@ -718,8 +728,150 @@ class LLMPredictor:
             return text
         return f"{text}【预测偏向：{bias}】"
 
+    @staticmethod
+    def _prediction_bias_to_tokens(bias):
+        bias = str(bias or "").strip()
+        mapping = {
+            "胜": ["胜"],
+            "平": ["平"],
+            "负": ["负"],
+            "胜平": ["胜", "平"],
+            "平负": ["平", "负"],
+            "胜负": ["胜", "负"],
+        }
+        return mapping.get(bias, [])
+
+    @classmethod
+    def _tokens_to_prediction_bias(cls, tokens):
+        ordered = [token for token in ["胜", "平", "负"] if token in set(tokens or [])]
+        if ordered == ["胜"]:
+            return "胜"
+        if ordered == ["平"]:
+            return "平"
+        if ordered == ["负"]:
+            return "负"
+        if ordered == ["胜", "平"]:
+            return "胜平"
+        if ordered == ["平", "负"]:
+            return "平负"
+        if ordered == ["胜", "负"]:
+            return "胜负"
+        return ""
+
+    @classmethod
+    def _normalize_prediction_bias(cls, bias, asian=None):
+        normalized = re.sub(r"\s+", "", str(bias or ""))
+        if not normalized:
+            return ""
+        if normalized in {"胜", "平", "负", "胜平", "平负", "胜负"}:
+            return normalized
+
+        explicit_pairs = [
+            (r"胜[\/、]平|主队不败", "胜平"),
+            (r"平[\/、]负|客队不败|主队不胜", "平负"),
+            (r"胜[\/、]负|两头", "胜负"),
+        ]
+        for pattern, mapped in explicit_pairs:
+            if re.search(pattern, normalized):
+                return mapped
+
+        keyword_map = [
+            (["主胜", "主队方向", "支持主队", "看好主队", "主队赢球", "主队打出"], "胜"),
+            (["客胜", "客队方向", "支持客队", "看好客队", "客队赢球", "客队打出"], "负"),
+            (["平局", "防平"], "平"),
+            (["放弃主胜", "防范主队不胜", "主队不胜"], "平负"),
+            (["放弃客胜", "防范客队不胜", "客队不胜"], "胜平"),
+        ]
+        for keywords, mapped in keyword_map:
+            if any(keyword in normalized for keyword in keywords):
+                return mapped
+
+        giving_side = cls._resolve_asian_giving_side(asian or {}).get("side")
+        if "让球方" in normalized:
+            if any(keyword in normalized for keyword in ["强势", "穿盘", "正路", "支持", "看好"]):
+                return "胜" if giving_side == "home" else "负" if giving_side == "away" else ""
+            if any(keyword in normalized for keyword in ["输盘", "不胜", "降级", "压制", "走弱"]):
+                return "平负" if giving_side == "home" else "胜平" if giving_side == "away" else ""
+
+        return ""
+
+    @classmethod
+    def _load_micro_signal_rule_map(cls):
+        try:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            rules_path = os.path.join(base_dir, "data", "rules", "micro_signals.json")
+            with open(rules_path, "r", encoding="utf-8") as f:
+                rules = json.load(f)
+            return {
+                str(rule.get("id")): rule
+                for rule in (rules or [])
+                if rule.get("id")
+            }
+        except Exception:
+            return {}
+
+    @classmethod
+    def _collect_triggered_micro_biases(cls, triggered_rule_ids, asian=None):
+        rule_map = cls._load_micro_signal_rule_map()
+        bias_pairs = []
+        for rid in triggered_rule_ids or []:
+            rule = rule_map.get(str(rid)) or {}
+            bias = cls._normalize_prediction_bias(rule.get("prediction_bias"), asian=asian)
+            if not bias:
+                bias = cls._infer_prediction_bias_from_signal_text(rule.get("warning_template"), asian=asian)
+            if bias:
+                bias_pairs.append((str(rid), bias))
+        return bias_pairs
+
+    @classmethod
+    def _merge_prediction_biases(cls, biases):
+        token_pool = []
+        for bias in biases or []:
+            token_pool.extend(cls._prediction_bias_to_tokens(bias))
+        return cls._tokens_to_prediction_bias(token_pool)
+
+    @classmethod
+    def _extract_nspf_tokens(cls, rec):
+        return [token for token in ["胜", "平", "负"] if token in (rec or "")]
+
+    @classmethod
+    def _format_micro_bias_standard_recommendation(cls, bias, existing_tokens, giving_side):
+        required = cls._prediction_bias_to_tokens(bias)
+        if not required:
+            return ""
+
+        tokens = list(required)
+        if len(tokens) == 1:
+            fallback_map = {
+                "胜": ["平", "负"],
+                "平": ["负" if giving_side == "home" else "胜" if giving_side == "away" else "胜"],
+                "负": ["平", "胜"],
+            }
+            for candidate in existing_tokens + fallback_map.get(tokens[0], ["平", "负", "胜"]):
+                if candidate not in tokens:
+                    tokens.append(candidate)
+                if len(tokens) >= 2:
+                    break
+
+        tokens = tokens[:2]
+        if len(tokens) < 2:
+            return ""
+        return cls._format_dual_recommendation(tokens)
+
+    @classmethod
+    def _format_programmatic_nspf_recommendation(cls, cover, top1=""):
+        normalized_cover = cls._normalize_prediction_bias(cover)
+        normalized_top1 = cls._normalize_prediction_bias(top1)
+        final_cover = normalized_cover or normalized_top1
+        if final_cover in {"胜", "平", "负", "胜平", "平负", "胜负"}:
+            return final_cover
+        return ""
+
     @classmethod
     def _infer_prediction_bias_from_signal_text(cls, text, asian=None):
+        explicit_bias = cls._normalize_prediction_bias(text, asian=asian)
+        if explicit_bias:
+            return explicit_bias
         normalized = re.sub(r"\s+", "", str(text or ""))
         if not normalized:
             return ""
@@ -980,6 +1132,15 @@ class LLMPredictor:
         conf_val = cls._parse_conf_int(details.get("confidence", ""))
         low_confidence = conf_val is not None and conf_val < 60
 
+        programmatic_cover = cls._normalize_prediction_bias(risk_policy.get("programmatic_nspf_cover"), asian=match_asian_odds)
+        programmatic_top1 = cls._normalize_prediction_bias(risk_policy.get("programmatic_nspf_top1"), asian=match_asian_odds)
+        if programmatic_cover:
+            current_cover = cls._normalize_prediction_bias(details.get("recommendation_nspf", "") or nspf_rec, asian=match_asian_odds)
+            expected_text = cls._format_programmatic_nspf_recommendation(programmatic_cover, top1=programmatic_top1)
+            if expected_text and current_cover != programmatic_cover:
+                prediction_text, line_changed = cls._replace_prediction_line(prediction_text, "竞彩推荐", expected_text)
+                changed = changed or line_changed
+
         if (risk_policy.get("must_double_nspf") or low_confidence) and cls._count_nspf_options(nspf_rec) < 2:
             dual_tokens = cls._pick_nspf_dual_tokens(nspf_rec, analysis_panpei, giving_side)
             dual_text = cls._format_dual_recommendation(dual_tokens)
@@ -994,10 +1155,39 @@ class LLMPredictor:
                 prediction_text, line_changed = cls._replace_prediction_line(prediction_text, "竞彩让球推荐", dual_text)
                 changed = changed or line_changed
 
+        micro_bias_standard = cls._normalize_prediction_bias(
+            risk_policy.get("micro_signal_bias_standard"),
+            asian=match_asian_odds,
+        )
+        if micro_bias_standard:
+            current_tokens = cls._extract_nspf_tokens(details.get("recommendation_nspf", "") or nspf_rec)
+            required_tokens = cls._prediction_bias_to_tokens(micro_bias_standard)
+            if not all(token in current_tokens for token in required_tokens) or (
+                required_tokens and current_tokens[:len(required_tokens)] != required_tokens
+            ):
+                standard_text = cls._format_micro_bias_standard_recommendation(
+                    micro_bias_standard,
+                    current_tokens,
+                    giving_side,
+                )
+                if standard_text:
+                    prediction_text, line_changed = cls._replace_prediction_line(prediction_text, "竞彩推荐", standard_text)
+                    changed = changed or line_changed
+
         return prediction_text, changed
 
     @staticmethod
-    def _build_risk_policy(*, triggered_rule_ids, odds_conflict_text="", has_anchor_divergence=False):
+    def _build_risk_policy(
+        *,
+        triggered_rule_ids,
+        odds_conflict_text="",
+        has_anchor_divergence=False,
+        micro_signal_bias_standard="",
+        allow_single_nspf=False,
+        programmatic_nspf_top1="",
+        programmatic_nspf_cover="",
+        programmatic_nspf_confidence=None,
+    ):
         policy = {
             "must_cover_micro_signals": bool(triggered_rule_ids),
             "must_double_nspf": False,
@@ -1006,9 +1196,14 @@ class LLMPredictor:
             "confidence_cap": None,
             "prefer_market_when_micro_triggered": bool(triggered_rule_ids),
             "joint_recommendation_generation": bool(triggered_rule_ids or odds_conflict_text or has_anchor_divergence),
+            "micro_signal_bias_standard": micro_signal_bias_standard,
+            "allow_single_nspf": bool(allow_single_nspf),
+            "programmatic_nspf_top1": programmatic_nspf_top1,
+            "programmatic_nspf_cover": programmatic_nspf_cover,
+            "programmatic_nspf_confidence": programmatic_nspf_confidence,
         }
 
-        if triggered_rule_ids:
+        if triggered_rule_ids and not allow_single_nspf:
             policy["must_double_nspf"] = True
             policy["must_double_rq"] = True
             policy["confidence_cap"] = 65
@@ -1060,11 +1255,13 @@ class LLMPredictor:
         triggered_rule_ids=None,
         dominant_score_gap=0,
         asian_context=None,
+        euro_context=None,
     ):
         details = details or {}
         conflict_assessment = conflict_assessment or {}
         triggered_rule_ids = triggered_rule_ids or []
         asian_context = asian_context or {}
+        euro_context = euro_context or {}
 
         missing_markers = {"", "未提取", "信息不足", "暂无", "无"}
         dimension_values = [
@@ -1083,6 +1280,8 @@ class LLMPredictor:
         final_value = details.get("arb_final", "") or details.get("recommendation_nspf", "") or ""
         fundamental_value = details.get("arb_fundamental", "") or ""
         intel_value = details.get("arb_intel", "") or ""
+        fundamental_tag = cls._infer_dimension_tag(fundamental_value, dimension="fundamental")
+        intel_tag = cls._infer_dimension_tag(intel_value, dimension="intel")
 
         market_micro_relation = cls._compare_tilt_relation(market_value, micro_value)
         final_market_relation = cls._compare_tilt_relation(final_value, market_value)
@@ -1112,7 +1311,10 @@ class LLMPredictor:
             "arb_final": final_value,
             "arb_fundamental": fundamental_value,
             "arb_intel": intel_value,
+            "fundamental_tag": fundamental_tag,
+            "intel_tag": intel_tag,
             "asian": asian_context,
+            "euro": euro_context,
         }
 
     @staticmethod
@@ -1158,6 +1360,80 @@ class LLMPredictor:
             "receiving_start_w": start["w2"] if start_hv >= 0 else start["w1"],
             "giving_live_w": live["w1"] if live_hv >= 0 else live["w2"],
             "receiving_live_w": live["w2"] if live_hv >= 0 else live["w1"],
+        }
+
+    @classmethod
+    def _build_micro_rule_euro_context(cls, europe_odds):
+        europe_odds = europe_odds or []
+
+        def pick_company(keywords):
+            return cls._pick_euro_company_row(europe_odds, keywords)
+
+        macau_row = pick_company(["澳门", "澳"])
+        bet365_row = pick_company(["bet365", "365"])
+
+        def build_start_triplet(row):
+            if not row:
+                return None
+            h = cls._safe_float(row.get("init_home"))
+            d = cls._safe_float(row.get("init_draw"))
+            a = cls._safe_float(row.get("init_away"))
+            if None in (h, d, a):
+                return None
+            return {"h": h, "d": d, "a": a}
+
+        def build_live_triplet(row):
+            if not row:
+                return None
+            h = cls._safe_float(row.get("live_home"))
+            d = cls._safe_float(row.get("live_draw"))
+            a = cls._safe_float(row.get("live_away"))
+            if None in (h, d, a):
+                return None
+            return {"h": h, "d": d, "a": a}
+
+        def implied_probs_from_3way(odds_3way):
+            if not odds_3way or len(odds_3way) != 3:
+                return None
+            try:
+                home_odds = float(odds_3way[0])
+                draw_odds = float(odds_3way[1])
+                away_odds = float(odds_3way[2])
+                implied_prob_sum = (1 / home_odds) + (1 / draw_odds) + (1 / away_odds)
+                return_rate = 1 / implied_prob_sum
+                return ((1 / home_odds) * return_rate, (1 / draw_odds) * return_rate, (1 / away_odds) * return_rate)
+            except Exception:
+                return None
+
+        macau_start = build_start_triplet(macau_row)
+        bet365_start = build_start_triplet(bet365_row)
+        macau_live = build_live_triplet(macau_row)
+        bet365_live = build_live_triplet(bet365_row)
+        chosen_live = macau_live or bet365_live
+        live_home = chosen_live["h"] if chosen_live else None
+        live_draw = chosen_live["d"] if chosen_live else None
+        live_away = chosen_live["a"] if chosen_live else None
+        probs = implied_probs_from_3way([live_home, live_draw, live_away]) if all(v is not None for v in (live_home, live_draw, live_away)) else None
+        p_home, p_draw, p_away = probs if probs else (None, None, None)
+        euro_profile = cls._build_euro_profile(europe_odds)
+
+        return {
+            "p_home": p_home,
+            "p_draw": p_draw,
+            "p_away": p_away,
+            "live_home": live_home,
+            "live_draw": live_draw,
+            "live_away": live_away,
+            "macau_start": macau_start,
+            "bet365_start": bet365_start,
+            "source_key": euro_profile.get("source_key"),
+            "source_name": euro_profile.get("source_name"),
+            "favored_side": euro_profile.get("favored_side"),
+            "favored_label": euro_profile.get("favored_label"),
+            "strength_gap_label": euro_profile.get("strength_gap_label"),
+            "movement_side": euro_profile.get("movement_side"),
+            "movement_direction": euro_profile.get("movement_direction"),
+            "movement_magnitude": euro_profile.get("movement_magnitude"),
         }
 
     def _evaluate_arbitration_rules(self, ctx):
@@ -1264,12 +1540,25 @@ class LLMPredictor:
     def _extract_json_block_from_review_text(review_text, heading):
         text = review_text or ""
         pattern = re.compile(
-            rf"\n*##\s*{re.escape(heading)}\s*```json\s*(?P<json>\[[\s\S]*?\])\s*```",
+            rf"\n*##\s*{re.escape(heading)}\s*\n*```json\s*(?P<json>\[[\s\S]*?\])\s*```",
             re.IGNORECASE,
         )
         match = pattern.search(text)
         if not match:
-            return text.strip(), []
+            # 兼容性匹配：有时LLM没有生成准确的标题，尝试只找包含对应字段的json数组
+            if heading == "结构化盘口复盘映射":
+                pattern_fallback = re.compile(r"```json\s*(?P<json>\[\s*\{\s*\"case_id\"[\s\S]*?\"misread_type\"[\s\S]*?\])\s*```", re.IGNORECASE)
+            elif heading == "结构化规则草稿":
+                pattern_fallback = re.compile(r"```json\s*(?P<json>\[\s*\{\s*\"draft_id\"[\s\S]*?\"target_scope\"[\s\S]*?\])\s*```", re.IGNORECASE)
+            else:
+                pattern_fallback = None
+                
+            if pattern_fallback:
+                match = pattern_fallback.search(text)
+                
+            if not match:
+                logger.warning(f"复盘正文缺少结构化区块: {heading}")
+                return text.strip(), []
 
         json_text = match.group("json").strip()
         try:
@@ -1288,6 +1577,935 @@ class LLMPredictor:
         cleaned_text, case_mappings = cls._extract_json_block_from_review_text(review_text, "结构化盘口复盘映射")
         cleaned_text, rule_drafts = cls._extract_json_block_from_review_text(cleaned_text, "结构化规则草稿")
         return cleaned_text, case_mappings, rule_drafts
+
+    @staticmethod
+    def _normalize_review_case_id(case_id, match_num, matchup):
+        if case_id:
+            return str(case_id).strip()
+        if match_num:
+            return str(match_num).strip()
+        if matchup:
+            return str(matchup).strip()
+        return f"fallback-{uuid4().hex[:10]}"
+
+    @staticmethod
+    def _parse_triggered_rule_ids(raw):
+        if isinstance(raw, list):
+            tokens = [str(item).strip() for item in raw if str(item).strip()]
+        else:
+            text = str(raw or "").strip()
+            if not text or text in {"无", "无规则命中", "None", "none"}:
+                return []
+            tokens = [
+                token.strip()
+                for token in re.split(r"[,\|，；;、\n]+", text)
+                if token.strip()
+            ]
+        unique = []
+        seen = set()
+        for token in tokens:
+            if token not in seen:
+                unique.append(token)
+                seen.add(token)
+        return unique
+
+    @staticmethod
+    def _handicap_text_to_value(handicap_text):
+        handicap_map = {
+            "平手": 0.0,
+            "平手/半球": 0.25,
+            "半球": 0.5,
+            "半球/一球": 0.75,
+            "一球": 1.0,
+            "一球/球半": 1.25,
+            "球半": 1.5,
+            "球半/两球": 1.75,
+            "两球": 2.0,
+            "两球/两球半": 2.25,
+            "两球半": 2.5,
+            "受平手/半球": -0.25,
+            "受半球": -0.5,
+            "受半球/一球": -0.75,
+            "受一球": -1.0,
+            "受一球/球半": -1.25,
+            "受球半": -1.5,
+            "受球半/两球": -1.75,
+            "受两球": -2.0,
+            "受两球/两球半": -2.25,
+            "受两球半": -2.5,
+        }
+        return handicap_map.get(str(handicap_text or "").replace(" ", ""))
+
+    @staticmethod
+    def _parse_asian_line_snapshot(line):
+        parts = [part.strip() for part in str(line or "").split("|")]
+        if len(parts) < 3:
+            return None
+        try:
+            return {
+                "giving_w": float(parts[0].replace("↑", "").replace("↓", "")),
+                "handicap_text": parts[1].replace(" ", ""),
+                "receiving_w": float(parts[2].replace("↑", "").replace("↓", "")),
+            }
+        except Exception:
+            return None
+
+    @staticmethod
+    def _pick_euro_company_row(europe_odds, keywords):
+        for row in europe_odds or []:
+            company = str((row or {}).get("company") or "").lower()
+            if any(keyword.lower() in company for keyword in keywords):
+                return row or {}
+        return {}
+
+    @staticmethod
+    def _safe_float(value):
+        try:
+            if value in (None, "", "0"):
+                return None
+            return float(value)
+        except Exception:
+            return None
+
+    @staticmethod
+    def _label_handicap_bucket(handicap_text):
+        text = str(handicap_text or "").replace(" ", "")
+        if not text:
+            return "未知盘"
+        mapping = {
+            "平手": "平手盘",
+            "平手/半球": "平半盘",
+            "半球": "半球盘",
+            "半球/一球": "半一盘",
+            "一球": "一球盘",
+            "一球/球半": "一球/球半盘",
+            "球半": "球半盘",
+            "球半/两球": "球半/两球盘",
+            "两球": "两球盘",
+            "两球/两球半": "两球/两球半盘",
+            "两球半": "两球半盘",
+            "受平手/半球": "受平半盘",
+            "受半球": "受半球盘",
+            "受半球/一球": "受半一盘",
+            "受一球": "受一球盘",
+            "受一球/球半": "受一球/球半盘",
+            "受球半": "受球半盘",
+        }
+        return mapping.get(text, f"{text}盘")
+
+    @classmethod
+    def _build_euro_profile(cls, europe_odds):
+        macau_row = cls._pick_euro_company_row(europe_odds, ["澳门", "澳"])
+        bet365_row = cls._pick_euro_company_row(europe_odds, ["bet365", "365"])
+        row = macau_row or bet365_row
+        if not row:
+            return {}
+
+        source_key = "macau_start" if row is macau_row else "bet365_start"
+        source_name = "澳门欧赔" if row is macau_row else "Bet365欧赔"
+        init_home = cls._safe_float(row.get("init_home"))
+        init_draw = cls._safe_float(row.get("init_draw"))
+        init_away = cls._safe_float(row.get("init_away"))
+        live_home = cls._safe_float(row.get("live_home"))
+        live_draw = cls._safe_float(row.get("live_draw"))
+        live_away = cls._safe_float(row.get("live_away"))
+        if init_home is None or init_away is None:
+            return {}
+
+        if init_home < init_away:
+            favored_side = "home"
+            favored_label = "主强"
+            favored_key, other_key = "h", "a"
+            favored_init, other_init = init_home, init_away
+        elif init_away < init_home:
+            favored_side = "away"
+            favored_label = "客强"
+            favored_key, other_key = "a", "h"
+            favored_init, other_init = init_away, init_home
+        else:
+            favored_side = None
+            favored_label = "均势"
+            favored_key, other_key = None, None
+            favored_init, other_init = None, None
+
+        ratio = (other_init / favored_init) if favored_init not in (None, 0) and other_init is not None else None
+        if ratio is None:
+            strength_gap_label = "强弱未知"
+        elif ratio >= 2.0 or favored_init <= 1.55:
+            strength_gap_label = "实力鸿沟"
+        elif ratio >= 1.55:
+            strength_gap_label = "强弱分明"
+        elif ratio >= 1.22:
+            strength_gap_label = "中度优势"
+        else:
+            strength_gap_label = "接近平势"
+
+        deltas = {
+            "home": None if init_home in (None, 0) or live_home is None else (live_home - init_home) / init_home,
+            "draw": None if init_draw in (None, 0) or live_draw is None else (live_draw - init_draw) / init_draw,
+            "away": None if init_away in (None, 0) or live_away is None else (live_away - init_away) / init_away,
+        }
+        def magnitude_label(delta):
+            abs_delta = abs(delta)
+            if abs_delta >= 0.08:
+                return "剧烈"
+            if abs_delta >= 0.04:
+                return "中等"
+            return "轻微"
+        side_labels = {"home": "主胜", "draw": "平局", "away": "客胜"}
+        tracked = {k: v for k, v in deltas.items() if v is not None and abs(v) >= 0.02 and k in {"home", "away"}}
+        if not tracked:
+            movement_label = "欧赔不跟随"
+            movement_magnitude = "无显著调幅"
+            movement_side = "none"
+            movement_direction = "flat"
+            condition_expr = (
+                f"euro['{source_key}'] is not None and euro['live_home'] is not None and euro['live_away'] is not None and "
+                f"abs((euro['live_home'] - euro['{source_key}']['h']) / euro['{source_key}']['h']) < 0.02 and "
+                f"abs((euro['live_away'] - euro['{source_key}']['a']) / euro['{source_key}']['a']) < 0.02"
+            )
+        else:
+            dominant_side = max(tracked, key=lambda k: abs(tracked[k]))
+            dominant_delta = tracked[dominant_side]
+            movement_magnitude = magnitude_label(dominant_delta)
+            movement_label = f"欧赔{side_labels[dominant_side]}{'上调' if dominant_delta > 0 else '下调'}{movement_magnitude}"
+            movement_side = dominant_side
+            movement_direction = "up" if dominant_delta > 0 else "down"
+            live_key = "live_home" if dominant_side == "home" else "live_away"
+            start_key = "h" if dominant_side == "home" else "a"
+            comparator = ">=" if dominant_delta > 0 else "<="
+            condition_expr = (
+                f"euro['{source_key}'] is not None and euro['{live_key}'] is not None and "
+                f"((euro['{live_key}'] - euro['{source_key}']['{start_key}']) / euro['{source_key}']['{start_key}']) {comparator} {abs(dominant_delta):.3f}"
+            )
+
+        if favored_side and favored_key and ratio is not None:
+            strength_condition = (
+                f"euro['{source_key}'] is not None and euro['{source_key}']['{favored_key}'] < euro['{source_key}']['{other_key}'] and "
+                f"(euro['{source_key}']['{other_key}'] / euro['{source_key}']['{favored_key}']) >= {ratio:.3f}"
+            )
+        else:
+            strength_condition = ""
+
+        return {
+            "source_key": source_key,
+            "source_name": source_name,
+            "favored_side": favored_side,
+            "favored_label": favored_label,
+            "strength_gap_label": strength_gap_label,
+            "movement_label": movement_label,
+            "movement_side": movement_side,
+            "movement_direction": movement_direction,
+            "movement_magnitude": movement_magnitude,
+            "movement_condition": condition_expr,
+            "strength_condition": strength_condition,
+            "init_home": init_home,
+            "init_draw": init_draw,
+            "init_away": init_away,
+            "live_home": live_home,
+            "live_draw": live_draw,
+            "live_away": live_away,
+            "home_delta": deltas["home"],
+            "draw_delta": deltas["draw"],
+            "away_delta": deltas["away"],
+        }
+
+    @classmethod
+    def _build_market_rule_name(cls, match, *, target_scope):
+        match = match or {}
+        start_snapshot = cls._parse_asian_line_snapshot(match.get("asian_start"))
+        live_snapshot = cls._parse_asian_line_snapshot(match.get("asian_live"))
+        parts = []
+
+        if start_snapshot and live_snapshot:
+            parts.append(cls._label_handicap_bucket(start_snapshot["handicap_text"]))
+            start_hv = cls._handicap_text_to_value(start_snapshot["handicap_text"])
+            live_hv = cls._handicap_text_to_value(live_snapshot["handicap_text"])
+            if start_hv is not None and live_hv is not None:
+                if live_hv > start_hv:
+                    parts.append("升盘")
+                elif live_hv < start_hv:
+                    parts.append("退盘")
+                else:
+                    parts.append("原盘")
+            delta_w = live_snapshot["giving_w"] - start_snapshot["giving_w"]
+            if delta_w >= 0.03:
+                parts.append("升水")
+            elif delta_w <= -0.03:
+                parts.append("降水")
+            else:
+                parts.append("水位平稳")
+
+        euro_profile = cls._build_euro_profile(match.get("europe_odds") or [])
+        if euro_profile:
+            if euro_profile.get("favored_label") and euro_profile.get("strength_gap_label"):
+                parts.append(f"{euro_profile['favored_label']}{euro_profile['strength_gap_label']}")
+            if euro_profile.get("movement_label"):
+                parts.append(euro_profile["movement_label"])
+
+        if not parts:
+            parts.append("盘口调度")
+
+        suffix = "微观规则" if target_scope == "micro_signal" else "仲裁保护规则"
+        return "-".join(parts) + "-" + suffix
+
+    @classmethod
+    def _build_market_scenario(cls, match, *, target_scope):
+        rule_name = cls._build_market_rule_name(match, target_scope=target_scope)
+        parts = [part.strip() for part in str(rule_name).split("-") if part.strip()]
+        scenario_version = "v1"
+        if parts and parts[-1] in {"微观规则", "仲裁保护规则"}:
+            scenario_parts = parts[:-1]
+        else:
+            scenario_parts = parts
+        scenario_key = "_".join([
+            re.sub(r"[^0-9A-Za-z\u4e00-\u9fff]+", "", part).lower()
+            for part in scenario_parts
+            if part.strip()
+        ]) or "盘口调度"
+        return {
+            "scenario_key": scenario_key,
+            "scenario_parts": scenario_parts,
+            "scenario_version": scenario_version,
+            "rule_name": rule_name,
+        }
+
+    @classmethod
+    def _build_micro_warning_template(cls, *, scenario_parts=None, prediction_bias="", effect_type=""):
+        scenario_label = " / ".join(
+            str(part).strip() for part in (scenario_parts or []) if str(part).strip()
+        ) or "盘口调度"
+        bias = cls._normalize_prediction_bias(prediction_bias) or str(prediction_bias or "").strip() or "需复核"
+        effect = str(effect_type or "").strip()
+        effect_text = f"作用类型：{effect}。" if effect else ""
+        return (
+            f"【剧本规则】命中盘口剧本：{scenario_label}。"
+            f"程序化标准偏向：{bias}。"
+            f"{effect_text}"
+            f"再次出现该剧本时，必须先按{bias}方向作为不让球预测基准；"
+            f"若其他维度要推翻，必须提供更强且结构化的反证。"
+        )
+
+    @staticmethod
+    def _build_euro_profile_conditions(euro_profile, *, ctx_prefix="euro"):
+        euro_profile = euro_profile or {}
+        conditions = []
+        favored_side = str(euro_profile.get("favored_side") or "").strip()
+        strength_gap_label = str(euro_profile.get("strength_gap_label") or "").strip()
+        movement_side = str(euro_profile.get("movement_side") or "").strip()
+        movement_direction = str(euro_profile.get("movement_direction") or "").strip()
+        movement_magnitude = str(euro_profile.get("movement_magnitude") or "").strip()
+
+        if favored_side in {"home", "away"}:
+            conditions.append(f"{ctx_prefix}['favored_side'] == '{favored_side}'")
+        if strength_gap_label in {"接近平势", "中度优势", "强弱分明", "实力鸿沟"}:
+            conditions.append(f"{ctx_prefix}['strength_gap_label'] == '{strength_gap_label}'")
+        if movement_side == "none":
+            conditions.append(f"{ctx_prefix}['movement_side'] == 'none'")
+            conditions.append(f"{ctx_prefix}['movement_direction'] == 'flat'")
+        elif movement_side in {"home", "away"}:
+            conditions.append(f"{ctx_prefix}['movement_side'] == '{movement_side}'")
+            if movement_direction in {"up", "down"}:
+                conditions.append(f"{ctx_prefix}['movement_direction'] == '{movement_direction}'")
+        if movement_magnitude in {"轻微", "中等", "剧烈", "无显著调幅"}:
+            conditions.append(f"{ctx_prefix}['movement_magnitude'] == '{movement_magnitude}'")
+
+        return conditions
+
+    @classmethod
+    def _infer_rule_from_market_chain(cls, trigger_text, *, target_scope, has_rule_hit, rule_id, bias_hint, case_match=None):
+        text = str(trigger_text or "")
+        if not text:
+            return None
+
+        scenario_meta = cls._build_market_scenario(case_match, target_scope=target_scope)
+        generated_rule_name = scenario_meta["rule_name"]
+
+        pattern = re.compile(
+            r"初盘(?P<start_w>\d+\.\d+)\s*\|\s*(?P<start_h>[^|]+?)\s*\|\s*(?P<start_other>\d+\.\d+)\s*->\s*即时(?P<live_w>\d+\.\d+)(?P<live_w_arrow>[↑↓]?)\s*\|\s*(?P<live_h>[^|↑↓]+?)(?:\s*(?P<change_label>升|退))?\s*\|\s*(?P<live_other>\d+\.\d+)(?P<live_other_arrow>[↑↓]?)"
+        )
+        match = pattern.search(text)
+        if not match:
+            return None
+
+        start_w = float(match.group("start_w"))
+        live_w = float(match.group("live_w"))
+        start_h_text = match.group("start_h").strip()
+        live_h_text = match.group("live_h").strip()
+        start_hv = cls._handicap_text_to_value(start_h_text)
+        live_hv = cls._handicap_text_to_value(live_h_text)
+        if start_hv is None or live_hv is None:
+            return None
+
+        delta_w = round(live_w - start_w, 3)
+        trend = "up" if live_hv > start_hv else "down" if live_hv < start_hv else "stable"
+        water_trend = "rise" if delta_w > 0.029 else "drop" if delta_w < -0.029 else "stable"
+        contextual_clauses, contextual_summary = cls._build_case_contextual_clauses(case_match)
+        market_summary = f"初盘{start_h_text}@{start_w:.2f} -> 即时{live_h_text}@{live_w:.2f}"
+        euro_profile = cls._build_euro_profile((case_match or {}).get("europe_odds") or [])
+
+        conditions = [f"asian['start_hv'] == {start_hv:g}", f"asian['live_hv'] == {live_hv:g}"]
+        if water_trend == "rise":
+            conditions.append("asian['giving_live_w'] - asian['giving_start_w'] >= 0.03")
+        elif water_trend == "drop":
+            conditions.append("asian['giving_start_w'] - asian['giving_live_w'] >= 0.03")
+        else:
+            conditions.append("abs(asian['giving_live_w'] - asian['giving_start_w']) < 0.03")
+        conditions.extend(cls._build_euro_profile_conditions(euro_profile, ctx_prefix="euro"))
+
+        if target_scope == "micro_signal":
+            suggested_condition = " and ".join(conditions)
+            try:
+                suggested_condition = normalize_micro_rule_condition(suggested_condition)
+            except Exception:
+                return None
+
+            if has_rule_hit:
+                action = f"标记为'{rule_id or 'existing_rule_fix'}'相关盘口边界需要修正，避免重复误判"
+            else:
+                if trend == "up" and water_trend == "rise":
+                    action = "标记为升盘升水风险场景，在最终方向仲裁时降低让球方穿盘评级"
+                elif trend == "up" and water_trend == "drop":
+                    action = "标记为升盘降水阻上场景，在最终方向仲裁时提高让球方打出权重"
+                elif trend == "stable" and water_trend == "rise":
+                    action = "标记为原盘升水扰动场景，在最终方向仲裁时警惕市场利用升水制造恐慌"
+                elif trend == "stable" and water_trend == "drop":
+                    action = "标记为原盘降水强化场景，在最终方向仲裁时提高让球方稳定性权重"
+                else:
+                    action = "标记为盘口退盘场景，在最终方向仲裁时重新核验让球方真实强度"
+
+            bias = bias_hint or (
+                "倾向让球方" if trend == "up" or (trend == "stable" and water_trend == "drop")
+                else "倾向受让方" if water_trend == "rise"
+                else "需结合其余维度复核"
+            )
+            warning_template = (
+                f"{market_summary}，触发盘口微观预警，请警惕{bias}"
+                if not contextual_summary
+                else f"{market_summary}，且{contextual_summary}，触发盘口微观预警，请警惕{bias}"
+            )
+            effect_type = (
+                "修正规则边界"
+                if has_rule_hit
+                else "降低让球方评级" if water_trend == "rise"
+                else "提高让球方评级" if water_trend == "drop"
+                else "提示复核"
+            )
+            return {
+                "suggested_condition": suggested_condition,
+                "suggested_action": action,
+                "suggested_bias": bias,
+                "rule_name": generated_rule_name,
+                "scenario_key": scenario_meta["scenario_key"],
+                "scenario_parts": scenario_meta["scenario_parts"],
+                "scenario_version": scenario_meta["scenario_version"],
+                "warning_message_template": warning_template,
+                "prediction_bias": bias,
+                "effect_type": effect_type,
+            }
+
+        ctx_conditions = [f"ctx['asian'].get('start_hv') == {start_hv:g}", f"ctx['asian'].get('live_hv') == {live_hv:g}"]
+        if water_trend == "rise":
+            ctx_conditions.append("(ctx['asian'].get('giving_live_w', 0) - ctx['asian'].get('giving_start_w', 0)) >= 0.03")
+        elif water_trend == "drop":
+            ctx_conditions.append("(ctx['asian'].get('giving_start_w', 0) - ctx['asian'].get('giving_live_w', 0)) >= 0.03")
+        else:
+            ctx_conditions.append("abs(ctx['asian'].get('giving_live_w', 0) - ctx['asian'].get('giving_start_w', 0)) < 0.03")
+        ctx_conditions.extend(cls._build_euro_profile_conditions(euro_profile, ctx_prefix="ctx['euro']"))
+        ctx_conditions.extend(contextual_clauses)
+
+        suggested_condition = " and ".join(ctx_conditions)
+        try:
+            suggested_condition = normalize_arbitration_rule_condition(suggested_condition)
+        except Exception:
+            return None
+
+        action = (
+            f"forbid_override::{rule_id}" if has_rule_hit and rule_id
+            else "cap_confidence::65" if water_trend == "rise" and not contextual_clauses
+            else "require_override_reason"
+        )
+        explanation_template = (
+            f"{market_summary}，且{contextual_summary}，命中仲裁保护规则"
+            if contextual_summary
+            else f"{market_summary}，命中仲裁保护规则"
+        )
+        action_type = "forbid_override" if has_rule_hit and rule_id else "cap_confidence" if water_trend == "rise" and not contextual_clauses else "require_override_reason"
+        action_payload = {"blocked_dimensions": ["market"]} if action_type == "forbid_override" else {"confidence_cap": 65} if action_type == "cap_confidence" else {}
+        return {
+            "suggested_condition": suggested_condition,
+            "suggested_action": action,
+            "suggested_bias": bias_hint or contextual_summary or "需要在仲裁层复核盘口边界",
+            "rule_name": generated_rule_name,
+            "scenario_key": scenario_meta["scenario_key"],
+            "scenario_parts": scenario_meta["scenario_parts"],
+            "scenario_version": scenario_meta["scenario_version"],
+            "action_type": action_type,
+            "action_payload": action_payload,
+            "explanation_template": explanation_template,
+        }
+
+    @classmethod
+    def _is_executable_rule_draft(cls, draft):
+        if not isinstance(draft, dict):
+            return False
+        scope = str(draft.get("target_scope") or "").strip()
+        condition = str(draft.get("suggested_condition") or "").strip()
+        action = str(draft.get("suggested_action") or "").strip()
+        bias = str(draft.get("suggested_bias") or "").strip()
+        if not condition or condition == "False":
+            return False
+        if not action or action in {"新增规则覆盖该盘口场景", "修正规则或收紧边界，避免再次误判"}:
+            return False
+        if not bias or bias == "待复盘补充":
+            return False
+        if scope == "micro_signal":
+            if not str(draft.get("warning_message_template") or "").strip():
+                return False
+            if not str(draft.get("effect_type") or "").strip():
+                return False
+            if not str(draft.get("prediction_bias") or "").strip():
+                return False
+        elif scope in {"arbitration_guard", "warning"}:
+            if not str(draft.get("action_type") or "").strip():
+                return False
+            if not isinstance(draft.get("action_payload"), dict):
+                return False
+            if not str(draft.get("explanation_template") or "").strip():
+                return False
+        return True
+
+    @classmethod
+    def _collect_rule_draft_gaps(cls, draft):
+        if not isinstance(draft, dict):
+            return ["draft_not_dict"]
+        scope = str(draft.get("target_scope") or "").strip()
+        gaps = []
+        if not str(draft.get("suggested_condition") or "").strip() or str(draft.get("suggested_condition") or "").strip() == "False":
+            gaps.append("missing_condition")
+        if not str(draft.get("suggested_action") or "").strip():
+            gaps.append("missing_action")
+        if not str(draft.get("suggested_bias") or "").strip() or str(draft.get("suggested_bias") or "").strip() == "待复盘补充":
+            gaps.append("missing_bias")
+        if not str(draft.get("rule_name") or "").strip():
+            gaps.append("missing_rule_name")
+        if scope == "micro_signal":
+            if not str(draft.get("warning_message_template") or "").strip():
+                gaps.append("missing_warning_template")
+            if not str(draft.get("prediction_bias") or "").strip():
+                gaps.append("missing_prediction_bias")
+            if not str(draft.get("effect_type") or "").strip():
+                gaps.append("missing_effect_type")
+        elif scope in {"arbitration_guard", "warning"}:
+            if not str(draft.get("action_type") or "").strip():
+                gaps.append("missing_action_type")
+            if not isinstance(draft.get("action_payload"), dict):
+                gaps.append("missing_action_payload")
+            if not str(draft.get("explanation_template") or "").strip():
+                gaps.append("missing_explanation_template")
+        return gaps
+
+    @classmethod
+    def _build_case_contextual_clauses(cls, match):
+        match = match or {}
+        clauses = []
+        summaries = []
+
+        fundamental_value = str(match.get("arb_fundamental") or "").strip()
+        intel_value = str(match.get("arb_intel") or "").strip()
+        mistake_hint = str(match.get("agentc_mistake_hint") or "").strip()
+        fundamental_tag = cls._infer_dimension_tag(fundamental_value, dimension="fundamental")
+        intel_tag = cls._infer_dimension_tag(intel_value, dimension="intel")
+
+        if fundamental_tag != "insufficient":
+            clauses.append(f"ctx['fundamental_tag'] == '{fundamental_tag}'")
+            summaries.append(f"基本面标签={fundamental_tag}")
+
+        if intel_tag not in {"insufficient"}:
+            clauses.append(f"ctx['intel_tag'] == '{intel_tag}'")
+            summaries.append(f"情报标签={intel_tag}")
+
+        if "更接近赛果的维度是：基本面" in mistake_hint:
+            summaries.append("基本面本应优先")
+        if "更接近赛果的维度是：情报" in mistake_hint:
+            summaries.append("情报本应优先")
+
+        return clauses, "；".join(summaries)
+
+    @classmethod
+    def _tilt_value_to_bias(cls, value):
+        tokens = cls._normalize_tilt_tokens(value)
+        token_map = {
+            ("胜",): "胜",
+            ("平",): "平",
+            ("负",): "负",
+            ("胜", "平"): "胜平",
+            ("平", "负"): "平负",
+            ("胜", "负"): "胜负",
+        }
+        return token_map.get(tuple(tokens), "")
+
+    @classmethod
+    def _actual_result_to_bias(cls, value):
+        text = str(value or "").strip()
+        return text if text in {"胜", "平", "负", "胜平", "平负", "胜负"} else ""
+
+    @classmethod
+    def _build_reason_driven_rule_fields(
+        cls,
+        *,
+        match,
+        mapping,
+        target_scope,
+        has_rule_hit,
+        rule_id,
+    ):
+        match = match or {}
+        mapping = mapping or {}
+        scenario_meta = cls._build_market_scenario(match, target_scope=target_scope)
+        reason_candidates = [
+            match.get("market_replay_summary"),
+            mapping.get("error_reason_summary"),
+            mapping.get("misread_type"),
+            match.get("arb_override_reason"),
+            match.get("agentc_mistake_hint"),
+        ]
+        reason_parts = []
+        for item in reason_candidates:
+            text = str(item or "").strip()
+            if text and text not in {"暂无", "未知原因", "待补充错因"} and text not in reason_parts:
+                reason_parts.append(text)
+        reason_text = "；".join(reason_parts)
+        if not reason_text:
+            return {}
+
+        fundamental_tag = cls._infer_dimension_tag(match.get("arb_fundamental"), dimension="fundamental")
+        intel_tag = cls._infer_dimension_tag(match.get("arb_intel"), dimension="intel")
+        final_bias = (
+            cls._actual_result_to_bias(match.get("actual_nspf"))
+            or cls._tilt_value_to_bias(match.get("arb_final"))
+            or cls._tilt_value_to_bias(match.get("arb_fundamental"))
+            or cls._tilt_value_to_bias(match.get("arb_intel"))
+            or cls._infer_prediction_bias_from_signal_text(reason_text)
+        )
+        market_hint = str(match.get("asian_start") or "未知").strip()
+        live_hint = str(match.get("asian_live") or "未知").strip()
+        chain_hint = f"初盘{market_hint} -> 即时{live_hint}"
+
+        if target_scope == "micro_signal":
+            effect_type = (
+                "修正规则边界" if has_rule_hit
+                else "补充新规则"
+            )
+            if any(keyword in reason_text for keyword in ["升盘升水", "升水", "热度", "控热", "诱上"]):
+                effect_type = "降低让球方评级"
+            elif any(keyword in reason_text for keyword in ["降水", "阻上", "真实强势", "强势"]):
+                effect_type = "提高让球方评级"
+            elif any(keyword in reason_text for keyword in ["退盘", "分歧", "冲突", "复核"]):
+                effect_type = "提示复核"
+
+            bias = final_bias or ("平负" if "主队" in reason_text and "过热" in reason_text else "")
+            warning_template = cls._build_micro_warning_template(
+                scenario_parts=scenario_meta.get("scenario_parts"),
+                prediction_bias=bias or "需复核",
+                effect_type=effect_type,
+            )
+            suggested_action = (
+                f"命中后{effect_type}，避免再次出现同类误判"
+                if not has_rule_hit
+                else f"围绕规则{rule_id or 'existing_rule'}执行{effect_type}，避免边界继续失真"
+            )
+            return {
+                "rule_name": scenario_meta.get("rule_name") or cls._build_market_rule_name(match, target_scope=target_scope),
+                "warning_message_template": warning_template,
+                "prediction_bias": bias or "需复核",
+                "effect_type": effect_type,
+                "suggested_bias": bias or "需复核",
+                "suggested_action": suggested_action,
+                "scenario_key": scenario_meta.get("scenario_key") or "",
+                "scenario_parts": scenario_meta.get("scenario_parts") or [],
+                "scenario_version": scenario_meta.get("scenario_version") or "v1",
+            }
+
+        action_type = "require_override_reason"
+        action_payload = {}
+        suggested_action = "要求补充明确推翻原因后再允许仲裁推翻盘口方向"
+        if any(keyword in reason_text for keyword in ["信息不足", "真空", "缺少", "证据不足"]):
+            action_type = "abort_prediction"
+            action_payload = {"message": f"错因提示：{reason_text}，信息不足，建议回避"}
+            suggested_action = "信息不足时直接中止预测并提示回避"
+        elif any(keyword in reason_text for keyword in ["双选", "防平", "防冷", "两手准备"]):
+            action_type = "force_double"
+            action_payload = {"nspf": True, "rq": True, "confidence_cap": 65}
+            suggested_action = "命中后强制双选并压低置信度"
+        elif any(keyword in reason_text for keyword in ["置信度", "过热", "高热", "降级"]):
+            action_type = "cap_confidence"
+            action_payload = {"confidence_cap": 65}
+            suggested_action = "命中后将置信度上限压到65"
+        elif has_rule_hit or any(keyword in reason_text for keyword in ["推翻", "优先级", "不应单凭", "忽略", "未跟随"]):
+            action_type = "forbid_override"
+            blocked = []
+            if "基本面" in reason_text or "基本面本应优先" in reason_text:
+                blocked.append("fundamental")
+            if "情报" in reason_text or intel_tag not in {"", "insufficient"}:
+                blocked.append("intel")
+            if not blocked:
+                blocked.append("market")
+            action_payload = {"blocked_dimensions": blocked}
+            suggested_action = "命中后禁止弱证据单独推翻更接近赛果的维度"
+
+        explanation_template = f"{chain_hint}；错因：{reason_text}。命中后执行{action_type}保护。"
+        suggested_bias = final_bias or (
+            "基本面优先" if "基本面本应优先" in reason_text or fundamental_tag not in {"", "insufficient"} and "推翻" in reason_text
+            else "情报优先" if "情报本应优先" in reason_text or intel_tag not in {"", "insufficient"} and "推翻" in reason_text
+            else "需补充推翻链路"
+        )
+        return {
+            "rule_name": scenario_meta.get("rule_name") or cls._build_market_rule_name(match, target_scope=target_scope),
+            "action_type": action_type,
+            "action_payload": action_payload,
+            "explanation_template": explanation_template,
+            "suggested_action": suggested_action,
+            "suggested_bias": suggested_bias,
+            "scenario_key": scenario_meta.get("scenario_key") or "",
+            "scenario_parts": scenario_meta.get("scenario_parts") or [],
+            "scenario_version": scenario_meta.get("scenario_version") or "v1",
+        }
+
+    @classmethod
+    def _enforce_error_case_coverage(cls, *, errors, case_mappings, rule_drafts, report_date):
+        normalized_mappings = {}
+        for item in case_mappings or []:
+            if not isinstance(item, dict):
+                continue
+            case_id = cls._normalize_review_case_id(
+                item.get("case_id"),
+                item.get("match_num"),
+                item.get("matchup"),
+            )
+            row = dict(item)
+            row["case_id"] = case_id
+            normalized_mappings[case_id] = row
+
+        normalized_drafts = []
+        drafts_by_case = {}
+        for item in rule_drafts or []:
+            if not isinstance(item, dict):
+                continue
+            row = dict(item)
+            case_id = cls._normalize_review_case_id(
+                row.get("case_id"),
+                row.get("match_num"),
+                "",
+            )
+            row["case_id"] = case_id
+            normalized_drafts.append(row)
+            drafts_by_case.setdefault(case_id, []).append(row)
+
+        created_at = datetime.now().isoformat(timespec="seconds")
+        output_mappings = []
+        output_drafts = []
+
+        for index, match in enumerate(errors or [], start=1):
+            match_num = str(match.get("match_num") or f"未编号{index}")
+            home = str(match.get("home") or "未知主队")
+            away = str(match.get("away") or "未知客队")
+            matchup = f"{home} vs {away}"
+            case_id = cls._normalize_review_case_id("", match_num, matchup)
+            market_chain = f"初盘{match.get('asian_start') or '未知'} -> 即时{match.get('asian_live') or '未知'}"
+            trigger_rule_ids = cls._parse_triggered_rule_ids(
+                (normalized_mappings.get(case_id) or {}).get("triggered_existing_rules")
+            )
+            has_rule_hit = len(trigger_rule_ids) > 0
+
+            existing_mapping = normalized_mappings.get(case_id, {})
+            disposition = (existing_mapping.get("disposition") or "").strip()
+            if has_rule_hit:
+                if disposition not in {"optimize_existing", "add_new_rule"}:
+                    disposition = "optimize_existing"
+            else:
+                disposition = "add_new_rule"
+
+            recommended_scope = "micro_signal"
+
+            market_review_complete = existing_mapping.get("market_review_complete")
+            if not isinstance(market_review_complete, bool):
+                market_review_complete = True
+
+            based_on_rule_id = (existing_mapping.get("based_on_rule_id") or "").strip()
+            if has_rule_hit and not based_on_rule_id:
+                based_on_rule_id = trigger_rule_ids[0]
+            if not has_rule_hit:
+                based_on_rule_id = ""
+
+            mapping = {
+                "case_id": case_id,
+                "match_num": match_num,
+                "matchup": matchup,
+                "error_reason_summary": existing_mapping.get("error_reason_summary") or existing_mapping.get("market_chain_summary") or match.get('market_replay_summary', '未知盘口链路'),
+                "misread_type": existing_mapping.get("misread_type") or "待补充错因",
+                "triggered_existing_rules": trigger_rule_ids,
+                "disposition": disposition,
+                "based_on_rule_id": based_on_rule_id,
+                "recommended_target_scope": recommended_scope,
+                "recommended_title": existing_mapping.get("recommended_title") or "待补充规则草稿",
+                "market_review_complete": market_review_complete,
+                "entry_summary": existing_mapping.get("entry_summary")
+                or f"{match_num} 需完成规则处置（{'命中旧规则' if has_rule_hit else '无规则命中'}）",
+                "optimization_mode": (
+                    "tighten_existing" if has_rule_hit and "边界" in str(existing_mapping.get("misread_type") or "")
+                    else "repair_existing" if has_rule_hit else "add_new_rule"
+                ),
+            }
+            output_mappings.append(mapping)
+
+            candidate_drafts = drafts_by_case.get(case_id) or []
+            if not candidate_drafts:
+                candidate_drafts = [{}]
+
+            for idx, draft in enumerate(candidate_drafts, start=1):
+                has_existing_draft = bool(draft)
+                scope_raw = (draft.get("target_scope") if has_existing_draft else "") or existing_mapping.get("recommended_target_scope") or "micro_signal"
+                scope_raw = str(scope_raw or "").strip()
+                if scope_raw in {"micro", "micro_signal"}:
+                    local_scope = "micro_signal"
+                elif scope_raw in {"arbitration_guard", "guard", "arbitration"}:
+                    local_scope = "arbitration_guard"
+                elif scope_raw == "warning":
+                    local_scope = "warning"
+                else:
+                    local_scope = "micro_signal"
+
+                local_disposition = (draft.get("disposition") or disposition).strip() if has_existing_draft else disposition
+                if has_rule_hit and local_disposition not in {"optimize_existing", "add_new_rule"}:
+                    local_disposition = "optimize_existing"
+                if not has_rule_hit and local_scope == "micro_signal":
+                    local_disposition = "add_new_rule"
+
+                local_rule_id = (draft.get("based_on_rule_id") or based_on_rule_id).strip() if has_existing_draft else based_on_rule_id
+                if not has_rule_hit:
+                    local_rule_id = ""
+
+                if has_existing_draft:
+                    draft_id = (draft.get("draft_id") or "").strip() or f"DRAFT-{report_date.replace('-', '')}-{match_num}-{idx}-{uuid4().hex[:8]}"
+                else:
+                    draft_id = f"DRAFT-{report_date.replace('-', '')}-{match_num}-{idx}-{uuid4().hex[:8]}"
+
+                inferred_rule = cls._infer_rule_from_market_chain(
+                    draft.get("trigger_condition_nl") if has_existing_draft else f"{match_num} {matchup} | {market_chain}",
+                    target_scope=local_scope,
+                    has_rule_hit=has_rule_hit,
+                    rule_id=local_rule_id,
+                    bias_hint=draft.get("suggested_bias") if has_existing_draft else "",
+                    case_match=match,
+                )
+                reason_driven_fields = cls._build_reason_driven_rule_fields(
+                    match=match,
+                    mapping=existing_mapping,
+                    target_scope=local_scope,
+                    has_rule_hit=has_rule_hit,
+                    rule_id=local_rule_id,
+                )
+                scenario_meta = cls._build_market_scenario(match, target_scope=local_scope)
+
+                actual_bias = cls._actual_result_to_bias(draft.get("actual_nspf") or match.get("actual_nspf"))
+                normalized_suggested_bias = (
+                    actual_bias
+                    or reason_driven_fields.get("suggested_bias")
+                    or reason_driven_fields.get("prediction_bias")
+                    or draft.get("suggested_bias")
+                    or draft.get("prediction_bias")
+                    or (inferred_rule or {}).get("suggested_bias")
+                    or (inferred_rule or {}).get("prediction_bias")
+                    or "待复盘补充"
+                )
+                normalized_prediction_bias = (
+                    actual_bias
+                    or reason_driven_fields.get("prediction_bias")
+                    or reason_driven_fields.get("suggested_bias")
+                    or draft.get("prediction_bias")
+                    or draft.get("suggested_bias")
+                    or (inferred_rule or {}).get("prediction_bias")
+                    or (inferred_rule or {}).get("suggested_bias")
+                    or ""
+                )
+                scenario_parts = (
+                    draft.get("scenario_parts")
+                    or reason_driven_fields.get("scenario_parts")
+                    or (inferred_rule or {}).get("scenario_parts")
+                    or scenario_meta.get("scenario_parts")
+                    or []
+                )
+                normalized_effect_type = (
+                    draft.get("effect_type")
+                    or reason_driven_fields.get("effect_type")
+                    or (inferred_rule or {}).get("effect_type")
+                    or ""
+                )
+                normalized_warning_template = cls._build_micro_warning_template(
+                    scenario_parts=scenario_parts,
+                    prediction_bias=normalized_prediction_bias,
+                    effect_type=normalized_effect_type,
+                )
+                normalized_draft = {
+                    "case_id": case_id,
+                    "draft_id": draft_id,
+                    "title": draft.get("title") or reason_driven_fields.get("rule_name") or (inferred_rule or {}).get("rule_name") or (f"{match_num} 命中规则处置草稿" if has_rule_hit else f"{match_num} 新规则补全草稿"),
+                    "target_scope": local_scope,
+                    "problem_type": draft.get("problem_type")
+                    or ("已有规则命中但方向失真，需要修正或收紧边界" if has_rule_hit else "无规则命中，需要提炼盘口经验新增规则"),
+                    "trigger_condition_nl": draft.get("trigger_condition_nl")
+                    or f"{match_num} {matchup} | {market_chain}",
+                    "suggested_condition": draft.get("suggested_condition") or (inferred_rule or {}).get("suggested_condition") or "False",
+                    "suggested_action": draft.get("suggested_action")
+                    or reason_driven_fields.get("suggested_action")
+                    or (inferred_rule or {}).get("suggested_action")
+                    or ("修正规则或收紧边界，避免再次误判" if has_rule_hit else "新增规则覆盖该盘口场景"),
+                    "suggested_bias": normalized_suggested_bias,
+                    "priority": draft.get("priority") if isinstance(draft.get("priority"), int) else (85 if has_rule_hit else 80),
+                    "source_matches": draft.get("source_matches") or [f"{match_num} {matchup}"],
+                    "disposition": local_disposition,
+                    "based_on_rule_id": local_rule_id,
+                    "market_review_complete": draft.get("market_review_complete")
+                    if isinstance(draft.get("market_review_complete"), bool)
+                    else market_review_complete,
+                    "status": draft.get("status") or "draft",
+                    "created_at": draft.get("created_at") or created_at,
+                    "source_date": draft.get("source_date") or report_date,
+                    "actual_nspf": draft.get("actual_nspf") or match.get("actual_nspf") or "",
+                    "actual_score": draft.get("actual_score") or match.get("actual_score") or "",
+                    "rule_name": draft.get("rule_name") or reason_driven_fields.get("rule_name") or (inferred_rule or {}).get("rule_name") or draft.get("title") or "",
+                    "scenario_key": draft.get("scenario_key") or reason_driven_fields.get("scenario_key") or (inferred_rule or {}).get("scenario_key") or scenario_meta.get("scenario_key") or "",
+                    "scenario_parts": scenario_parts,
+                    "scenario_version": draft.get("scenario_version") or reason_driven_fields.get("scenario_version") or (inferred_rule or {}).get("scenario_version") or scenario_meta.get("scenario_version") or "v1",
+                    "warning_message_template": normalized_warning_template,
+                    "prediction_bias": normalized_prediction_bias,
+                    "effect_type": normalized_effect_type,
+                    "action_type": draft.get("action_type") or reason_driven_fields.get("action_type") or (inferred_rule or {}).get("action_type") or "",
+                    "action_payload": draft.get("action_payload") if isinstance(draft.get("action_payload"), dict) else reason_driven_fields.get("action_payload") or (inferred_rule or {}).get("action_payload") or {},
+                    "explanation_template": draft.get("explanation_template") or reason_driven_fields.get("explanation_template") or (inferred_rule or {}).get("explanation_template") or draft.get("trigger_condition_nl") or "",
+                    "optimization_mode": (
+                        "tighten_existing"
+                        if has_rule_hit and ("边界" in str(draft.get("problem_type") or "") or "收紧" in str(draft.get("suggested_action") or ""))
+                        else "repair_existing"
+                        if has_rule_hit
+                        else "add_new_rule"
+                    ),
+                }
+                normalized_draft["rule_id"] = draft.get("rule_id") or generate_rule_id_from_draft(
+                    normalized_draft,
+                    category="micro_signal",
+                )
+                normalized_draft["completeness_gaps"] = cls._collect_rule_draft_gaps(normalized_draft)
+                normalized_draft["is_executable"] = len(normalized_draft["completeness_gaps"]) == 0
+                if cls._is_executable_rule_draft(normalized_draft):
+                    output_drafts.append(normalized_draft)
+                else:
+                    mapping["market_review_complete"] = False
+                    gap_text = "、".join(normalized_draft["completeness_gaps"]) or "unknown_gap"
+                    mapping["entry_summary"] = f"{match_num} 已定位错因，但草稿仍缺少关键定义：{gap_text}"
+
+        return output_mappings, output_drafts
 
     @staticmethod
     def _append_review_validation_section(review_text, warnings):
@@ -1320,7 +2538,7 @@ class LLMPredictor:
             disposition = case.get("disposition", "未分类")
             based_on_rule_id = case.get("based_on_rule_id", "")
             target_scope = case.get("recommended_target_scope", "")
-            summary = case.get("entry_summary") or case.get("market_chain_summary") or "未提供"
+            summary = case.get("entry_summary") or case.get("error_reason_summary") or case.get("market_chain_summary") or "未提供"
             lines.append(f"### {match_num} | {matchup}")
             lines.append(f"- 处置类型：`{disposition}`")
             if based_on_rule_id:
@@ -2541,7 +3759,7 @@ class LLMPredictor:
         
         error_lines = []
         for e in errors[:20]:
-            reason_clean = e.get('reason', '无').replace('\n', ' ').replace('|', '｜')
+            reason_clean = str(e.get('market_replay_summary') or e.get('arb_override_reason') or '无').replace('\n', ' ').replace('|', '｜')
             error_lines.append(
                 f"| {e.get('match_num', '未知')} | {e.get('league', '未知')} | {e.get('home', '未知')} vs {e.get('away', '未知')} | "
                 f"{e.get('actual_score', '未知')}({e.get('actual_nspf', '未知')}) | {e.get('pred_nspf', '暂无')} | "
@@ -2604,57 +3822,64 @@ class LLMPredictor:
    - 忽略欧赔实力方与亚赔让球方分工；
    - 该触发的微观信号没有触发，或触发了错误信号。
 5. **归纳可复用的盘口错误模式**：总结这些错误属于哪几类固定盘口剧本，明确“以后遇到什么盘型/水位/欧亚组合必须警惕什么”。
-6. **产出可回灌规则（最多3条）**：每条建议都必须尽量写成可落到微观信号规则库的形式，明确“触发条件 + 应对动作/防范方向”。
-7. **逐场盘口复盘必须完整**：对于每一场错误案例，你必须单独保留该比赛编号的小节，并在该小节中明确写出以下 3 项：
-   - `盘口链路`：必须落到初盘、即时盘、升降盘或水位变化，不能只写泛化结论；
+6. **产出可回灌规则（规则处理严格来源于复盘原因）**：每条建议都必须尽量写成可落到微观信号规则库的形式，明确“触发条件 + 应对动作/防范方向”。对于每一场错误比赛，都必须给出明确的规则处置。这个规则的触发条件和建议动作，必须**严格基于数据中该场比赛的“预测逻辑简述”、“推翻原因”或“Agent C 误判提示”**来提炼。
+7. **严禁主观盘赔分析**：你自身做出的盘赔方向分析基本没有参考价值。因此，**绝对禁止**你自行对盘口、水位变化、欧亚组合进行额外的主观推演和解读，必须完全依赖输入数据中已有的逻辑记录。
+8. **逐场盘口复盘必须完整**：对于每一场错误案例，你必须单独保留该比赛编号的小节，并在该小节中明确写出以下 3 项：
+   - `盘口链路/复盘原因摘要`：必须落到初盘、即时盘、升降盘或水位变化，并直接提取输入数据中该场的原有错误逻辑，不能只写泛化结论；
    - `规则命中检查`：说明命中了哪些已有规则，或明确写“无规则命中”；
-   - `规则处置建议`：必须在 `optimize_existing / add_new_rule / observe_only` 三者中三选一；若因为信息不足导致盘口链路不完整，必须明确写出 `missing_market_review`。
-8. **重点回答是修旧规则还是补新规则**：
-   - 若错误来自已有规则误用，必须明确说明是“完全背离”还是“边界过宽”，并优先给出 `optimize_existing`；
-   - 若错误来自现有规则覆盖空白，给出 `add_new_rule`；
-   - 若证据不足以立规，给出 `observe_only`，不能强行编规则。
+   - `规则处置建议`：必须在 optimize_existing（修旧规则） / add_new_rule（新增规则）中二选一。如果有命中旧规则，就需要提供是修正规则还是收紧原规则；如果没有命中规则，应该总结经验新增规则。若因为信息不足导致盘口链路不完整，必须明确写出 `missing_market_review`。
+9. **重点回答是修旧规则还是补新规则**：所有的处置建议，最终都必须体现在下文的“结构化规则草稿”JSON中。
 
 严格约束：
 - 严禁捏造任何不在此报告中的数据、比分或预测内容
 - 胜=主队胜、负=主队负。严禁将"平/胜"说成"看好客队"
 - 如果某场错误表显示预测为"胜(60%)/平(40%)"而赛果是"负"，你只能说"模型预测主队不败但主队输了"
 - 基本面只能作为辅助说明，除非它能解释为什么盘口判断失效；否则不要喧宾夺主
-- 输出用Markdown，分为"四维方向对比总览"、"Agent C误判链路"、"盘口调度错因拆解"、"微观信号修正规则"四部分
-- 所有错误场次都必须在正文里被点名；不能跳过任何一场错误比赛
+- 绝对禁止输出自行脑补的盘赔分析
+- 输出用Markdown，分为"四维方向对比总览"、"Agent C误判链路"、"盘口调度错因拆解"、"逐场规则处置"四部分
+- 所有错误场次都必须在正文里被点名，并且必须在后续JSON中有对应的草稿！不能跳过任何一场错误比赛
 - 对每个错误场次，若你没有足够盘口链路，请显式写出 `missing_market_review`，禁止用一句泛化判断带过
 """
         if return_rule_drafts:
             prompt += """
 
 附加输出要求：
-- 在正文最后先追加一个标题为“## 结构化盘口复盘映射”的区块
+- 在正文最后先追加一个标题为“## 结构化盘口复盘映射”的区块（此标题必须严格一字不差）
 - 该区块下面必须紧跟一个 ```json 代码块
 - JSON 顶层必须是数组，数组中的每一项对应一个错误场次，字段必须包含：
   - case_id
   - match_num
   - matchup
-  - market_chain_summary
+  - error_reason_summary
   - misread_type
   - triggered_existing_rules
   - disposition
   - based_on_rule_id
-  - recommended_target_scope
+  - recommended_target_scope（固定填写 `micro_signal`）
   - recommended_title
   - market_review_complete
   - entry_summary
-- 在正文最后追加一个标题为“## 结构化规则草稿”的区块
+- 在正文最后追加一个标题为“## 结构化规则草稿”的区块（此标题必须严格一字不差）
 - 该区块下面必须紧跟一个 ```json 代码块
-- JSON 顶层必须是数组，最多输出 3 条规则草稿
+- JSON 顶层必须是数组，且必须覆盖所有错误场次（每个错误场次至少 1 条草稿）
 - 每条草稿必须包含字段：
   - case_id
   - draft_id
+  - rule_id
   - title
-  - target_scope（warning / micro_signal / arbitration_guard）
+  - rule_name
+  - target_scope（固定填写 `micro_signal`）
   - problem_type
   - trigger_condition_nl
   - suggested_condition
   - suggested_action
   - suggested_bias
+  - warning_message_template
+  - prediction_bias
+  - effect_type
+  - action_type
+  - action_payload
+  - explanation_template
   - priority
   - source_matches
   - disposition
@@ -2662,8 +3887,10 @@ class LLMPredictor:
   - market_review_complete
   - status
   - created_at
+- 生成新规则或修正原规则时，必须先对齐 Rule_Manager 使用的正式规则定义，不能只给抽象建议。所有草稿都按 `micro_signal` 生成，最终必须能映射成正式规则字段：`id / name / condition / warning_template / prediction_bias / effect`
+- `title` 用于草稿展示，`rule_name` 用于正式规则名称；两者允许相同，但不能留空
 - `suggested_condition` 必须是当前系统可直接执行的 Python 布尔表达式，不允许输出伪代码或自然语言 DSL
-- 如果 `target_scope = micro_signal`，`suggested_condition` 只能使用以下上下文变量：
+- `suggested_condition` 只能使用以下上下文变量：
   - `asian['start_hv']`
   - `asian['live_hv']`
   - `asian['giving_start_w']`
@@ -2678,16 +3905,26 @@ class LLMPredictor:
   - `euro['live_away']`
   - `euro['macau_start']`
   - `euro['bet365_start']`
+  - `euro['favored_side']`
+  - `euro['strength_gap_label']`
+  - `euro['movement_side']`
+  - `euro['movement_direction']`
+  - `euro['movement_magnitude']`
   - `league['is_euro_cup']`
-- 如果 `target_scope = arbitration_guard` 或 `warning`，`suggested_condition` 只能使用 `ctx[...]` 形式的上下文变量
+- 欧赔条件优先使用结构化标签/档位字段，避免把某一场历史比赛的精确赔率小数直接固化进规则条件
 - 严禁输出这些不兼容写法：`AND`、`OR`、`BETWEEN`、`IS TRUE`、`signal(...)`、`count(...)`、`all(...)`、`dimension.status`
-- `disposition` 只能填写 `optimize_existing`、`add_new_rule`、`observe_only`
+- `warning_message_template` 不能为空，必须是最终告警话术模板，而不是错因摘要
+- `prediction_bias` 不能为空，必须明确写出预测偏向
+- `effect_type` 不能为空，必须明确写出作用类型
+- `action_type`、`action_payload`、`explanation_template` 统一留空，不要生成仲裁规则
+- `disposition` 只能填写 `optimize_existing`、`add_new_rule`
 - 如果 `disposition = optimize_existing`，必须填写 `based_on_rule_id`
-- `market_review_complete` 必须是布尔值；若该场盘口链路不完整，必须填 `false`
+- `market_review_complete` 必须是布尔值；若该场复盘链路不完整，必须填 `false`
 - 结构化盘口复盘映射 与 结构化规则草稿 必须一致：同一 `case_id` 的处置类型、旧规则ID、目标范围不得互相冲突
-- 如果没有合适草稿，也必须输出空数组 []
-- 如果没有合适草稿，也必须输出空数组 []
-- 除了这个 JSON 区块外，不要输出额外解释
+- 对每个错误场次必须给出处置结论：若 `triggered_existing_rules` 非空，必须在草稿中明确“修正规则或收紧原规则”；若无规则命中，必须产出 `add_new_rule` 草稿
+- `draft_id` 必须全局唯一，推荐格式：`DRAFT-YYYYMMDD-<match_num>-<8位随机串>`
+- 仅当错误场次为 0 时允许输出空数组 []
+- 除了这两个 JSON 区块外，在 JSON 区块之后不要输出任何额外解释，确保 Markdown 结构清晰。
 """
         
         try:
@@ -2705,6 +3942,12 @@ class LLMPredictor:
             rule_drafts = []
             if return_rule_drafts:
                 review_text, case_mappings, rule_drafts = self._extract_review_structured_payloads(review_text)
+                case_mappings, rule_drafts = self._enforce_error_case_coverage(
+                    errors=errors,
+                    case_mappings=case_mappings,
+                    rule_drafts=rule_drafts,
+                    report_date=date,
+                )
                 rendered_entries = self._render_market_review_entries(case_mappings)
                 if rendered_entries:
                     review_text = (review_text.rstrip() + "\n\n" + rendered_entries).strip()
@@ -2921,6 +4164,41 @@ class LLMPredictor:
         return [token for token in order if token in text]
 
     @classmethod
+    def _infer_dimension_tag(cls, value, *, dimension="generic"):
+        text = str(value or "").strip()
+        compact = text.replace("/", "").replace("、", "").replace(" ", "")
+        if not compact or compact in {"未提取", "信息不足", "暂无", "无"}:
+            return "insufficient"
+
+        if dimension == "intel":
+            if "情报分裂" in text:
+                return "split"
+            if "情报不足" in text:
+                return "insufficient"
+
+        keyword_pairs = [
+            (["主队优势", "主队受支持", "支持主队", "主队更强"], "home_advantage"),
+            (["客队优势", "客队受支持", "支持客队", "客队更强"], "away_advantage"),
+            (["均势", "均衡", "平衡"], "balanced"),
+        ]
+        for keywords, tag in keyword_pairs:
+            if any(keyword in text for keyword in keywords):
+                return tag
+
+        tokens = cls._normalize_tilt_tokens(text)
+        token_set = set(tokens)
+        token_map = {
+            frozenset({"胜"}): "home_win",
+            frozenset({"平"}): "draw",
+            frozenset({"负"}): "away_win",
+            frozenset({"胜", "平"}): "home_unbeaten",
+            frozenset({"平", "负"}): "away_unbeaten",
+            frozenset({"胜", "负"}): "sides_no_draw",
+            frozenset({"胜", "平", "负"}): "all_sides",
+        }
+        return token_map.get(frozenset(token_set), "insufficient")
+
+    @classmethod
     def _compare_tilt_relation(cls, left_value, right_value):
         left = set(cls._normalize_tilt_tokens(left_value))
         right = set(cls._normalize_tilt_tokens(right_value))
@@ -3058,6 +4336,8 @@ class LLMPredictor:
         match_data,
         risk_policy,
         triggered_rule_ids,
+        triggered_micro_bias_pairs=None,
+        micro_signal_bias_standard="",
         micro_signals_text,
         odds_conflict_text="",
         has_anchor_divergence=False,
@@ -3074,27 +4354,15 @@ class LLMPredictor:
         ]
 
         if triggered_rule_ids:
+            triggered_micro_bias_pairs = triggered_micro_bias_pairs or []
             lines.append(f"- 微观规则命中：{', '.join(f'[{rid}]' for rid in triggered_rule_ids)}")
-            try:
-                import json
-                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                rules_path = os.path.join(base_dir, "data", "rules", "micro_signals.json")
-                with open(rules_path, "r", encoding="utf-8") as f:
-                    rules = json.load(f)
-                bias_map = {
-                    str(r.get("id")): str(r.get("prediction_bias") or "").strip()
-                    for r in (rules or [])
-                    if r.get("id")
-                }
-                bias_parts = [
-                    f"[{rid}]={bias_map.get(rid)}"
-                    for rid in triggered_rule_ids
-                    if bias_map.get(rid)
-                ]
-                if bias_parts:
-                    lines.append(f"- 微观规则偏向：{', '.join(bias_parts)}")
-            except Exception:
-                pass
+            bias_parts = [f"[{rid}]={bias}" for rid, bias in triggered_micro_bias_pairs if bias]
+            if bias_parts:
+                lines.append(f"- 微观规则偏向：{', '.join(bias_parts)}")
+            if micro_signal_bias_standard:
+                lines.append(
+                    f"- 微观规则预测标准：本场命中信号的程序化标准偏向为 {micro_signal_bias_standard}；最终不让球推荐必须至少覆盖该方向，且优先以其作为预测基准。"
+                )
         else:
             lines.append("- 微观规则命中：无盘赔微观信号规则匹配")
 
@@ -3142,7 +4410,7 @@ class LLMPredictor:
             if first_micro:
                 lines.append(f"- 微观规则摘要：{first_micro}")
 
-        lines.append("- 使用方式：请先完成【四维仲裁】，再决定是否需要由基本面/情报推翻盘口方向；若已命中微观信号，则默认先站在盘口/微观链路一侧审视基本面，若要推翻必须写清楚推翻链路。")
+        lines.append("- 使用方式：请先完成【四维仲裁】，再决定是否需要由基本面/情报推翻盘口方向；若已命中微观信号，则默认先站在盘口/微观链路一侧审视基本面，并以信号的 prediction_bias 作为预测标准；若要推翻必须写清楚推翻链路。")
         return "\n".join(lines)
 
     def _build_agent_c_prompt(
@@ -3163,8 +4431,12 @@ class LLMPredictor:
             leisu_brief=leisu_brief,
             formatted_data=formatted_data,
         )
+        c_prompt = AGENT_C_PROMPT
+        if not self.enable_llm_subjective_market_analysis:
+            c_prompt += "\n\n【系统严格指令】：当前已关闭主观盘赔推演功能。在【盘赔深度解析】中，你**绝对禁止**自行对盘口、水位、赔率进行任何主观解读或方向推演。你只能客观复述系统提供的🔴量化预警和🧩微观信号，或盘口专员的客观总结。若没有信号，直接写“无盘赔微观信号规则匹配，且无主观盘赔推演”。"
+            
         return f"""
-{AGENT_C_PROMPT}
+{c_prompt}
 
 {guardrails}
 
@@ -3233,25 +4505,176 @@ class LLMPredictor:
                 and euro_anchor_side is not None
                 and asian_anchor_side != euro_anchor_side
             )
-            micro_signals_text = self._analyze_micro_market_signals(match_odds, match_asian_odds, match_league, euro_odds=match_euro_odds)
-            triggered_rule_ids = re.findall(r"\[(\w+)\]", micro_signals_text) if micro_signals_text else []
-            risk_policy = self._build_risk_policy(
-                triggered_rule_ids=triggered_rule_ids,
-                odds_conflict_text=odds_conflict_text,
-                has_anchor_divergence=has_anchor_divergence,
-            )
-            if micro_signals_text:
-                micro_signal_block = "\n".join([f"- {line}" for line in micro_signals_text.split("\n") if line.strip()])
-            else:
-                micro_signal_block = "无"
 
-            dynamic_rules += f"\n\n### 🧩 盘赔微观信号触发清单（程序已判定）\n{micro_signal_block}\n"
-            if triggered_rule_ids:
-                dynamic_rules += (
-                    "\n### 🔴 微观信号硬约束（触发即生效）\n"
-                    "1) 在【盘赔深度解析】中必须逐条回应以上每条微观信号（必须引用对应的 [rule_id]）。\n"
-                    "2) **竞彩推荐**与**竞彩让球推荐**必须双选（绝对禁止单选）。\n"
-                    "3) **竞彩置信度上限 65**；若你认为可以更高，必须明确说明你如何推翻这些微观信号。\n"
+            engine_mode = (self.market_engine_mode or "legacy").lower()
+            micro_signals_text = ""
+            triggered_rule_ids = []
+            triggered_micro_bias_pairs = []
+            micro_signal_bias_standard = ""
+            risk_policy = {}
+
+            if engine_mode == "legacy":
+                micro_signals_text = self._analyze_micro_market_signals(
+                    match_odds,
+                    match_asian_odds,
+                    match_league,
+                    euro_odds=match_euro_odds,
+                )
+                triggered_rule_ids = re.findall(r"\[(\w+)\]", micro_signals_text) if micro_signals_text else []
+                triggered_micro_bias_pairs = self._collect_triggered_micro_biases(
+                    triggered_rule_ids,
+                    asian=match_asian_odds,
+                )
+                micro_signal_bias_standard = self._merge_prediction_biases(
+                    [bias for _, bias in triggered_micro_bias_pairs]
+                )
+                risk_policy = self._build_risk_policy(
+                    triggered_rule_ids=triggered_rule_ids,
+                    odds_conflict_text=odds_conflict_text,
+                    has_anchor_divergence=has_anchor_divergence,
+                    micro_signal_bias_standard=micro_signal_bias_standard,
+                )
+
+                micro_signal_block = (
+                    "\n".join([f"- {line}" for line in micro_signals_text.split("\n") if line.strip()])
+                    if micro_signals_text
+                    else "无"
+                )
+                dynamic_rules += f"\n\n### 🧩 盘赔微观信号触发清单（程序已判定）\n{micro_signal_block}\n"
+                if triggered_rule_ids:
+                    dynamic_rules += (
+                        "\n### 🔴 微观信号硬约束（触发即生效）\n"
+                        "1) 在【盘赔深度解析】中必须逐条回应以上每条微观信号（必须引用对应的 [rule_id]）。\n"
+                        "2) **竞彩推荐**与**竞彩让球推荐**必须双选（绝对禁止单选）。\n"
+                        "3) **竞彩置信度上限 65**；若你认为可以更高，必须明确说明你如何推翻这些微观信号。\n"
+                    )
+                    if micro_signal_bias_standard:
+                        dynamic_rules += f"4) 本场命中微观信号的程序化标准偏向为 **{micro_signal_bias_standard}**；最终【竞彩推荐】必须至少覆盖该方向，并优先按该偏向生成。\n"
+
+            elif engine_mode in {"v2_shadow", "v2_enforce_risk", "v2_full"}:
+                v2_output = self._v2_engine.analyze(
+                    fixture_id=str(match_data.get("fixture_id") or ""),
+                    prediction_period=period,
+                    match_data=match_data,
+                    mode=engine_mode,
+                )
+                v2_lines = format_v2_lines(v2_output)
+                v2_block = "\n".join([f"- {line}" for line in v2_lines if line.strip()]) if v2_lines else "无"
+
+                v2_ids = v2_triggered_rule_ids(v2_output)
+
+                if engine_mode == "v2_shadow":
+                    micro_signals_text = self._analyze_micro_market_signals(
+                        match_odds,
+                        match_asian_odds,
+                        match_league,
+                        euro_odds=match_euro_odds,
+                    )
+                    triggered_rule_ids = re.findall(r"\[(\w+)\]", micro_signals_text) if micro_signals_text else []
+                    triggered_micro_bias_pairs = self._collect_triggered_micro_biases(
+                        triggered_rule_ids,
+                        asian=match_asian_odds,
+                    )
+                    micro_signal_bias_standard = self._merge_prediction_biases(
+                        [bias for _, bias in triggered_micro_bias_pairs]
+                    )
+                    risk_policy = self._build_risk_policy(
+                        triggered_rule_ids=triggered_rule_ids,
+                        odds_conflict_text=odds_conflict_text,
+                        has_anchor_divergence=has_anchor_divergence,
+                        micro_signal_bias_standard=micro_signal_bias_standard,
+                    )
+
+                    micro_signal_block = (
+                        "\n".join([f"- {line}" for line in micro_signals_text.split("\n") if line.strip()])
+                        if micro_signals_text
+                        else "无"
+                    )
+                    dynamic_rules += f"\n\n### 🧩 盘赔微观信号触发清单（程序已判定）\n{micro_signal_block}\n"
+                    if triggered_rule_ids:
+                        dynamic_rules += (
+                            "\n### 🔴 微观信号硬约束（触发即生效）\n"
+                            "1) 在【盘赔深度解析】中必须逐条回应以上每条微观信号（必须引用对应的 [rule_id]）。\n"
+                            "2) **竞彩推荐**与**竞彩让球推荐**必须双选（绝对禁止单选）。\n"
+                            "3) **竞彩置信度上限 65**；若你认为可以更高，必须明确说明你如何推翻这些微观信号。\n"
+                        )
+                        if micro_signal_bias_standard:
+                            dynamic_rules += f"4) 本场命中微观信号的程序化标准偏向为 **{micro_signal_bias_standard}**；最终【竞彩推荐】必须至少覆盖该方向，并优先按该偏向生成。\n"
+                else:
+                    dynamic_rules += f"\n\n### 🧭 市场剧本引擎 v2 输出（程序已判定）\n{v2_block}\n"
+                    micro_signals_text = "\n".join([line for line in v2_lines if line.strip()])
+                    triggered_rule_ids = list(v2_ids)
+
+                    v2_top1 = self._normalize_prediction_bias(
+                        getattr(v2_output, "nspf_top1", ""),
+                        asian=match_asian_odds,
+                    )
+                    v2_cover = self._normalize_prediction_bias(
+                        getattr(v2_output, "nspf_cover", ""),
+                        asian=match_asian_odds,
+                    )
+                    v2_bias_standard = self._normalize_prediction_bias(
+                        getattr(v2_output, "prediction_bias", ""),
+                        asian=match_asian_odds,
+                    )
+                    enforce_bias_standard = "" if v2_cover else v2_bias_standard
+                    allow_single_nspf = bool(v2_cover and v2_top1 and v2_cover == v2_top1)
+                    risk_policy = self._build_risk_policy(
+                        triggered_rule_ids=v2_ids,
+                        odds_conflict_text=odds_conflict_text,
+                        has_anchor_divergence=has_anchor_divergence,
+                        micro_signal_bias_standard=enforce_bias_standard,
+                        allow_single_nspf=allow_single_nspf,
+                        programmatic_nspf_top1=v2_top1,
+                        programmatic_nspf_cover=v2_cover,
+                        programmatic_nspf_confidence=getattr(v2_output, "nspf_confidence", None),
+                    )
+
+                    if v2_bias_standard:
+                        dynamic_rules += f"4) 本场 v2 程序化标准偏向为 **{v2_bias_standard}**；最终【竞彩推荐】必须至少覆盖该方向，并优先按该偏向生成。\n"
+                    if v2_top1 or v2_cover:
+                        cover_text = v2_cover or v2_top1
+                        conf_text = getattr(v2_output, "nspf_confidence", None)
+                        conf_clause = f"，程序置信度 **{conf_text}**" if conf_text is not None else ""
+                        dynamic_rules += f"5) 本场 v2 程序化主推为 **{v2_top1 or cover_text}**，覆盖建议为 **{cover_text}**{conf_clause}；最终【竞彩推荐】必须与该覆盖范围一致。\n"
+
+                    if v2_ids and engine_mode in {"v2_enforce_risk", "v2_full"}:
+                        dynamic_rules += (
+                            "\n### 🔴 v2 风控硬约束（触发即生效）\n"
+                            "1) 在【盘赔深度解析】中必须逐条回应以上每条 v2 输出（必须引用对应的 [rule_id]）。\n"
+                            + (
+                                "2) **竞彩推荐**必须严格跟随程序覆盖范围；若程序给出单选，禁止改写成其他方向，若程序给出双选，禁止缩成冲突单选。**竞彩让球推荐**仍需双选覆盖。\n"
+                                "3) **竞彩置信度**优先参考程序置信度；若你要明显高于程序置信度，必须明确说明你如何推翻这些 v2 结论。\n"
+                                if allow_single_nspf
+                                else "2) **竞彩推荐**与**竞彩让球推荐**必须双选（绝对禁止单选）。\n"
+                                "3) **竞彩置信度上限 65**；若你认为可以更高，必须明确说明你如何推翻这些 v2 结论。\n"
+                            )
+                        )
+
+                    if engine_mode == "v2_full":
+                        triggered_micro_bias_pairs = []
+                        micro_signal_bias_standard = ""
+
+            else:
+                micro_signals_text = self._analyze_micro_market_signals(
+                    match_odds,
+                    match_asian_odds,
+                    match_league,
+                    euro_odds=match_euro_odds,
+                )
+                triggered_rule_ids = re.findall(r"\[(\w+)\]", micro_signals_text) if micro_signals_text else []
+                triggered_micro_bias_pairs = self._collect_triggered_micro_biases(
+                    triggered_rule_ids,
+                    asian=match_asian_odds,
+                )
+                micro_signal_bias_standard = self._merge_prediction_biases(
+                    [bias for _, bias in triggered_micro_bias_pairs]
+                )
+                risk_policy = self._build_risk_policy(
+                    triggered_rule_ids=triggered_rule_ids,
+                    odds_conflict_text=odds_conflict_text,
+                    has_anchor_divergence=has_anchor_divergence,
+                    micro_signal_bias_standard=micro_signal_bias_standard,
                 )
             
             # ==========================================
@@ -3275,10 +4698,15 @@ class LLMPredictor:
             # ==========================================
             logger.info(f"[{match_data.get('home_team')} vs {match_data.get('away_team')}] Agent B 正在推演盘口意图...")
             agent_b_data = self._extract_odds_data(match_data)
+            
+            agent_b_sys_prompt = AGENT_B_PROMPT
+            if not self.enable_llm_subjective_market_analysis:
+                agent_b_sys_prompt += "\n\n【系统严格指令】：当前已关闭主观盘赔推演功能。你**绝对禁止**自行基于初盘、即时盘、水位变化等数据进行主观的“诱上/阻上”推演。你只能严格基于系统给出的🔴量化预警和🧩微观信号进行客观总结。如果没有给出任何预警或微观信号，你必须直接返回“无明显盘赔信号”，不要自行脑补盘口意图！"
+                
             agent_b_response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": AGENT_B_PROMPT},
+                    {"role": "system", "content": agent_b_sys_prompt},
                     {"role": "user", "content": f"请推演以下比赛的机构盘口意图：\n{agent_b_data}"}
                 ],
                 temperature=0.4
@@ -3296,6 +4724,8 @@ class LLMPredictor:
                 match_data=match_data,
                 risk_policy=risk_policy,
                 triggered_rule_ids=triggered_rule_ids,
+                triggered_micro_bias_pairs=triggered_micro_bias_pairs,
+                micro_signal_bias_standard=micro_signal_bias_standard,
                 micro_signals_text=micro_signals_text,
                 odds_conflict_text=odds_conflict_text,
                 has_anchor_divergence=has_anchor_divergence,
@@ -3343,6 +4773,7 @@ class LLMPredictor:
                 conflict_assessment=conflict_assessment,
                 triggered_rule_ids=triggered_rule_ids,
                 asian_context=self._build_micro_rule_asian_context(match_asian_odds),
+                euro_context=self._build_micro_rule_euro_context(match_data.get("europe_odds", [])),
             )
             arbitration_actions = self._evaluate_arbitration_rules(arbitration_ctx)
             retry_msgs = self._build_retry_messages(
@@ -3382,6 +4813,7 @@ class LLMPredictor:
                 conflict_assessment=conflict_assessment,
                 triggered_rule_ids=triggered_rule_ids,
                 asian_context=self._build_micro_rule_asian_context(match_asian_odds),
+                euro_context=self._build_micro_rule_euro_context(match_data.get("europe_odds", [])),
             )
             final_arbitration_actions = self._evaluate_arbitration_rules(final_arbitration_ctx)
             effective_risk_policy = dict(risk_policy)
@@ -3538,12 +4970,36 @@ class LLMPredictor:
         for line in self._format_leisu_intelligence_block(match_data):
             info += f"{line}\n"
 
-        micro_signals = self._analyze_micro_market_signals(odds, asian, match_data.get("league", ""), euro_odds=match_data.get("europe_odds", []))
-        if micro_signals:
-            info += f"- 🧩 盘赔微观信号：\n"
-            for line in micro_signals.split("\n"):
-                if line.strip():
-                    info += f"  - {self._format_signal_with_prediction_bias(line, asian)}\n"
+        engine_mode = (getattr(self, "market_engine_mode", None) or "legacy").lower()
+        if engine_mode in {"v2_enforce_risk", "v2_full"}:
+            try:
+                period = self._determine_prediction_period(match_data)
+            except Exception:
+                period = "final"
+            v2_output = self._v2_engine.analyze(
+                fixture_id=str(match_data.get("fixture_id") or ""),
+                prediction_period=period,
+                match_data=match_data,
+                mode=engine_mode,
+            )
+            v2_lines = format_v2_lines(v2_output)
+            if v2_lines:
+                info += "- 🧭 盘口剧本信号（v2）：\n"
+                for line in v2_lines:
+                    if line.strip():
+                        info += f"  - {line}\n"
+        else:
+            micro_signals = self._analyze_micro_market_signals(
+                odds,
+                asian,
+                match_data.get("league", ""),
+                euro_odds=match_data.get("europe_odds", []),
+            )
+            if micro_signals:
+                info += f"- 🧩 盘赔微观信号：\n"
+                for line in micro_signals.split("\n"):
+                    if line.strip():
+                        info += f"  - {self._format_signal_with_prediction_bias(line, asian)}\n"
             
         # 加入量化预警
         deep_water = self._detect_deep_water_trap(asian)
@@ -3681,6 +5137,8 @@ class LLMPredictor:
         probs = implied_probs_from_3way([live_home, live_draw, live_away]) if all(v is not None for v in (live_home, live_draw, live_away)) else None
         p_home, p_draw, p_away = probs if probs else (None, None, None)
 
+        euro_context = LLMPredictor._build_micro_rule_euro_context(euro_odds or [])
+
         # 1. 构造上下文 (Context)
         context = {
             "asian": {
@@ -3691,16 +5149,7 @@ class LLMPredictor:
                 "giving_live_w": giving_live_w,
                 "receiving_live_w": receiving_live_w,
             },
-            "euro": {
-                "p_home": p_home,
-                "p_draw": p_draw,
-                "p_away": p_away,
-                "live_home": live_home,
-                "live_draw": live_draw,
-                "live_away": live_away,
-                "macau_start": macau_start,
-                "bet365_start": bet365_start
-            },
+            "euro": euro_context,
             "league": {
                 "is_euro_cup": is_euro_cup
             }
@@ -3730,7 +5179,14 @@ class LLMPredictor:
                             rname = rule.get("name", "?")
                             rlevel = rule.get("level", "?")
                             full_text = f"{rlevel} [{rid}] {rname}：{msg}"
-                            lines.append(LLMPredictor._format_signal_with_prediction_bias(full_text, asian))
+                            rule_bias = LLMPredictor._normalize_prediction_bias(rule.get("prediction_bias"), asian=asian)
+                            if not rule_bias:
+                                rule_bias = LLMPredictor._infer_prediction_bias_from_signal_text(msg, asian=asian)
+                            lines.append(
+                                LLMPredictor._append_prediction_bias(full_text, rule_bias)
+                                if rule_bias
+                                else LLMPredictor._format_signal_with_prediction_bias(full_text, asian)
+                            )
                     except Exception as e:
                         logger.warning(f"执行规则 {rule.get('id')} 失败: {e}")
         except Exception as e:

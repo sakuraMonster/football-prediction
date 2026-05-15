@@ -44,6 +44,7 @@ if "auth" in st.query_params and not st.session_state.get("logged_in", False):
                 st.session_state["username"] = user.username
                 st.session_state["role"] = user.role
                 st.session_state["valid_until"] = user.valid_until
+                st.session_state["auth_token"] = token
     except Exception as e:
         pass
 
@@ -53,6 +54,18 @@ if not st.session_state.get("logged_in", False):
         st.switch_page("app.py")
     st.stop() # 停止渲染下方内容
 # ==========================================
+
+if "auth" not in st.query_params:
+    token = st.session_state.get("auth_token", "")
+    if not token and st.session_state.get("username"):
+        try:
+            raw_token = f"{st.session_state['username']}|{int(time.time())}"
+            token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
+        except Exception:
+            token = ""
+    if token:
+        st.session_state["auth_token"] = token
+        st.query_params["auth"] = token
 
 # 设置页面配置
 st.set_page_config(
@@ -210,6 +223,18 @@ def main():
     # 导航区
     st.sidebar.markdown("---")
     st.sidebar.header("🧭 功能导航")
+
+    if st.sidebar.button("🧩 v2 执行监控（当日）", use_container_width=True):
+        if "auth" in st.query_params:
+            st.switch_page("pages/6_V2_Daily_Monitor.py")
+        else:
+            try:
+                raw_token = f"{st.session_state['username']}|{int(time.time())}"
+                token = base64.b64encode(raw_token.encode('utf-8')).decode('utf-8')
+                st.query_params["auth"] = token
+            except Exception:
+                pass
+            st.switch_page("pages/6_V2_Daily_Monitor.py")
     
     if st.sidebar.button("🏀 竞彩篮球预测", use_container_width=True):
         if "auth" in st.query_params:

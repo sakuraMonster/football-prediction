@@ -1,0 +1,62 @@
+{
+  "version": "v1",
+  "prototypes": [
+    {
+      "prototype_id": "info_shock",
+      "name": "信息冲击型",
+      "default_action": "Risk",
+      "required_features": ["time_series", "euro_probs"],
+      "notes": ["多公司共振+速度快更可信", "低流动性联赛需降级"]
+    },
+    {
+      "prototype_id": "risk_balancing",
+      "name": "仓位风控型",
+      "default_action": "Diagnosis",
+      "required_features": ["time_series", "dispersion"],
+      "notes": ["只动水不动盘多为风控噪声", "不要硬推方向"]
+    },
+    {
+      "prototype_id": "public_pressure",
+      "name": "大众热度引导型",
+      "default_action": "Risk",
+      "required_features": ["time_series", "euro_probs"],
+      "notes": ["缺少投注热度数据时谨慎反向", "更适合做防冷/双选"]
+    },
+    {
+      "prototype_id": "head_fake",
+      "name": "试盘假动作型",
+      "default_action": "Diagnosis",
+      "required_features": ["time_series", "reversal"],
+      "notes": ["必须用序列识别回撤", "只看初末两点会误判"]
+    },
+    {
+      "prototype_id": "cross_market_divergence",
+      "name": "欧亚背离型",
+      "default_action": "Risk",
+      "required_features": ["time_series", "euro_probs", "asian_line"],
+      "notes": ["默认不单挑", "优先降级为双选/观望"]
+    },
+    {
+      "prototype_id": "key_number_mgmt",
+      "name": "关键档位管理型",
+      "default_action": "Diagnosis",
+      "required_features": ["time_series", "asian_line"],
+      "notes": ["顶住不跨多为价位管理", "临场集中跨档才可能转 info_shock"]
+    },
+    {
+      "prototype_id": "draw_shaping",
+      "name": "平局定价操盘型",
+      "default_action": "Risk",
+      "required_features": ["time_series", "euro_probs"],
+      "notes": ["平局概率变化是关键", "更适合提示防平而非硬推胜负"]
+    },
+    {
+      "prototype_id": "late_correction",
+      "name": "临场纠偏型",
+      "default_action": "Diagnosis",
+      "required_features": ["time_series", "dispersion"],
+      "notes": ["临场收敛更重要", "早盘噪声需降权"]
+    }
+  ]
+}
+

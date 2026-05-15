@@ -1,0 +1,227 @@
+{
+  "version": "v1",
+  "subclasses": [
+    {
+      "subclass_id": "head_fake_v_reversal",
+      "prototype": "head_fake",
+      "default_action": "Diagnosis",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "min_bucket_count": 3,
+        "min_reversal_abs": 0.015
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 80,
+        "mid_window": 240,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "divergence_euro_vs_ah",
+      "prototype": "cross_market_divergence",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "min_bucket_count": 3
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 80,
+        "mid_window": 240,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "high_dispersion",
+      "prototype": "risk_balancing",
+      "default_action": "Diagnosis",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "dispersion_ge": 0.10
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 80,
+        "mid_window": 240,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "risk_balancing_price_only",
+      "prototype": "risk_balancing",
+      "default_action": "Diagnosis",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "ah_line_cross": false,
+        "ah_price_swing_ge": 0.08,
+        "euro_favored_prob_delta_le": 0.01
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "risk_balancing_flat_drift",
+      "prototype": "risk_balancing",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "euro_favored_prob_delta_le": 0.01,
+        "dispersion_le": 0.08
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "info_shock_mvp",
+      "prototype": "info_shock",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["low_liquidity_league", "cup_match_volatility", "final_round_or_lock"],
+      "detection": {
+        "favored_prob_delta_ge": 0.025,
+        "max_dispersion": 0.06
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "draw_shaping_draw_driven",
+      "prototype": "draw_shaping",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "draw_prob_delta_ge": 0.02,
+        "max_dispersion": 0.08
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "key_number_hold",
+      "prototype": "key_number_mgmt",
+      "default_action": "Diagnosis",
+      "allow_direction": false,
+      "veto_tags": [],
+      "detection": {
+        "min_bucket_count": 3,
+        "price_swing_ge": 0.08
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "late_correction_key_cross",
+      "prototype": "late_correction",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["low_liquidity_league"],
+      "detection": {
+        "cross_key_number": true
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "late_correction_convergence",
+      "prototype": "late_correction",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["low_liquidity_league"],
+      "detection": {
+        "convergence_flag": true
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "info_shock_euro_first",
+      "prototype": "info_shock",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["low_liquidity_league", "cup_match_volatility", "final_round_or_lock"],
+      "detection": {
+        "who_moves_first": "euro_first",
+        "favored_prob_delta_ge": 0.03,
+        "velocity": "fast",
+        "max_dispersion": 0.06
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "public_pressure_popular_tax",
+      "prototype": "public_pressure",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["cup_match_volatility"],
+      "detection": {
+        "favored_side_required": true,
+        "euro_favored_prob_delta_le": -0.02,
+        "draw_prob_delta_ge": 0.015
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    },
+    {
+      "subclass_id": "public_pressure_popular_deepening",
+      "prototype": "public_pressure",
+      "default_action": "Risk",
+      "allow_direction": false,
+      "veto_tags": ["cup_match_volatility"],
+      "detection": {
+        "favored_side_required": true,
+        "ah_line_cross": true,
+        "euro_favored_prob_delta_le": 0.01
+      },
+      "monitoring": {
+        "status": "gray",
+        "short_window": 120,
+        "mid_window": 360,
+        "alpha": 0.2
+      }
+    }
+  ]
+}

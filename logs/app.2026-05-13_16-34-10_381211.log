@@ -1,0 +1,88 @@
+2026-05-13 16:34:10.377 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-13 16:40:14.718 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 17 场竞彩比赛。
+2026-05-13 16:40:14.958 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 17 场竞彩比赛。
+2026-05-13 16:41:17.530 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:17.970 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1366306 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:21.137 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/12] fixture_id=1366306 快照已写入
+2026-05-13 16:41:21.539 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:22.002 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1373129 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:25.659 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/12] fixture_id=1373129 快照已写入
+2026-05-13 16:41:26.068 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:26.506 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216141 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:29.432 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/12] fixture_id=1216141 快照已写入
+2026-05-13 16:41:29.834 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:30.333 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216053 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:32.574 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/12] fixture_id=1216053 快照已写入
+2026-05-13 16:41:33.049 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:33.531 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1205767 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:37.034 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/12] fixture_id=1205767 快照已写入
+2026-05-13 16:41:37.445 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:37.833 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202685 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:41.311 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [6/12] fixture_id=1202685 快照已写入
+2026-05-13 16:41:41.721 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:42.107 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1407953 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:44.587 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [7/12] fixture_id=1407953 快照已写入
+2026-05-13 16:41:44.992 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:45.354 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1205790 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:47.555 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [8/12] fixture_id=1205790 快照已写入
+2026-05-13 16:41:47.964 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:48.314 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216056 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:50.380 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [9/12] fixture_id=1216056 快照已写入
+2026-05-13 16:41:50.788 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:51.130 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216111 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:54.040 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [10/12] fixture_id=1216111 快照已写入
+2026-05-13 16:41:54.443 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:54.816 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1358365 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:41:57.333 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [11/12] fixture_id=1358365 快照已写入
+2026-05-13 16:41:57.742 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 16:41:58.144 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1358377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 16:42:00.208 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [12/12] fixture_id=1358377 快照已写入
+2026-05-13 17:00:12.880 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-13 17:06:13.770 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-13 17:06:14.180 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1366306 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-13 17:06:14.568 | INFO     | src.llm.predictor:predict:4619 - [神户胜利 vs 京都] Agent A 正在分析基本面...
+2026-05-13 17:07:00.244 | INFO     | src.llm.predictor:predict:4635 - [神户胜利 vs 京都] Agent B 正在推演盘口意图...
+2026-05-13 17:07:19.888 | INFO     | src.llm.predictor:predict:4656 - [神户胜利 vs 京都] Agent C 正在进行最终风控裁决...
+2026-05-13 17:08:03.915 | INFO     | src.llm.predictor:predict:4795 - 预测成功返回！ [时间段: final]
+2026-05-14 15:06:10.326 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-14 15:12:14.880 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:15.273 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1366306 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:15.818 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:15.927 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:16.336 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1373129 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:16.802 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:16.933 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:17.734 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216141 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:18.484 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:18.846 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:19.412 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216053 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:19.928 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:20.076 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:20.536 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1205767 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:21.110 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:21.353 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:21.922 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202685 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:22.393 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:22.518 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:22.889 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1407953 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:23.444 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:23.579 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:24.092 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1205790 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:24.636 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:24.796 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:25.493 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216056 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:26.037 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:26.248 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:26.548 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216111 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:27.062 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:27.258 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:27.778 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1358365 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:28.395 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 15:12:28.568 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 15:12:28.863 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1358377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 15:12:29.387 | ERROR    | src.llm.predictor:predict:4807 - 调用 LLM 失败: 'MarketScriptV2Output' object has no attribute 'get'
+2026-05-14 16:23:32.339 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-14 16:25:50.281 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-13 赛果: https://trade.500.com/jczq/?date=2026-05-13
+2026-05-14 16:25:50.391 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 12 场比赛的赛果。
+2026-05-14 16:25:50.814 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-14 赛果: https://trade.500.com/jczq/?date=2026-05-14
+2026-05-14 16:25:50.916 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 0 场比赛的赛果。

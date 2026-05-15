@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "defaults": {
+    "lean_draw": {
+      "draw_dom_delta_abs_min": 0.02,
+      "close_dispersion_max": 0.08,
+      "draw_prob_delta_min": 0.015,
+      "p_draw_close_min": 0.28,
+      "favored_prob_delta_max": 0.0
+    },
+    "guard_draw": {
+      "draw_prob_delta_min": 0.01,
+      "favored_prob_delta_max": -0.01
+    },
+    "two_heads": {
+      "draw_prob_delta_max": -0.01,
+      "p_draw_close_max": 0.23
+    }
+  },
+  "overrides": [
+    {
+      "match": {
+        "league_contains": ["日职", "韩职"],
+        "dispersion_close_max": 0.07
+      },
+      "params": {
+        "lean_draw": {
+          "draw_prob_delta_min": 0.014,
+          "p_draw_close_min": 0.275
+        }
+      }
+    }
+  ]
+}
+

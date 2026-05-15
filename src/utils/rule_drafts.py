@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from uuid import uuid4
 
 
 def get_rule_drafts_path():
@@ -30,14 +31,33 @@ def append_rule_drafts(path=None, drafts=None):
     existing_ids = {item.get("draft_id") for item in existing}
 
     for draft in drafts or []:
-        draft_id = draft.get("draft_id")
-        if not draft_id or draft_id in existing_ids:
+        row = dict(draft or {})
+        draft_id = str(row.get("draft_id") or "").strip()
+        if not draft_id:
+            draft_id = f"DRAFT-{uuid4().hex}"
+        if draft_id in existing_ids:
             continue
-        existing.append(draft)
+        row["draft_id"] = draft_id
+        existing.append(row)
         existing_ids.add(draft_id)
 
     save_rule_drafts(draft_path, existing)
     return existing
+
+
+def replace_pending_rule_drafts_for_date(source_date, drafts=None, path=None):
+    draft_path = Path(path) if path is not None else get_rule_drafts_path()
+    existing = load_rule_drafts(draft_path)
+    target_date = str(source_date or "").strip()
+    kept = [
+        item for item in existing
+        if not (
+            item.get("status", "draft") == "draft"
+            and str(item.get("source_date") or "").strip() == target_date
+        )
+    ]
+    save_rule_drafts(draft_path, kept)
+    return append_rule_drafts(draft_path, drafts or [])
 
 
 def get_pending_rule_drafts(path=None):

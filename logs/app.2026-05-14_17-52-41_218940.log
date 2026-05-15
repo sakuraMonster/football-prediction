@@ -1,0 +1,257 @@
+2026-05-14 17:52:41.215 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-14 17:54:57.363 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-13 赛果: https://trade.500.com/jczq/?date=2026-05-13
+2026-05-14 17:54:58.587 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 12 场比赛的赛果。
+2026-05-14 17:54:59.931 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-14 赛果: https://trade.500.com/jczq/?date=2026-05-14
+2026-05-14 17:55:01.089 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 0 场比赛的赛果。
+2026-05-14 18:53:41.150 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-13 赛果: https://trade.500.com/jczq/?date=2026-05-13
+2026-05-14 18:53:42.565 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 12 场比赛的赛果。
+2026-05-14 18:53:43.979 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-14 赛果: https://trade.500.com/jczq/?date=2026-05-14
+2026-05-14 18:53:45.138 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 0 场比赛的赛果。
+2026-05-14 18:54:18.753 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 8 场竞彩比赛。
+2026-05-14 18:54:20.025 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 12 场竞彩比赛。
+2026-05-14 19:17:19.095 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 10 场竞彩比赛。
+2026-05-14 19:17:20.432 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 10 场竞彩比赛。
+2026-05-14 19:17:30.761 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:17:32.185 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1215805 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:17:36.441 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1215805 快照已写入
+2026-05-14 19:17:36.841 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:17:38.190 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234922 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:17:41.933 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234922 快照已写入
+2026-05-14 19:17:42.334 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:17:43.716 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234932 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:17:47.035 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234932 快照已写入
+2026-05-14 19:17:47.435 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:17:48.925 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216129 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:17:53.270 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1216129 快照已写入
+2026-05-14 19:17:53.671 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:17:55.254 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1215804 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:17:58.614 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1215804 快照已写入
+2026-05-14 19:20:45.414 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:20:46.870 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1215805 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:20:49.573 | INFO     | src.llm.predictor:predict:4683 - [巴伦西亚 vs 巴列卡诺] Agent A 正在分析基本面...
+2026-05-14 19:21:33.388 | INFO     | src.llm.predictor:predict:4699 - [巴伦西亚 vs 巴列卡诺] Agent B 正在推演盘口意图...
+2026-05-14 19:22:13.279 | INFO     | src.llm.predictor:predict:4720 - [巴伦西亚 vs 巴列卡诺] Agent C 正在进行最终风控裁决...
+2026-05-14 19:23:01.420 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-14 19:23:44.790 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-14 19:23:44.790 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-14 19:23:46.136 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:23:47.505 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234922 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:23:49.992 | INFO     | src.llm.predictor:predict:4683 - [达曼协定 vs 吉达联合] Agent A 正在分析基本面...
+2026-05-14 19:24:43.546 | INFO     | src.llm.predictor:predict:4699 - [达曼协定 vs 吉达联合] Agent B 正在推演盘口意图...
+2026-05-14 19:25:22.827 | INFO     | src.llm.predictor:predict:4720 - [达曼协定 vs 吉达联合] Agent C 正在进行最终风控裁决...
+2026-05-14 19:26:01.480 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-14 19:26:51.539 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-14 19:26:51.539 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-14 19:26:52.776 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:26:54.247 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234932 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:26:56.704 | INFO     | src.llm.predictor:predict:4683 - [胡巴尔卡德西亚 vs 拉斯决心] Agent A 正在分析基本面...
+2026-05-14 19:27:38.078 | INFO     | src.llm.predictor:predict:4699 - [胡巴尔卡德西亚 vs 拉斯决心] Agent B 正在推演盘口意图...
+2026-05-14 19:28:15.408 | INFO     | src.llm.predictor:predict:4720 - [胡巴尔卡德西亚 vs 拉斯决心] Agent C 正在进行最终风控裁决...
+2026-05-14 19:28:55.508 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-14 19:28:56.700 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:28:58.076 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1216129 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:29:00.571 | INFO     | src.llm.predictor:predict:4683 - [赫罗纳 vs 皇家社会] Agent A 正在分析基本面...
+2026-05-14 19:29:57.250 | INFO     | src.llm.predictor:predict:4699 - [赫罗纳 vs 皇家社会] Agent B 正在推演盘口意图...
+2026-05-14 19:30:37.173 | INFO     | src.llm.predictor:predict:4720 - [赫罗纳 vs 皇家社会] Agent C 正在进行最终风控裁决...
+2026-05-14 19:31:16.887 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-14 19:31:16.887 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-14 19:31:18.131 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-14 19:31:19.478 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1215804 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-14 19:31:22.026 | INFO     | src.llm.predictor:predict:4683 - [皇马 vs 奥维耶多] Agent A 正在分析基本面...
+2026-05-14 19:32:02.396 | INFO     | src.llm.predictor:predict:4699 - [皇马 vs 奥维耶多] Agent B 正在推演盘口意图...
+2026-05-14 19:32:49.632 | INFO     | src.llm.predictor:predict:4720 - [皇马 vs 奥维耶多] Agent C 正在进行最终风控裁决...
+2026-05-14 19:33:29.705 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-14 19:34:08.141 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 10:20:39.851 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-15 10:20:59.288 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-14 赛果: https://trade.500.com/jczq/?date=2026-05-14
+2026-05-15 10:21:00.738 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 5 场比赛的赛果。
+2026-05-15 10:21:02.271 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-15 赛果: https://trade.500.com/jczq/?date=2026-05-15
+2026-05-15 10:21:03.497 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 0 场比赛的赛果。
+2026-05-15 11:41:10.653 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-14 赛果: https://trade.500.com/jczq/?date=2026-05-14
+2026-05-15 11:41:11.958 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 5 场比赛的赛果。
+2026-05-15 11:41:13.456 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:203 - 开始抓取 2026-05-15 赛果: https://trade.500.com/jczq/?date=2026-05-15
+2026-05-15 11:41:14.994 | INFO     | src.crawler.jingcai_crawler:fetch_match_results:251 - 成功获取到 0 场比赛的赛果。
+2026-05-15 11:54:40.527 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-15 12:40:21.452 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 43 场竞彩比赛。
+2026-05-15 12:40:22.925 | INFO     | src.crawler.jingcai_crawler:_parse_html:164 - 成功解析出 43 场竞彩比赛。
+2026-05-15 12:40:30.163 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:40:31.601 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:40:35.232 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 12:40:35.633 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:40:36.986 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:40:40.326 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 12:40:40.726 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:40:42.107 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:40:45.674 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 12:40:46.075 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:40:47.496 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:40:51.012 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 12:40:51.412 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:40:52.820 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:40:56.188 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 12:58:56.184 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 12:58:57.620 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 12:59:00.233 | INFO     | src.llm.predictor:predict:4683 - [阿德莱德 vs 奥克兰FC] Agent A 正在分析基本面...
+2026-05-15 12:59:22.039 | INFO     | src.llm.predictor:predict:4699 - [阿德莱德 vs 奥克兰FC] Agent B 正在推演盘口意图...
+2026-05-15 13:00:03.467 | INFO     | src.llm.predictor:predict:4720 - [阿德莱德 vs 奥克兰FC] Agent C 正在进行最终风控裁决...
+2026-05-15 13:00:42.338 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 13:00:42.338 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 13:00:43.587 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 13:00:44.918 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 13:00:47.417 | INFO     | src.llm.predictor:predict:4683 - [达马克 vs 迈季迈阿宽广] Agent A 正在分析基本面...
+2026-05-15 13:01:40.323 | INFO     | src.llm.predictor:predict:4699 - [达马克 vs 迈季迈阿宽广] Agent B 正在推演盘口意图...
+2026-05-15 13:02:32.021 | INFO     | src.llm.predictor:predict:4720 - [达马克 vs 迈季迈阿宽广] Agent C 正在进行最终风控裁决...
+2026-05-15 13:03:14.156 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 13:03:15.378 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 13:03:16.807 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 13:03:19.447 | INFO     | src.llm.predictor:predict:4683 - [布赖代合作 vs 利雅得] Agent A 正在分析基本面...
+2026-05-15 13:04:18.026 | INFO     | src.llm.predictor:predict:4699 - [布赖代合作 vs 利雅得] Agent B 正在推演盘口意图...
+2026-05-15 13:04:49.492 | INFO     | src.llm.predictor:predict:4720 - [布赖代合作 vs 利雅得] Agent C 正在进行最终风控裁决...
+2026-05-15 13:05:40.718 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 13:06:18.380 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 13:06:18.380 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 13:06:19.612 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 13:06:21.051 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 13:06:23.829 | INFO     | src.llm.predictor:predict:4683 - [圣埃蒂安 vs 罗德兹] Agent A 正在分析基本面...
+2026-05-15 13:06:59.752 | INFO     | src.llm.predictor:predict:4699 - [圣埃蒂安 vs 罗德兹] Agent B 正在推演盘口意图...
+2026-05-15 13:07:50.180 | INFO     | src.llm.predictor:predict:4720 - [圣埃蒂安 vs 罗德兹] Agent C 正在进行最终风控裁决...
+2026-05-15 13:08:32.206 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 13:09:28.364 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 13:09:28.364 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 13:09:29.687 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 13:09:31.069 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 13:09:33.738 | INFO     | src.llm.predictor:predict:4683 - [维拉 vs 利物浦] Agent A 正在分析基本面...
+2026-05-15 13:10:23.734 | INFO     | src.llm.predictor:predict:4699 - [维拉 vs 利物浦] Agent B 正在推演盘口意图...
+2026-05-15 13:11:08.274 | INFO     | src.llm.predictor:predict:4720 - [维拉 vs 利物浦] Agent C 正在进行最终风控裁决...
+2026-05-15 13:11:57.621 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 13:12:54.775 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 13:12:54.776 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 14:58:13.686 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 14:58:15.319 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 14:58:19.543 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 14:58:19.944 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 14:58:21.329 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 14:58:24.869 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 14:58:25.270 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 14:58:26.710 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 14:58:30.530 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 14:58:30.930 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 14:58:32.414 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 14:58:36.148 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 14:58:36.548 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 14:58:38.093 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 14:58:42.316 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 15:06:05.435 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:06:06.906 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:06:11.490 | INFO     | src.llm.predictor:predict:4683 - [阿德莱德 vs 奥克兰FC] Agent A 正在分析基本面...
+2026-05-15 15:06:52.411 | INFO     | src.llm.predictor:predict:4699 - [阿德莱德 vs 奥克兰FC] Agent B 正在推演盘口意图...
+2026-05-15 15:07:35.928 | INFO     | src.llm.predictor:predict:4720 - [阿德莱德 vs 奥克兰FC] Agent C 正在进行最终风控裁决...
+2026-05-15 15:08:53.980 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 15:09:39.241 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 15:09:39.242 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 15:09:40.769 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:09:42.555 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:09:45.515 | INFO     | src.llm.predictor:predict:4683 - [达马克 vs 迈季迈阿宽广] Agent A 正在分析基本面...
+2026-05-15 15:11:01.067 | INFO     | src.llm.predictor:predict:4699 - [达马克 vs 迈季迈阿宽广] Agent B 正在推演盘口意图...
+2026-05-15 15:11:47.685 | INFO     | src.llm.predictor:predict:4720 - [达马克 vs 迈季迈阿宽广] Agent C 正在进行最终风控裁决...
+2026-05-15 15:12:52.794 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 15:14:01.228 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 15:14:01.229 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 15:14:02.576 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:14:03.942 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:14:06.587 | INFO     | src.llm.predictor:predict:4683 - [布赖代合作 vs 利雅得] Agent A 正在分析基本面...
+2026-05-15 15:14:51.734 | INFO     | src.llm.predictor:predict:4699 - [布赖代合作 vs 利雅得] Agent B 正在推演盘口意图...
+2026-05-15 15:15:39.984 | INFO     | src.llm.predictor:predict:4720 - [布赖代合作 vs 利雅得] Agent C 正在进行最终风控裁决...
+2026-05-15 15:16:23.047 | WARNING  | src.llm.predictor:predict:4794 - 检测到推理链路存在冲突，触发一次复核重试
+2026-05-15 15:17:04.379 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 15:17:04.379 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 15:17:10.415 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:17:12.188 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:17:24.392 | INFO     | src.llm.predictor:predict:4683 - [圣埃蒂安 vs 罗德兹] Agent A 正在分析基本面...
+2026-05-15 15:18:08.921 | INFO     | src.llm.predictor:predict:4699 - [圣埃蒂安 vs 罗德兹] Agent B 正在推演盘口意图...
+2026-05-15 15:18:49.772 | INFO     | src.llm.predictor:predict:4720 - [圣埃蒂安 vs 罗德兹] Agent C 正在进行最终风控裁决...
+2026-05-15 15:19:36.146 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 15:19:36.146 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 15:19:39.202 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:19:41.342 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:19:45.117 | INFO     | src.llm.predictor:predict:4683 - [维拉 vs 利物浦] Agent A 正在分析基本面...
+2026-05-15 15:20:33.540 | INFO     | src.llm.predictor:predict:4699 - [维拉 vs 利物浦] Agent B 正在推演盘口意图...
+2026-05-15 15:21:15.560 | INFO     | src.llm.predictor:predict:4720 - [维拉 vs 利物浦] Agent C 正在进行最终风控裁决...
+2026-05-15 15:22:12.185 | WARNING  | src.llm.predictor:predict:4849 - 纠错后仍未满足最小风险覆盖，已执行代码级双选兜底
+2026-05-15 15:22:12.185 | INFO     | src.llm.predictor:predict:4859 - 预测成功返回！ [时间段: final]
+2026-05-15 15:23:46.434 | INFO     | src.logging_config:setup_logging:29 - 日志系统初始化完成
+2026-05-15 15:54:38.610 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:54:40.308 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:54:47.789 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 15:54:48.190 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:54:49.585 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:54:55.259 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 15:54:55.659 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:54:57.047 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:55:02.293 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 15:55:02.694 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:55:04.160 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:55:10.464 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 15:55:10.865 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 15:55:12.296 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 15:55:17.573 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 16:47:31.134 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:47:32.840 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:47:37.141 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 16:47:37.542 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:47:38.988 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:47:43.335 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 16:47:43.735 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:47:45.157 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:47:48.995 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 16:47:49.396 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:47:50.831 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:47:56.631 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 16:47:57.031 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:47:58.687 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:48:03.017 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 16:51:34.434 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:51:35.906 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:51:43.442 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 16:51:43.843 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:51:45.257 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:51:48.911 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 16:51:49.311 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:51:50.646 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:51:54.054 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 16:51:54.455 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:51:55.818 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:51:59.315 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 16:51:59.716 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 16:52:01.164 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 16:52:04.474 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 17:03:41.137 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:03:42.593 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:03:46.165 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 17:03:46.566 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:03:47.959 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:03:51.842 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 17:03:52.243 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:03:54.430 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:03:59.661 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 17:04:00.062 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:04:01.901 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:04:05.304 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 17:04:05.705 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:04:07.242 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:04:10.706 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入
+2026-05-15 17:29:41.838 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:29:43.301 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1409581 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:29:49.532 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [1/5] fixture_id=1409581 快照已写入
+2026-05-15 17:29:49.933 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:29:51.315 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234977 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:29:56.363 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [2/5] fixture_id=1234977 快照已写入
+2026-05-15 17:29:56.765 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:29:58.778 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1234975 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:30:05.101 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [3/5] fixture_id=1234975 快照已写入
+2026-05-15 17:30:05.502 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:30:07.059 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1411377 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:30:15.732 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [4/5] fixture_id=1411377 快照已写入
+2026-05-15 17:30:16.133 | INFO     | src.crawler.advanced_stats_crawler:fetch_advanced_stats:91 - FOOTBALL_API_KEY 未配置，跳过 API-Sports 高阶数据抓取，将使用 500网基本面数据 Fallback
+2026-05-15 17:30:17.704 | INFO     | src.crawler.euro_odds_crawler:fetch_euro_odds:101 - fixture_id=1202507 提取到 5 家公司欧赔数据 (尝试1次)
+2026-05-15 17:30:21.956 | INFO     | scripts.v2_daily_collect_snapshots:collect_snapshots_for_window:126 - [5/5] fixture_id=1202507 快照已写入

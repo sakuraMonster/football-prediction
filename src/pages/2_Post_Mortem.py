@@ -14,7 +14,7 @@ import time
 from src.db.database import Database
 from src.crawler.jingcai_crawler import JingcaiCrawler
 from src.llm.predictor import LLMPredictor
-from src.utils.rule_drafts import append_rule_drafts, get_pending_rule_drafts
+from src.utils.rule_drafts import get_pending_rule_drafts, replace_pending_rule_drafts_for_date
 
 def decode_auth_token(token):
     try:
@@ -69,6 +69,7 @@ def main():
                     st.session_state["username"] = user.username
                     st.session_state["role"] = user.role
                     st.session_state["valid_until"] = user.valid_until
+                    st.session_state["auth_token"] = token
         except Exception as e:
             pass
 
@@ -80,12 +81,16 @@ def main():
     
     # 确保 URL 中携带 auth token（防止直接访问 /Post_Mortem 时缺失）
     if "auth" not in st.query_params and "username" in st.session_state:
-        try:
-            raw_token = f"{st.session_state['username']}|{int(time.time())}"
-            token = base64.b64encode(raw_token.encode('utf-8')).decode('utf-8')
+        token = st.session_state.get("auth_token", "")
+        if not token:
+            try:
+                raw_token = f"{st.session_state['username']}|{int(time.time())}"
+                token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
+            except Exception:
+                token = ""
+        if token:
+            st.session_state["auth_token"] = token
             st.query_params["auth"] = token
-        except:
-            pass
     # ==========================================
         
     # 显示当前登录用户信息
@@ -101,7 +106,7 @@ def main():
     st.sidebar.info(user_info)
     st.sidebar.markdown("---")
 
-    current_auth_token = st.query_params.get("auth", "")
+    current_auth_token = st.query_params.get("auth", "") or st.session_state.get("auth_token", "")
 
     st.sidebar.header("🧭 功能导航")
     if st.sidebar.button("🏠 返回今日赛事看板", use_container_width=True):
@@ -307,34 +312,40 @@ def main():
                             total_matches_count=len(hist_records),
                         )
                         if pred_text and "预测失败" not in pred_text:
-                            predicted_result = Database.extract_prediction_recommendation(pred_text)
-                            repredicted_record = db.session.query(MatchPrediction).filter(
-                                MatchPrediction.fixture_id == p.fixture_id,
-                                MatchPrediction.prediction_period == 'repredicted'
-                            ).first()
+                            try:
+                                predicted_result = Database.extract_prediction_recommendation(pred_text)
+                                repredicted_record = db.session.query(MatchPrediction).filter(
+                                    MatchPrediction.fixture_id == p.fixture_id,
+                                    MatchPrediction.prediction_period == 'repredicted'
+                                ).first()
 
-                            if not repredicted_record:
-                                repredicted_record = MatchPrediction(
-                                    fixture_id=p.fixture_id,
-                                    match_num=p.match_num,
-                                    league=p.league,
-                                    home_team=p.home_team,
-                                    away_team=p.away_team,
-                                    match_time=p.match_time,
-                                    prediction_period='repredicted',
-                                    raw_data=match_dict,
-                                )
-                                db.session.add(repredicted_record)
+                                if not repredicted_record:
+                                    repredicted_record = MatchPrediction(
+                                        fixture_id=p.fixture_id,
+                                        match_num=p.match_num,
+                                        league=p.league,
+                                        home_team=p.home_team,
+                                        away_team=p.away_team,
+                                        match_time=p.match_time,
+                                        prediction_period='repredicted',
+                                        raw_data=match_dict,
+                                    )
+                                    db.session.add(repredicted_record)
 
-                            repredicted_record.raw_data = match_dict
-                            repredicted_record.prediction_text = pred_text
-                            repredicted_record.predicted_result = predicted_result
-                            repredicted_record.actual_score = p.actual_score
-                            repredicted_record.actual_bqc = p.actual_bqc
-                            repredicted_record.actual_result = p.actual_result
-                            repredicted_record.htft_prediction_text = p.htft_prediction_text
-                            p.raw_data = match_dict
-                            success_count += 1
+                                repredicted_record.raw_data = match_dict
+                                repredicted_record.prediction_text = pred_text
+                                repredicted_record.predicted_result = predicted_result
+                                repredicted_record.actual_score = p.actual_score
+                                repredicted_record.actual_bqc = p.actual_bqc
+                                repredicted_record.actual_result = p.actual_result
+                                repredicted_record.htft_prediction_text = p.htft_prediction_text
+                                p.raw_data = match_dict
+                                db.session.commit()
+                                success_count += 1
+                            except Exception as e:
+                                db.session.rollback()
+                                fail_count += 1
+                                st.warning(f"{p.match_num} 保存失败: {e}")
                         else:
                             fail_count += 1
                             st.warning(f"{p.match_num} 预测失败: {pred_text}")
@@ -343,8 +354,7 @@ def main():
                         st.warning(f"{p.match_num} 预测异常: {e}")
                     
                     progress_bar.progress((i + 1) / len(hist_records))
-                
-                db.session.commit()
+
                 if leisu:
                     try:
                         leisu.close()
@@ -410,6 +420,132 @@ def main():
             
         df = pd.DataFrame(table_data)
         st.dataframe(df.drop(columns=["_raw_record", "_htft_rec", "_actual_bqc_cn"]), use_container_width=True, hide_index=True)
+
+        if st.session_state.get("role") == "admin":
+            st.markdown("### 🔁 重新预测当前列表比赛")
+            opt_cols = st.columns([1.2, 1.2, 1.9, 1.0])
+            only_incorrect = opt_cols[0].checkbox(
+                "仅重跑未命中",
+                value=False,
+                key=f"pm_repredict_only_incorrect_{target_date_str}",
+            )
+            use_leisu = opt_cols[1].checkbox(
+                "注入雷速情报",
+                value=True,
+                key=f"pm_repredict_use_leisu_{target_date_str}",
+            )
+            auto_update_review = opt_cols[2].checkbox(
+                "完成后自动更新复盘报告",
+                value=False,
+                key=f"pm_repredict_auto_review_{target_date_str}",
+            )
+            if opt_cols[3].button("开始重新预测", key=f"pm_btn_repredict_current_{target_date_str}"):
+                from src.db.database import MatchPrediction
+                from src.processor.data_fusion import build_leisu_crawler, inject_leisu_data
+
+                candidates = list(predictions)
+                if only_incorrect:
+                    filtered = []
+                    for p in candidates:
+                        is_correct = getattr(p, "is_correct", None)
+                        if is_correct is False:
+                            filtered.append(p)
+                    candidates = filtered
+
+                if not candidates:
+                    st.warning("当前没有可重新预测的比赛记录。")
+                else:
+                    predictor = LLMPredictor()
+                    leisu = build_leisu_crawler(headless=True) if use_leisu else None
+                    success_count = 0
+                    fail_count = 0
+                    progress_bar = st.progress(0)
+                    for i, p in enumerate(candidates):
+                        try:
+                            raw_data = getattr(p, "raw_data", None) or {}
+                            if isinstance(raw_data, str):
+                                raw_data = json.loads(raw_data)
+                            if not isinstance(raw_data, dict):
+                                raw_data = {}
+
+                            match_dict = dict(raw_data)
+                            match_dict.update(
+                                {
+                                    "fixture_id": p.fixture_id,
+                                    "match_num": p.match_num,
+                                    "league": p.league,
+                                    "home_team": p.home_team,
+                                    "away_team": p.away_team,
+                                    "match_time": str(p.match_time) if p.match_time else "",
+                                }
+                            )
+                            match_dict.setdefault("odds", raw_data.get("odds", {}))
+                            match_dict.setdefault("asian_odds", raw_data.get("asian_odds", {}))
+                            match_dict.setdefault("recent_form", raw_data.get("recent_form", {}))
+                            match_dict.setdefault("h2h_summary", raw_data.get("h2h_summary", "暂无"))
+                            match_dict.setdefault("advanced_stats", raw_data.get("advanced_stats", {}))
+                            if leisu:
+                                inject_leisu_data(match_dict, leisu)
+
+                            pred_text, _ = predictor.predict(
+                                match_dict,
+                                period="repredicted",
+                                total_matches_count=len(candidates),
+                            )
+                            if pred_text and "预测失败" not in pred_text:
+                                try:
+                                    predicted_result = Database.extract_prediction_recommendation(pred_text)
+                                    repredicted_record = db.session.query(MatchPrediction).filter(
+                                        MatchPrediction.fixture_id == p.fixture_id,
+                                        MatchPrediction.prediction_period == "repredicted",
+                                    ).first()
+                                    if not repredicted_record:
+                                        repredicted_record = MatchPrediction(
+                                            fixture_id=p.fixture_id,
+                                            match_num=p.match_num,
+                                            league=p.league,
+                                            home_team=p.home_team,
+                                            away_team=p.away_team,
+                                            match_time=p.match_time,
+                                            prediction_period="repredicted",
+                                            raw_data=match_dict,
+                                        )
+                                        db.session.add(repredicted_record)
+                                    repredicted_record.raw_data = match_dict
+                                    repredicted_record.prediction_text = pred_text
+                                    repredicted_record.predicted_result = predicted_result
+                                    repredicted_record.actual_score = p.actual_score
+                                    repredicted_record.actual_bqc = getattr(p, "actual_bqc", None)
+                                    repredicted_record.actual_result = getattr(p, "actual_result", None)
+                                    repredicted_record.htft_prediction_text = getattr(p, "htft_prediction_text", None)
+                                    p.raw_data = match_dict
+                                    db.session.commit()
+                                    success_count += 1
+                                except Exception as e:
+                                    db.session.rollback()
+                                    fail_count += 1
+                                    st.warning(f"{p.match_num} 保存失败: {e}")
+                            else:
+                                fail_count += 1
+                                st.warning(f"{p.match_num} 预测失败: {pred_text}")
+                        except Exception as e:
+                            fail_count += 1
+                            st.warning(f"{p.match_num} 预测异常: {e}")
+                        progress_bar.progress((i + 1) / len(candidates))
+
+                    if leisu:
+                        try:
+                            leisu.close()
+                        except Exception:
+                            pass
+                    progress_bar.empty()
+                    if success_count > 0:
+                        st.success(f"✅ 成功重新预测 {success_count}/{len(candidates)} 场比赛（period=repredicted）。")
+                        if auto_update_review:
+                            st.session_state["pm_auto_review_target_date"] = target_date_str
+                        st.rerun()
+                    if fail_count > 0:
+                        st.error(f"❌ {fail_count} 场预测失败")
         
         # 3. AI 深度复盘
         st.divider()
@@ -448,6 +584,8 @@ def main():
                     "target_scope": draft.get("target_scope", "unknown"),
                     "market_review_complete": draft.get("market_review_complete", True),
                     "trigger_condition_nl": draft.get("trigger_condition_nl", "未提供"),
+                    "is_executable": draft.get("is_executable", True),
+                    "completeness_gaps": draft.get("completeness_gaps") or [],
                 })
 
             if structured_entries:
@@ -472,6 +610,8 @@ def main():
                     if entry["based_on_rule_id"]:
                         st.write(f"关联旧规则：`{entry['based_on_rule_id']}`")
                     st.write(f"触发条件摘要：{entry['trigger_condition_nl']}")
+                    if not entry["is_executable"]:
+                        st.error(f"该场草稿尚不可采纳，缺少字段：{'、'.join(entry['completeness_gaps']) or 'unknown'}")
                     if entry["market_review_complete"] is False:
                         st.warning("该入口对应的盘口复盘仍不完整，建议先补盘口链路再下规则结论。")
 
@@ -494,9 +634,27 @@ def main():
                         market_review_complete = draft.get("market_review_complete")
                         if market_review_complete is False:
                             st.warning("该草稿对应场次的盘口复盘仍不完整，请先补齐盘口链路再决定是否采纳。")
+                        if not draft.get("is_executable", True):
+                            st.error(f"该草稿尚不可采纳，缺少字段：{'、'.join(draft.get('completeness_gaps') or []) or 'unknown'}")
                         st.write(f"触发条件描述：{draft.get('trigger_condition_nl', '未提供')}")
                         st.write(f"建议条件：`{draft.get('suggested_condition', 'False')}`")
                         st.write(f"建议动作：`{draft.get('suggested_action', '')}`")
+                        if draft.get("rule_id"):
+                            st.write(f"候选规则ID：`{draft.get('rule_id')}`")
+                        if draft.get("rule_name"):
+                            st.write(f"规则名称：`{draft.get('rule_name')}`")
+                        if draft.get("scenario_key"):
+                            st.write(f"盘口剧本Key：`{draft.get('scenario_key')}`")
+                        if draft.get("scenario_parts"):
+                            st.write(f"盘口剧本拆分：`{' | '.join(draft.get('scenario_parts') or [])}`")
+                        if draft.get("target_scope") == "micro_signal":
+                            st.write(f"警告话术模板：`{draft.get('warning_message_template', '')}`")
+                            st.write(f"预测偏向：`{draft.get('prediction_bias', '')}`")
+                            st.write(f"作用类型：`{draft.get('effect_type', '')}`")
+                        elif draft.get("target_scope") in {"arbitration_guard", "warning"}:
+                            st.write(f"动作类型：`{draft.get('action_type', '')}`")
+                            st.write(f"动作参数：`{draft.get('action_payload', {})}`")
+                            st.write(f"解释模板：`{draft.get('explanation_template', '')}`")
                         draft_case_id = draft.get("case_id") or "|".join(draft.get("source_matches") or [])
                         target_scope = draft.get("target_scope", "")
                         shortcut_cols = st.columns(3)
@@ -532,6 +690,34 @@ def main():
             # LLM洞察按钮（先计算准确率，再让AI做洞察）
             if st.session_state.get("role") == "admin":
                 st.divider()
+                if st.session_state.get("pm_auto_review_target_date") == target_date_str:
+                    st.session_state["pm_auto_review_target_date"] = None
+                    import importlib, scripts.run_post_mortem
+                    importlib.reload(scripts.run_post_mortem)
+                    from scripts.run_post_mortem import compute_accuracy_report
+                    with st.spinner("正在程序化计算准确率..."):
+                        st.session_state.acc_report = compute_accuracy_report(target_date_str)
+                    acc_report = st.session_state.acc_report
+                    if acc_report and acc_report["overall"]["total"] > 0:
+                        with st.spinner("AI正在基于准确率数据进行分析..."):
+                            predictor = LLMPredictor()
+                            review_text, rule_drafts, _case_mappings = predictor.generate_post_mortem(
+                                target_date_str,
+                                acc_report,
+                                return_rule_drafts=True,
+                            )
+                            for draft in rule_drafts:
+                                draft.setdefault("source_date", target_date_str)
+                            replace_pending_rule_drafts_for_date(target_date_str, drafts=rule_drafts)
+                            if db.save_daily_review(target_date_str, review_content=review_text):
+                                st.success("复盘报告已生成！")
+                                st.rerun()
+                            else:
+                                st.error("保存失败")
+                    else:
+                        st.error("暂无准确率数据，请先确保该日期有已完成比赛。")
+                        st.stop()
+
                 if st.button("🤖 生成/更新复盘报告", key="btn_full_review",
                            help="程序化计算准确率后，由AI基于数据做洞察分析"):
                     import importlib, scripts.run_post_mortem
@@ -553,7 +739,7 @@ def main():
                             )
                             for draft in rule_drafts:
                                 draft.setdefault("source_date", target_date_str)
-                            append_rule_drafts(drafts=rule_drafts)
+                            replace_pending_rule_drafts_for_date(target_date_str, drafts=rule_drafts)
                             if db.save_daily_review(target_date_str, review_content=review_text):
                                 st.success("复盘报告已生成！")
                                 st.rerun()

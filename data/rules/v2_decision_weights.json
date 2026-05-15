@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "defaults": {
+    "bias_single_bonus": 0.12,
+    "bias_double_bonus": 0.07,
+    "single_gap_threshold": 0.12,
+    "high_dispersion_penalty_gap": 0.02,
+    "white_status_gap_bonus": 0.02,
+    "top1_base_confidence": 56,
+    "top1_gap_scale": 120,
+    "upset_alert": {
+      "popular_tax_score": 20,
+      "popular_deepening_score": 18,
+      "divergence_score": 20,
+      "draw_shaping_score": 12,
+      "late_correction_score": 8,
+      "fade_favored_score": 18,
+      "draw_up_score": 14,
+      "high_dispersion_score": 10,
+      "black_status_score": 12,
+      "diagnosis_score": 8,
+      "guard_draw_score": 8,
+      "avoid_single_score": 10,
+      "medium_threshold": 40,
+      "high_threshold": 60
+    },
+    "subclass": {
+      "draw_shaping_draw_driven": {
+        "draw_bonus": 0.12
+      },
+      "public_pressure_popular_tax": {
+        "draw_bonus": 0.08,
+        "favored_penalty": 0.04
+      },
+      "public_pressure_popular_deepening": {
+        "draw_bonus": 0.05,
+        "underdog_bonus": 0.04
+      },
+      "divergence_euro_vs_ah": {
+        "draw_bonus": 0.03
+      },
+      "late_correction_key_cross": {
+        "draw_bonus": 0.02
+      },
+      "late_correction_convergence": {
+        "draw_bonus": 0.02
+      },
+      "info_shock_euro_first": {
+        "favored_bonus": 0.1
+      },
+      "info_shock_mvp": {
+        "favored_bonus": 0.08
+      }
+    }
+  },
+  "overrides": [
+    {
+      "match": {
+        "league_contains": [
+          "日职",
+          "韩职"
+        ],
+        "dispersion_max": 0.08
+      },
+      "weights": {
+        "single_gap_threshold": 0.13
+      }
+    }
+  ]
+}

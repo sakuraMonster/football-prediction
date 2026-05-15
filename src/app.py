@@ -27,6 +27,7 @@ setup_logging()
 from loguru import logger
 
 from src.db.database import Database
+from src.constants import AUTH_TOKEN_TTL
 
 # 设置页面配置 (主入口文件必须包含)
 st.set_page_config(
@@ -66,8 +67,7 @@ if "auth" in st.query_params and not st.session_state.get("logged_in", False):
         token = st.query_params["auth"]
         username, login_timestamp = decode_auth_token(token)
         
-        # 严格验证：如果距离登录时间超过 1 小时 (3600秒)，则 token 失效
-        if username and (int(time.time()) - login_timestamp <= 3600):
+        if username and (int(time.time()) - login_timestamp <= AUTH_TOKEN_TTL):
             db = Database()
             user = db.get_user(username)
             db.close()
@@ -76,6 +76,7 @@ if "auth" in st.query_params and not st.session_state.get("logged_in", False):
                 st.session_state["logged_in"] = True
                 st.session_state["username"] = user.username
                 st.session_state["role"] = user.role
+                st.session_state["auth_token"] = token
                 st.switch_page("pages/1_Dashboard.py")
     except Exception as e:
         pass
@@ -85,6 +86,7 @@ if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
     st.session_state["username"] = ""
     st.session_state["role"] = ""
+    st.session_state["auth_token"] = ""
 
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
@@ -110,7 +112,8 @@ def main():
         # 如果已经登录，提示并提供跳转按钮
         st.success(f"欢迎回来，{st.session_state['username']}！")
         st.write("您已成功登录系统。")
-        token = encode_auth_token(st.session_state['username'])
+        token = st.session_state.get("auth_token") or encode_auth_token(st.session_state["username"])
+        st.session_state["auth_token"] = token
         # 注意 Streamlit 的路由规则，pages 目录下的文件会忽略前缀数字和下划线，"1_Dashboard.py" 的路由就是 "Dashboard"
         nav_url = f"/Dashboard?auth={token}"
         st.markdown(f'<a href="{nav_url}" target="_self"><button style="width:100%; padding:10px; background-color:#FF4B4B; color:white; border:none; border-radius:5px; cursor:pointer;">👉 进入赛事预测看板</button></a>', unsafe_allow_html=True)
@@ -119,6 +122,7 @@ def main():
             st.session_state["logged_in"] = False
             st.session_state["username"] = ""
             st.session_state["role"] = ""
+            st.session_state["auth_token"] = ""
             if "auth" in st.query_params:
                 del st.query_params["auth"]
             st.rerun()
@@ -149,6 +153,7 @@ def main():
                             st.success("登录成功！请点击下方按钮进入系统...")
                             # 生成带有时间戳的加密 token
                             token = encode_auth_token(username)
+                            st.session_state["auth_token"] = token
                             # 路由必须是 /Dashboard (Streamlit 会自动忽略文件名的数字前缀)
                             nav_url = f"/Dashboard?auth={token}"
                             st.markdown(f'<meta http-equiv="refresh" content="1;url={nav_url}">', unsafe_allow_html=True)

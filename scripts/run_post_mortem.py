@@ -185,6 +185,71 @@ def _build_agentc_mistake_hint(dim_reviews, override_reason, actual_nspf):
     return "；".join(reasons)
 
 
+def _to_float(value):
+    try:
+        if value in (None, "", "0"):
+            return None
+        return float(value)
+    except Exception:
+        return None
+
+
+def _pick_company(europe_odds, keyword):
+    keyword = str(keyword or "").lower()
+    for row in europe_odds or []:
+        company = str((row or {}).get("company") or "").lower()
+        if keyword in company:
+            return row or {}
+    return {}
+
+
+def _format_pct_change(init_val, live_val):
+    if init_val in (None, 0) or live_val is None:
+        return "未知"
+    pct = ((live_val - init_val) / init_val) * 100
+    sign = "+" if pct >= 0 else ""
+    return f"{sign}{pct:.1f}%"
+
+
+def _build_market_replay_summary(asian_start, asian_live, europe_odds):
+    asian_text = f"亚盘：初{asian_start or '未知'} -> 即{asian_live or '未知'}"
+    market_profile = LLMPredictor._build_market_rule_name(
+        {
+            "asian_start": asian_start,
+            "asian_live": asian_live,
+            "europe_odds": europe_odds,
+        },
+        target_scope="micro_signal",
+    ).replace("-微观规则", "")
+    euro_profile = LLMPredictor._build_euro_profile(europe_odds)
+    macau = _pick_company(europe_odds, "澳门") or _pick_company(europe_odds, "澳")
+    bet365 = _pick_company(europe_odds, "bet365") or _pick_company(europe_odds, "365")
+
+    euro_parts = []
+    for label, row in [("澳门欧赔", macau), ("Bet365欧赔", bet365)]:
+        if not row:
+            continue
+        init_home = _to_float(row.get("init_home"))
+        live_home = _to_float(row.get("live_home"))
+        init_draw = _to_float(row.get("init_draw"))
+        live_draw = _to_float(row.get("live_draw"))
+        init_away = _to_float(row.get("init_away"))
+        live_away = _to_float(row.get("live_away"))
+        euro_parts.append(
+            f"{label}：主{row.get('init_home', '未知')}->{row.get('live_home', '未知')}({ _format_pct_change(init_home, live_home) })，"
+            f"平{row.get('init_draw', '未知')}->{row.get('live_draw', '未知')}({ _format_pct_change(init_draw, live_draw) })，"
+            f"客{row.get('init_away', '未知')}->{row.get('live_away', '未知')}({ _format_pct_change(init_away, live_away) })"
+        )
+    euro_text = "；".join(euro_parts) if euro_parts else "欧赔：未提取到澳门/Bet365有效变化"
+    strength_text = ""
+    if euro_profile:
+        strength_text = (
+            f" | 初赔强弱：{euro_profile.get('favored_label', '未知')} / {euro_profile.get('strength_gap_label', '未知')} / "
+            f"{euro_profile.get('movement_label', '未知')} / 调幅档位={euro_profile.get('movement_magnitude', '未知')}"
+        )
+    return f"{market_profile} | {asian_text}{strength_text} | {euro_text}"
+
+
 def compute_accuracy_report(target_date=None):
     """
     程序化计算指定日期的预测准确率报告。
@@ -306,6 +371,8 @@ def compute_accuracy_report(target_date=None):
         asian_odds = full_asian.get('macau', {})
         asian_start = asian_odds.get('start', '')
         asian_live = asian_odds.get('live', '')
+        europe_odds = raw_data.get('europe_odds', []) or []
+        market_replay_summary = _build_market_replay_summary(asian_start, asian_live, europe_odds)
         
         # Determine NSPF correctness
         is_correct_nspf = False
@@ -372,6 +439,8 @@ def compute_accuracy_report(target_date=None):
             "asian_start": asian_start,
             "asian_live": asian_live,
             "reason": reason,
+            "market_replay_summary": market_replay_summary,
+            "europe_odds": europe_odds,
             "pred_id": pred.get('id'),
             "prediction_period": pred.get('prediction_period', ''),
             "arb_fundamental": arb_fundamental or "未提取",

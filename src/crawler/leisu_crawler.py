@@ -464,8 +464,8 @@ class LeisuCrawler:
         if not text:
             return []
         cleaned = re.sub(r'\s+', ' ', text).strip(" \n\r\t：:")
-        cleaned = re.sub(r'^[^\u4e00-\u9fa5A-Za-z0-9]+', '', cleaned)
-        cleaned = re.sub(r'[^\u4e00-\u9fa5A-Za-z0-9]+$', '', cleaned)
+        cleaned = re.sub(r'^[^\u4e00-\u9fa5A-Za-z0-9%]+', '', cleaned)
+        cleaned = re.sub(r'[^\u4e00-\u9fa5A-Za-z0-9%]+$', '', cleaned)
         if not cleaned:
             return []
         parts = re.split(r'[。！？；;]+', cleaned)
@@ -554,8 +554,18 @@ class LeisuCrawler:
 
         home_prefix = text[:first_marker]
         away_prefix = text[neutral_marker + len("中立情报"):second_marker]
-        home_label = cls._extract_team_label(home_prefix, home_team or "")
-        away_label = cls._extract_team_label(away_prefix, away_team or "")
+        extracted_home = cls._extract_team_label(home_prefix, home_team or "")
+        extracted_away = cls._extract_team_label(away_prefix, away_team or "")
+        home_label = extracted_home
+        away_label = extracted_away
+        if home_team and extracted_home and home_team in extracted_home and len(extracted_home) > len(home_team):
+            home_label = extracted_home
+        elif home_team:
+            home_label = home_team
+        if away_team and extracted_away and away_team in extracted_away and len(extracted_away) > len(away_team):
+            away_label = extracted_away
+        elif away_team:
+            away_label = away_team
         home_pros = cls._split_swot_points(text[first_marker + len(marker):first_negative])
         home_cons = cls._split_swot_points(text[first_negative + len("不利情报"):neutral_marker])
         neutral_text = text[neutral_marker + len("中立情报"):second_marker]

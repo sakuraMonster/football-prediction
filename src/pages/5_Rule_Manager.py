@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
@@ -23,6 +24,62 @@ from src.utils.rule_registry import (
     load_rule_list,
     save_rule_list,
 )
+
+
+def _normalize_scenario_key(value):
+    return str(value or "").strip()
+
+
+def _collect_scenario_options(*rule_groups):
+    options = []
+    seen = set()
+    for group in rule_groups:
+        for item in group or []:
+            scenario_key = _normalize_scenario_key(item.get("scenario_key"))
+            if scenario_key and scenario_key not in seen:
+                seen.add(scenario_key)
+                options.append(scenario_key)
+    return sorted(options)
+
+
+def _filter_rules_by_scenario(rules, scenario_key):
+    normalized = _normalize_scenario_key(scenario_key)
+    if not normalized:
+        return list(rules or [])
+    return [rule for rule in (rules or []) if _normalize_scenario_key(rule.get("scenario_key")) == normalized]
+
+
+def _find_same_scenario_rules(draft, micro_rules, arbitration_rules):
+    scenario_key = _normalize_scenario_key(draft.get("scenario_key"))
+    if not scenario_key:
+        return []
+    candidates = []
+    for rule in (micro_rules or []) + (arbitration_rules or []):
+        if _normalize_scenario_key(rule.get("scenario_key")) == scenario_key:
+            candidates.append(rule)
+    return candidates
+
+
+def _analyze_condition_rigidity(condition):
+    text = str(condition or "").strip()
+    if not text:
+        return []
+
+    issues = []
+    if "euro['macau_start']" in text or "euro['bet365_start']" in text:
+        issues.append("引用了历史欧赔原始点位")
+    if "euro['live_home']" in text or "euro['live_away']" in text:
+        issues.append("直接用即时欧赔点位做单场比较")
+    if re.search(r"\b(?:>=|<=|>|<)\s\d+\.\d{3,}\b", text):
+        issues.append("包含精确小数阈值")
+    if "/ euro['" in text or "]['a'] / euro['" in text or "]['h'] / euro['" in text:
+        issues.append("使用了精确欧赔比值")
+
+    deduped = []
+    for issue in issues:
+        if issue not in deduped:
+            deduped.append(issue)
+    return deduped
 
 
 def decode_auth_token(token):
@@ -49,6 +106,11 @@ def _render_micro_rules_editor(rules, focus_rule_id="", focus_draft=None):
                     f" 动作=`{focus_draft.get('suggested_action', '')}`；"
                     f" 偏向=`{focus_draft.get('suggested_bias', '')}`"
                 )
+            if rule.get("scenario_key"):
+                st.caption(f"盘口剧本：`{rule.get('scenario_key')}`")
+            rigidity_issues = _analyze_condition_rigidity(rule.get("condition"))
+            if rigidity_issues:
+                st.warning("条件过死风险：" + "、".join(rigidity_issues))
             col1, col2 = st.columns([1, 5])
 
             with col1:
@@ -96,6 +158,8 @@ def _render_arbitration_rules_editor(rules, focus_rule_id="", focus_draft=None):
                     f" 动作=`{focus_draft.get('suggested_action', '')}`；"
                     f" 摘要=`{focus_draft.get('trigger_condition_nl', '')}`"
                 )
+            if rule.get("scenario_key"):
+                st.caption(f"盘口剧本：`{rule.get('scenario_key')}`")
             col1, col2 = st.columns([1, 5])
 
             with col1:
@@ -164,6 +228,11 @@ def _render_prefilled_micro_rule_form(draft, micro_rules_path):
     warning_template = st.text_area("警告话术模板", value=default_rule.get("warning_template", ""), key=f"prefill_micro_warn::{draft_token}")
     prediction_bias = st.text_input("预测偏向", value=default_rule.get("prediction_bias", ""), key=f"prefill_micro_bias::{draft_token}")
     effect = st.text_input("作用类型", value=default_rule.get("effect", ""), key=f"prefill_micro_effect::{draft_token}")
+    if default_rule.get("scenario_key"):
+        st.caption(f"盘口剧本：`{default_rule.get('scenario_key')}`")
+    rigidity_issues = _analyze_condition_rigidity(default_rule.get("condition"))
+    if rigidity_issues:
+        st.warning("预填条件存在过死风险：" + "、".join(rigidity_issues))
 
     if st.button("➕ 按预填内容新增微观规则", key=f"prefill_create_micro::{draft_token}"):
         final_rule_id = ensure_unique_rule_id(rule_id or generated_rule_id, existing_ids=existing_ids, fallback="micro_rule")
@@ -178,6 +247,9 @@ def _render_prefilled_micro_rule_form(draft, micro_rules_path):
                 "warning_template": warning_template,
                 "prediction_bias": prediction_bias,
                 "effect": effect,
+                "scenario_key": default_rule.get("scenario_key") or draft.get("scenario_key") or "",
+                "scenario_parts": default_rule.get("scenario_parts") or draft.get("scenario_parts") or [],
+                "scenario_version": default_rule.get("scenario_version") or draft.get("scenario_version") or "v1",
                 "enabled": True,
                 "source": "rule_draft_prefill",
             },
@@ -205,6 +277,8 @@ def _render_prefilled_arbitration_rule_form(draft, arbitration_rules_path):
         key=f"prefill_arb_payload::{draft_token}",
     )
     explanation = st.text_area("解释模板", value=default_rule.get("explanation_template", ""), key=f"prefill_arb_explain::{draft_token}")
+    if default_rule.get("scenario_key"):
+        st.caption(f"盘口剧本：`{default_rule.get('scenario_key')}`")
 
     if st.button("➕ 按预填内容新增仲裁规则", key=f"prefill_create_arb::{draft_token}"):
         payload = json.loads(action_payload or "{}")
@@ -220,6 +294,9 @@ def _render_prefilled_arbitration_rule_form(draft, arbitration_rules_path):
                 "action_type": action_type,
                 "action_payload": payload,
                 "explanation_template": explanation,
+                "scenario_key": default_rule.get("scenario_key") or draft.get("scenario_key") or "",
+                "scenario_parts": default_rule.get("scenario_parts") or draft.get("scenario_parts") or [],
+                "scenario_version": default_rule.get("scenario_version") or draft.get("scenario_version") or "v1",
                 "enabled": True,
                 "source": "rule_draft_prefill",
             },
@@ -320,6 +397,7 @@ def app():
                     st.session_state["username"] = user.username
                     st.session_state["role"] = user.role
                     st.session_state["valid_until"] = user.valid_until
+                    st.session_state["auth_token"] = token
         except Exception:
             pass
 
@@ -328,6 +406,18 @@ def app():
         if st.button("👉 返回登录页面"):
             st.switch_page("app.py")
         st.stop()
+
+    if "auth" not in st.query_params:
+        token = st.session_state.get("auth_token", "")
+        if not token and st.session_state.get("username"):
+            try:
+                raw_token = f"{st.session_state['username']}|{int(time.time())}"
+                token = base64.b64encode(raw_token.encode("utf-8")).decode("utf-8")
+            except Exception:
+                token = ""
+        if token:
+            st.session_state["auth_token"] = token
+            st.query_params["auth"] = token
 
     st.title("⚙️ 动态风控规则管理")
     st.markdown("在此处统一管理微观规则、仲裁保护规则以及复盘自动生成的候选草稿。")
@@ -359,7 +449,18 @@ def app():
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     micro_rules_path = get_micro_rules_path()
     arbitration_rules_path = get_arbitration_rules_path()
+    micro_rules_all = load_rule_list(micro_rules_path)
+    arbitration_rules_all = load_rule_list(arbitration_rules_path)
     drafts = get_pending_rule_drafts()
+
+    scenario_options = _collect_scenario_options(micro_rules_all, arbitration_rules_all, drafts)
+    selected_scenario = st.selectbox(
+        "盘口剧本筛选",
+        ["全部剧本"] + scenario_options,
+        index=0,
+        help="按盘口剧本筛选规则和草稿，便于查看同剧本历史规则与新增草稿。",
+    )
+    active_scenario_key = "" if selected_scenario == "全部剧本" else selected_scenario
 
     def _draft_matches_focus(draft):
         draft_case = draft.get("case_id") or "|".join(draft.get("source_matches") or [])
@@ -369,7 +470,8 @@ def app():
             return True
         return False
 
-    focus_draft = next((draft for draft in drafts if _draft_matches_focus(draft)), None)
+    visible_drafts = _filter_rules_by_scenario(drafts, active_scenario_key)
+    focus_draft = next((draft for draft in visible_drafts if _draft_matches_focus(draft)), None)
 
     section_options = ["🧩 微观规则", "🛡️ 仲裁规则", "📝 候选草稿"]
     scope_to_section = {
@@ -396,8 +498,10 @@ def app():
     )
 
     if selected_section == "🧩 微观规则":
-        micro_rules = load_rule_list(micro_rules_path)
+        micro_rules = _filter_rules_by_scenario(micro_rules_all, active_scenario_key)
         st.subheader("📋 微观规则列表")
+        if active_scenario_key:
+            st.caption(f"当前仅展示剧本：`{active_scenario_key}`")
         if focus_action == "optimize_existing":
             st.caption("当前为修旧规则模式，优先检查与焦点比赛关联的旧微观规则。")
         elif focus_action == "add_new_rule":
@@ -426,14 +530,21 @@ def app():
 - `asian['giving_live_w']`: 即时盘让球方水位
 - `asian['receiving_live_w']`: 即时盘受让方水位
 - `euro['p_draw']`: 欧赔隐含平局概率
+- `euro['favored_side']`: 欧赔初赔低赔方（home/away）
+- `euro['strength_gap_label']`: 欧赔强弱档位（接近平势/中度优势/强弱分明/实力鸿沟）
+- `euro['movement_side']`: 欧赔主要变动侧（home/away/none）
+- `euro['movement_direction']`: 欧赔变动方向（up/down/flat）
+- `euro['movement_magnitude']`: 欧赔调幅档位（轻微/中等/剧烈/无显著调幅）
 - `league['is_euro_cup']`: 是否欧战
 """
         )
         _render_micro_rule_generator(base_dir, micro_rules_path)
 
     elif selected_section == "🛡️ 仲裁规则":
-        arbitration_rules = load_rule_list(arbitration_rules_path)
+        arbitration_rules = _filter_rules_by_scenario(arbitration_rules_all, active_scenario_key)
         st.subheader("📋 仲裁保护规则列表")
+        if active_scenario_key:
+            st.caption(f"当前仅展示剧本：`{active_scenario_key}`")
         if focus_action == "optimize_existing":
             st.caption("当前为修旧规则模式，优先检查与焦点比赛关联的旧仲裁保护规则。")
         elif focus_action == "add_new_rule":
@@ -465,11 +576,11 @@ def app():
 
     else:
         st.subheader("📝 复盘候选规则草稿")
-        if not drafts:
+        if not visible_drafts:
             st.info("当前没有待审核的规则草稿。")
         else:
-            drafts = sorted(drafts, key=lambda draft: 0 if _draft_matches_focus(draft) else 1)
-            for i, draft in enumerate(drafts):
+            visible_drafts = sorted(visible_drafts, key=lambda draft: 0 if _draft_matches_focus(draft) else 1)
+            for i, draft in enumerate(visible_drafts):
                 source_matches = "、".join(draft.get("source_matches") or []) or "未知来源"
                 title = f"{draft.get('title', '未命名草稿')} [{draft.get('target_scope', 'unknown')}]"
                 with st.expander(title, expanded=_draft_matches_focus(draft)):
@@ -480,8 +591,19 @@ def app():
                         st.write(f"基于旧规则：`{draft.get('based_on_rule_id')}`")
                     if draft.get("market_review_complete") is False:
                         st.warning("该草稿对应场次的盘口复盘不完整，建议先补充盘口链路再审核。")
+                    if draft.get("scenario_key"):
+                        st.write(f"盘口剧本Key：`{draft.get('scenario_key')}`")
+                    if draft.get("scenario_parts"):
+                        st.write(f"盘口剧本拆分：`{' | '.join(draft.get('scenario_parts') or [])}`")
+                    same_scenario_rules = _find_same_scenario_rules(draft, micro_rules_all, arbitration_rules_all)
+                    if same_scenario_rules:
+                        sample = "、".join(f"{rule.get('name', '未命名')}[{rule.get('id', '?')}]" for rule in same_scenario_rules[:3])
+                        st.info(f"同剧本已有规则 {len(same_scenario_rules)} 条：{sample}")
                     st.write(f"触发条件描述：{draft.get('trigger_condition_nl', '未提供')}")
                     st.write(f"建议条件：`{draft.get('suggested_condition', 'False')}`")
+                    draft_rigidity_issues = _analyze_condition_rigidity(draft.get("suggested_condition"))
+                    if draft_rigidity_issues:
+                        st.warning("该草稿条件过死：" + "、".join(draft_rigidity_issues))
                     st.write(f"建议动作：`{draft.get('suggested_action', '')}`")
                     if draft.get("suggested_bias"):
                         st.write(f"建议偏向：{draft.get('suggested_bias')}")

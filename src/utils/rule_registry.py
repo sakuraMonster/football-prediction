@@ -70,6 +70,11 @@ def generate_rule_id_from_draft(draft, category=None, existing_ids=None):
     return ensure_unique_rule_id(base_id, existing_ids=existing_ids, fallback=prefix)
 
 
+def actual_nspf_to_bias(value):
+    text = str(value or "").strip()
+    return text if text in {"胜", "平", "负", "胜平", "平负", "胜负"} else ""
+
+
 def _normalize_logic_expression(expr):
     text = str(expr or "").strip()
     if not text:
@@ -214,38 +219,50 @@ def normalize_arbitration_rule_action(action_type, action_payload=None, explanat
 
 
 def convert_draft_to_arbitration_rule(draft):
-    title = draft.get("title") or draft.get("problem_type") or "未命名仲裁规则"
+    title = draft.get("rule_name") or draft.get("title") or draft.get("problem_type") or "未命名仲裁规则"
     action_type, action_payload = normalize_arbitration_rule_action(
-        draft.get("suggested_action"),
-        explanation=draft.get("trigger_condition_nl") or draft.get("problem_type") or title,
+        draft.get("action_type") or draft.get("suggested_action"),
+        action_payload=draft.get("action_payload") if isinstance(draft.get("action_payload"), dict) else None,
+        explanation=draft.get("explanation_template") or draft.get("trigger_condition_nl") or draft.get("problem_type") or title,
         suggested_bias=draft.get("suggested_bias") or "",
     )
+    priority_value = draft.get("priority")
+    normalized_priority = int(priority_value) if isinstance(priority_value, (int, float)) else (80 if priority_value == "high" else 60)
     return {
-        "id": generate_rule_id_from_draft(draft, category="arbitration_guard"),
+        "id": str(draft.get("rule_id") or generate_rule_id_from_draft(draft, category="arbitration_guard")).strip(),
         "name": title,
         "category": "arbitration_guard",
-        "priority": 80 if draft.get("priority") == "high" else 60,
+        "priority": normalized_priority,
         "condition": normalize_arbitration_rule_condition(draft.get("suggested_condition") or "False"),
         "action_type": action_type,
         "action_payload": action_payload,
-        "explanation_template": draft.get("trigger_condition_nl") or draft.get("problem_type") or title,
+        "explanation_template": draft.get("explanation_template") or draft.get("trigger_condition_nl") or draft.get("problem_type") or title,
+        "scenario_key": draft.get("scenario_key") or "",
+        "scenario_parts": draft.get("scenario_parts") or [],
+        "scenario_version": draft.get("scenario_version") or "v1",
         "enabled": True,
         "source": "rule_draft",
     }
 
 
 def convert_draft_to_micro_rule(draft):
-    title = draft.get("title") or draft.get("problem_type") or "未命名微观规则"
-    trigger_text = draft.get("trigger_condition_nl") or draft.get("problem_type") or title
+    title = draft.get("rule_name") or draft.get("title") or draft.get("problem_type") or "未命名微观规则"
+    trigger_text = draft.get("warning_message_template") or draft.get("trigger_condition_nl") or draft.get("problem_type") or title
+    priority_value = draft.get("priority")
+    level = "🔴高危" if (isinstance(priority_value, (int, float)) and int(priority_value) >= 80) or priority_value == "high" else "🟡关注"
+    actual_bias = actual_nspf_to_bias(draft.get("actual_nspf"))
     return {
-        "id": generate_rule_id_from_draft(draft, category="micro_signal"),
+        "id": str(draft.get("rule_id") or generate_rule_id_from_draft(draft, category="micro_signal")).strip(),
         "name": title,
         "category": "micro_signal",
-        "level": "🔴高危" if draft.get("priority") == "high" else "🟡关注",
+        "level": level,
         "condition": normalize_micro_rule_condition(draft.get("suggested_condition") or "False"),
         "warning_template": trigger_text,
-        "prediction_bias": draft.get("suggested_bias") or "",
-        "effect": draft.get("suggested_action") or "",
+        "prediction_bias": actual_bias or draft.get("prediction_bias") or draft.get("suggested_bias") or "",
+        "effect": draft.get("effect_type") or draft.get("suggested_action") or "",
+        "scenario_key": draft.get("scenario_key") or "",
+        "scenario_parts": draft.get("scenario_parts") or [],
+        "scenario_version": draft.get("scenario_version") or "v1",
         "enabled": True,
         "source": "rule_draft",
     }

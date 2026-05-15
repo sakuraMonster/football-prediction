@@ -46,7 +46,51 @@ class JingcaiCrawler:
             logger.error(f"抓取竞彩数据发生异常: {e}")
             return []
 
-    def _parse_html(self, html_text, target_date=None):
+    def fetch_matches_in_window(self, window_start: datetime.datetime, window_end: datetime.datetime):
+        window_start = window_start if isinstance(window_start, datetime.datetime) else None
+        window_end = window_end if isinstance(window_end, datetime.datetime) else None
+        if window_start is None or window_end is None or window_end <= window_start:
+            return []
+
+        dates = sorted({window_start.date(), window_end.date()})
+        all_matches = []
+        for d in dates:
+            date_str = d.strftime("%Y-%m-%d")
+            url = f"{self.url}?date={date_str}"
+            try:
+                res = requests.get(url, headers=self.headers, timeout=15)
+                res.encoding = "gb2312"
+                if res.status_code != 200:
+                    continue
+                all_matches.extend(self._parse_html(res.text, target_date=date_str, filter_prefix=False))
+            except Exception:
+                continue
+
+        dedup = {}
+        out = []
+        for m in all_matches:
+            fixture_id = m.get("fixture_id")
+            if not fixture_id or fixture_id in dedup:
+                continue
+            dt = None
+            try:
+                dt = datetime.datetime.strptime(m.get("match_time"), "%Y-%m-%d %H:%M")
+            except Exception:
+                try:
+                    dt = datetime.datetime.strptime(m.get("match_time"), "%Y-%m-%d %H:%M:%S")
+                except Exception:
+                    dt = None
+            if dt is None:
+                continue
+            if dt < window_start or dt >= window_end:
+                continue
+            dedup[fixture_id] = True
+            out.append(m)
+
+        out.sort(key=lambda x: x.get("match_time") or "")
+        return out
+
+    def _parse_html(self, html_text, target_date=None, filter_prefix=True):
         soup = BeautifulSoup(html_text, 'html.parser')
         match_rows = soup.find_all('tr', class_='bet-tb-tr')
         
@@ -77,9 +121,10 @@ class JingcaiCrawler:
                 if not match_num:
                     continue
                     
-                # 只保留编号前缀和今天一致的比赛
-                if current_day_prefix and not match_num.startswith(current_day_prefix):
-                    continue
+                if filter_prefix:
+                    # 只保留编号前缀和今天一致的比赛
+                    if current_day_prefix and not match_num.startswith(current_day_prefix):
+                        continue
 
                 fixture_id = row.get('data-fixtureid', '')
                 league = row.get('data-simpleleague', '')
